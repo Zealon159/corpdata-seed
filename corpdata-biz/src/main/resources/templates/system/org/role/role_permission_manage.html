@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8" />
+		<title>分配角色权限</title>
+		<link rel="stylesheet" href="/js/plugin/layui-v2.2.5/layui/css/layui.css">
+		<link rel="stylesheet" href="/js/plugin/bootstrap/css/bootstrap.min.css">
+		<link rel="stylesheet" href="/css/reset.css">
+		<script src="/js/jquery-2.1.1.min.js"></script>
+		<script src="/js/plugin/layui-v2.2.5/layui/layui.js"></script>
+		<script src="/js/common.js"></script>
+		<!-- ztree -->
+		<link rel="stylesheet" href="/js/plugin/zTree_v3/css/zTreeStyle/zTreeStyle.css" type="text/css">
+		<script type="text/javascript" src="/js/plugin/zTree_v3/js/jquery.ztree.all.min.js"></script>
+		
+ 		<script type="text/javascript">
+	 		var roleId=$("#roleId").val();//角色id每次选择角色改变值
+			var checkNodes="";//角色已有权限id集合，以逗号分割 ，每次选择角色时改变值
+			var setting = { 
+					check: {
+						enable: true,
+						chkStyle: "checkbox",
+						chkboxType: { "Y": "ps", "N": "s" }
+					},
+				async:{
+					enable:true,
+					url:"/orgpermission/gettreejson",
+					autoParam:["id","name"]
+				},
+				callback: {
+					onAsyncSuccess: showRole
+				}
+
+			};
+			var zTree;
+			$(document).ready(function(){
+				$.fn.zTree.init($("#tree"), setting);
+				
+				zTree = $.fn.zTree.getZTreeObj("tree");
+			});
+
+			function showRole(id,roleName){
+				//全部不选
+				zTree.checkAllNodes(false);
+				roleId=id;
+				$("#roleName").html(roleName+"--");
+				//获取角色的所有权限
+				getRolePer();
+	   			//根据权限结合选中节点
+				checkNode();
+			}
+			//保存角色和权限的映射
+			function savePermission(){
+				var roleId = $("#roleId").val();
+				var url="/orgrole/savepermission";
+				var nodes=zTree.getCheckedNodes(true);
+				var permissionIds="";
+				for(var i=0;i<nodes.length;i++){
+					if(permissionIds==""){
+						permissionIds=nodes[i].id;
+					}else{
+						permissionIds=permissionIds+","+nodes[i].id;
+					}
+				}
+				
+				if(roleId==""){
+					layer.alert("请选择角色!",{icon:7});
+					return false;
+				}
+				
+				$.post(url, {roleId:roleId,permissionIds:permissionIds}, function(result) {
+					window.parent.layer.msg(result.msg);
+					closeLayer();
+	            }, 'json');
+			}
+
+			
+			//选中节点函数
+			function checkNode(){
+				var nodeArr=checkNodes.split(",");
+				for(var i=0;i<nodeArr.length;i++){
+					var node=zTree.getNodeByParam("id",nodeArr[i],null);
+					if(node!=null){
+						zTree.checkNode(node,true,false);
+					}
+				}
+			}
+			function getRolePer(){
+				var roleId = $("#roleId").val();
+				var url="/orgpermission/findRolePermmission";
+				jQuery.ajax({
+			        type:"post",
+			        async:false,
+			        url:url,
+			        dataType:"json",
+			        data:{roleId:roleId},
+			        success:function(data){
+			           checkNodes=data.msg;
+			        }
+	   			 });
+			}
+
+ 		</script>
+	</head>
+<body>
+	<ul id="tree" class="ztree"></ul>
+	
+	<div class="col-md-6 col-sm-6 col-xs-6">
+		<button type="button" id="btn_savePermission" onclick="savePermission()" class="btn btn-primary float-r">保存</button>
+	</div>
+		<div class="col-md-6 col-sm-6 col-xs-6">
+		<button type="button" class="btn btn-default" onclick="closeLayer();">取消</button>
+	</div>	
+	<input id="roleId" type="hidden" name="roleId" th:value="${roleId}" />
+</body>
+</html>

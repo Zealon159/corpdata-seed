@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8" />
+		<title>用户管理</title>
+		<link rel="stylesheet" href="/js/plugin/layui-v2.2.5/layui/css/layui.css">
+		<link rel="stylesheet" href="/js/plugin/select2/select2.css"><!-- 下拉框的 -->
+		<link rel="stylesheet" href="/js/plugin/bootstrap/css/bootstrap.min.css">
+		<link rel="stylesheet" href="/js/plugin/bootstrapValidator/bootstrapValidator.min.css"/>
+		<link rel="stylesheet" href="/css/reset.css">
+		<link rel="stylesheet" href="/js/plugin/bootstrap/css/bootstrap.min.css">
+		<script src="/js/jquery-2.1.1.min.js"></script>
+		<script type="text/javascript" src="/js/plugin/bootstrap/js/bootstrap.min.js"></script>
+	   	<script type="text/javascript" src="/js/plugin/bootstrapValidator/bootstrapValidator.min.js"></script>
+		<script src="/js/plugin/layui-v2.2.5/layui/layui.js"></script>
+		<script src='../../../js/plugin/select2/select2.full.js'></script><!-- 下拉框的  -->
+		<script src="/js/common.js"></script>
+		<script type="text/javascript">
+		$(document).ready(function() {
+			initSelect2("orgDept","/orgdept/selectjson/0","");
+		});
+	</script>
+	<style>
+		select{
+			  outline: none;  
+              -webkit-tap-highlight-color: rgba(0,0,0,0);  }
+        .layui-bg-blue{
+        	margin-right:4px;
+        }
+	</style>
+	</head>
+	<body>
+	<input type="hidden" id="memberid" name="memberid" th:value="${id}" />
+		<div style="padding: 15px; height: 100%">
+			<div class="layui-row">
+				<div class="search-box " style="height:40px">
+					
+						<div class="col-md-6 col-sm-6 col-xs-6">
+							<div class="form-group">
+							    <select id="orgDept" name="orgDept" class="form-control selectpicker">
+							   	</select>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-6 col-xs-6">
+							<div >
+							<input class="form-control" placeholder="搜索登录名/中文名" type="text" id="keyword" style="position:relative;" />
+						    <i class="glyphicon glyphicon-search my-search-icon"  style="position:absolute;top:10px;right:20px" onclick="reloadList()"></i>
+							</div>
+						</div>
+					<div style="clear:both"></div>
+				</div>
+				<table class="layui-hide" id="LAY_table_user" lay-filter="user"></table> 
+				<form id="defaultForm"  action="#" th:method="post" th:action="@{/project/member/add}">
+						<div>
+							<div>已选用户：</div>
+							<div id="yixuan" style="margin-bottom:10px;">
+								<span th:id="${member.user.id}" th:each="member : ${members}">
+									<span class="layui-badge layui-bg-blue" th:text="${member.user.userName}"></span>
+									<input type="hidden" id="userId" name="userId" th:value="${member.user.Userid}" >
+								</span>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-6 col-xs-6">
+							<button type="button" class="btn btn-default float-r" onclick="closeLayer();">关闭</button>
+						</div>	
+						<div class="col-md-6 col-sm-6 col-xs-6">
+							<button type="submit" class="btn btn-primary">保存</button>
+						</div>
+						<input type="hidden" id="projectId" name="projectId" th:value="${id}">
+				</form>
+			</div>
+		</div>
+		
+		<script th:inline="javascript">
+		$("#orgDept").change(function(){
+			//执行重载
+			var id=$(this).val();
+		      layui.table.reload('dg_user', {
+		        page: {
+		          curr: 1 //重新从第 1 页开始
+		        }
+		        ,where: {
+		        	deptId: id
+		        }
+		      });
+		})
+			var memberid=$("#memberid").val();
+			layui.use('table', function(){
+				var table = layui.table;
+				//方法级渲染
+				table.render({
+					id:'dg_user',
+				    elem: '#LAY_table_user',
+				    url: '/orguser/projectfind/',
+				    cols: [[
+				      {checkbox: true, fixed: true}
+				      ,{field:'userid', align:'left', title: '登录名'}
+				      ,{field:'userName', align:'left', title: '中文名',  sort: true}
+				      ,{field:'sortNumber', align:'center', title: '排序'}
+				    ]] 
+					,where: {
+						memberid: memberid
+				     }
+				    ,page: true
+				    ,height: "full-260" 
+				});
+				
+				table.on('checkbox(user)', function(obj){  
+					if(obj.type=="all"){
+						var checkStatus = table.checkStatus('dg_user')
+						for(var i=0;i<checkStatus.data.length;i++){
+							$("#"+checkStatus.data[i].id).remove();
+							$("#yixuan").append('<span class="layui-badge layui-bg-blue" id="'+checkStatus.data[i].id+'"><span>'+checkStatus.data[i].userName+'</span><input type="hidden" id="userId" name="userId" value="'+checkStatus.data[i].userid+'" ></span>');
+						}
+						if(checkStatus.data.length==0){
+							$("#yixuan").html("");
+						}
+					}else{
+						if(obj.checked){
+							$("#"+obj.data.id).remove();
+							$("#yixuan").append('<span class="layui-badge layui-bg-blue" id="'+obj.data.id+'"><span>'+obj.data.userName+'</span><input type="hidden" id="userId" name="userId" value="'+obj.data.userid+'" ></span>');
+						}else{
+							$("#"+obj.data.id).remove();
+						}
+					}
+					
+		        });  
+				$('.demoTable .layui-btn').on('click', function(){
+				    var type = $(this).data('type');
+				    active[type] ? active[type].call(this) : '';
+				});
+				
+			});
+			
+			
+			$(document).ready(function() {
+			    $('#defaultForm')
+			        .bootstrapValidator({
+			            message: 'This value is not valid',
+			            feedbackIcons: {
+			                valid: 'glyphicon glyphicon-ok',
+			                invalid: 'glyphicon glyphicon-remove',
+			                validating: 'glyphicon glyphicon-refresh'
+			            }
+			        })
+			        .on('success.form.bv', function(e) {
+			            // Prevent form submission
+			            e.preventDefault();
+
+			            // Get the form instance
+			            var $form = $(e.target);
+
+			            // Get the BootstrapValidator instance
+			            var bv = $form.data('bootstrapValidator');
+
+			            // Use Ajax to submit form data
+			            $.post($form.attr('action'), $form.serialize(), function(result) {
+			            	parent.layer.msg(result.msg);
+							var id = $("#projectId").val();
+							
+							closeLayer();
+			            }, 'json');
+			            //alert($form.attr('action'));
+			            
+			        });
+			});
+			function reloadList(){
+				 keyword = $('#keyword').val();
+			      
+			      //执行重载
+			      layui.table.reload('dg_user', {
+			        page: {
+			          curr: 1 //重新从第 1 页开始
+			        }
+			        ,where: {
+			            keyword: keyword
+			        }
+			      });
+			}
+		</script>
+	</body>
+</html>

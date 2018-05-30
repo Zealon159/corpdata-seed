@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8" />
+		<title>分配角色权限</title>
+		<link rel="stylesheet" href="/js/plugin/layui-v2.2.5/layui/css/layui.css">
+		<link rel="stylesheet" href="/js/plugin/bootstrap/css/bootstrap.min.css">
+		<link rel="stylesheet" href="/css/reset.css">
+		<script src="/js/jquery-2.1.1.min.js"></script>
+		<script src="/js/plugin/layui-v2.2.5/layui/layui.js"></script>
+		<script src="/js/common.js"></script>
+		
+	</head>
+<body>
+	<div class="panel panel-default">
+		  <div class="panel-heading">请选择相应的用户角色进行分配~</div>
+		  <div class="panel-body">
+		  <div>
+		  	<label>
+          		<input name="ck_all" id="ck_all" value="1" type="checkbox" onclick="checkAll(this.checked)"> 全部
+        	</label>
+        	</div>
+        	
+	      		<span style="width:20%;float:left;" th:each="role,status : ${list}">
+		        	<label>
+		          		<input name="roles" th:value="${role.id}" type="checkbox" th:text="' ' + ${status.index+1} + '. ' + ${role.roleName}"> 
+		        	</label>
+		      	</span>
+		      	
+		  </div>
+		</div>
+		<div style="width: 100%; text-align: center; padding-top: 20px">
+			<button class="btn btn-primary radius primary-vdd" type="button" onclick="saveUserRoles()">分配角色</button>
+			<a class="btn btn-default radius" onClick="closeLayer();"> 关 闭</a>
+			<br />
+			<br />
+		</div>
+		
+		<div style="display:none">
+			<input id="userRoles" name="userRoles" type="hidden" th:value="${userRoles}" />
+			<input id="userId" name="userId" type="hidden" th:value="${userId}" />
+		</div>
+</body>
+
+<script>
+$(document).ready(function() {
+	//处理用户已有角色默认选中
+	var userRoles = $("#userRoles").val();
+	$('input[name="roles"]').each(function(){
+		var val = $(this).val();
+		if(userRoles.indexOf(val)!=-1){
+			$(this).prop("checked",true);
+		}
+	});
+	
+});
+function jqchk(){ //jquery获取复选框值 
+	var chk_value =[]; 
+	$('input[name="roles"]:checked').each(function(){ 
+		chk_value.push($(this).val()); 
+	}); 
+	return chk_value;
+} 
+
+//全选:反选
+function checkAll(val){
+	if(val){
+		$("[name='roles']").prop("checked",true);//全选 
+	}else{
+		$("[name='roles']").prop("checked",false);//取消全选
+	}
+}
+//存盘数据
+function saveUserRoles() {
+	var roles = jqchk();
+	if(roles.length==0){alert("请选择角色!");return false;}
+	var url = "/orguserrole/saveUserRoles";
+	var userId = $("#userId").val();
+	roles = JSON.stringify(roles);
+	jQuery.ajax({
+		type : "post",
+		async : false,
+		url : url,
+		dataType : "json",
+		data : {
+			userId : userId,
+			roles : roles
+		},
+		success : function(data) {
+			if (data.success) {
+				parent.layer.msg(data.msg);
+			}
+		}
+	}); 
+}
+
+</script>
+</html>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.corpdata.system.org.dao.OrgDeptMapper" >
+  <resultMap id="BaseResultMap" type="com.corpdata.system.org.entity.OrgDept" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="folderName" property="foldername" jdbcType="VARCHAR" />
+    <result column="folderid" property="folderid" jdbcType="VARCHAR" />
+    <result column="ParentFolderid" property="parentfolderid" jdbcType="VARCHAR" />
+    <result column="Sort_number" property="sortNumber" jdbcType="INTEGER" />
+    <result column="creater" property="creater" jdbcType="VARCHAR" />
+    <result column="created" property="created" jdbcType="TIMESTAMP" />
+    <result column="modified" property="modified" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, folderName, folderid, ParentFolderid, Sort_number, creater, created, modified
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from org_dept
+    where id = #{id,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from org_dept
+    where id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.corpdata.system.org.entity.OrgDept" >
+    insert into org_dept (id, folderName, folderid, 
+      ParentFolderid, Sort_number, creater, 
+      created, modified)
+    values (#{id,jdbcType=CHAR}, #{foldername,jdbcType=VARCHAR}, #{folderid,jdbcType=VARCHAR}, 
+      #{parentfolderid,jdbcType=VARCHAR}, #{sortNumber,jdbcType=INTEGER}, #{creater,jdbcType=VARCHAR}, 
+      #{created,jdbcType=TIMESTAMP}, #{modified,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.corpdata.system.org.entity.OrgDept" >
+    update org_dept
+    set folderName = #{foldername,jdbcType=VARCHAR},
+    <if test="folderid!=null">
+    	folderid = #{folderid,jdbcType=VARCHAR},
+    </if>
+      ParentFolderid = #{parentfolderid,jdbcType=VARCHAR},
+      Sort_number = #{sortNumber,jdbcType=INTEGER},
+      modified = #{modified,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=CHAR}
+  </update>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, folderName, folderid, ParentFolderid, Sort_number, creater, created, modified 
+    from org_dept order by folderid
+  </select>
+  
+  <select id="selectAllByKeyword" resultMap="BaseResultMap" parameterType="String">
+    select id, folderName, folderid, ParentFolderid, Sort_number, creater, created, modified 
+    from org_dept 
+    where 1=1 
+    <if test="keyword!=null">
+    	and (folderName like CONCAT(CONCAT('%',#{keyword}), '%') )
+    </if>
+     order by folderid
+  </select>
+  
+  <select id="selectAllByCombox" resultType="map">
+    select id, folderName text, folderid from org_dept order by folderid
+  </select>
+  
+  <!-- 按父分类查询最后一条子分类记录 编号（folderid） -->
+  <select id="selectLastFolderidByParent" resultType="String" parameterType="java.lang.String" >
+    select folderid from org_dept  
+    where parentFolderid = #{parentFolderid,jdbcType=CHAR} 
+    order by folderid desc limit 0,1
+  </select>
+</mapper>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8" />
+		<title>用户管理</title>
+		<div th:replace="biz/common/common_grid_header"></div>
+		<style type="text/css">
+		
+		.my-search-icon {
+			right:20px;
+			top:10px;
+		}
+		</style>
+	</head>
+	<body>
+		<div style="padding: 15px; height: 100%">
+			<div class="layui-row">
+				<div class="search-box ">
+					
+						<div class="col-md-6 col-sm-6 col-xs-6">
+							<div class="form-group">
+							    <select id="orgDept" name="orgDept" class="form-control selectpicker"  data-type="reload">
+							   	</select>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-6 col-xs-6">
+							<div class="form-group">
+							<input type="text" id="searchStr" class="form-control"  placeholder="" width="100px">
+						    <a href="javascript:void(0)" id='btn-search' data-type="reload"><i class='glyphicon glyphicon-search my-search-icon'></i></a>
+							</div>
+						</div>
+					<div style="clear:both"></div>
+				</div>
+				<table class="layui-hide" id="LAY_table_user" lay-filter="user"></table> 
+				
+				<div style="width:100%;text-align:center;padding:10px">
+					 <button type="button" class="btn btn-primary" onClick="doSel()">确 定 </button> &nbsp; &nbsp; 
+				 	 <button type="button" class="btn btn-default" onClick="closeLayer();"> 取 消 </button> 	
+				</div>
+			</div>
+		</div>
+		<!-- 当前节点名称  -->
+		<script type="text/html" id="deptTpl">
+			{{#  if(d.orgDept != null){ }}
+			{{d.orgDept.foldername}}
+			{{#  } }}
+		</script>
+		<script th:inline="javascript">
+			layui.use('table', function(){
+				var table = layui.table;
+			  	
+				//方法级渲染
+				table.render({
+					id:'dg_user',
+				    elem: '#LAY_table_user',
+				    url: '/orguser/find/',
+				    cols: [[
+				      {checkbox: true, fixed: true}
+				      ,{field:'userid', align:'left', title: '登录名'}
+				      ,{field:'userName', align:'left', title: '中文名',  sort: true}
+				      ,{field:'deptName', align:'left', title: '部门',  templet: '#deptTpl' }
+				      ,{field:'sortNumber', align:'center', title: '排序'}
+				    ]]
+				    ,page: true
+				    ,height: 300
+				});
+				
+				var active = {
+				    reload: function(){
+				      var searchStr = $('#searchStr');
+				      var orgDept = $('#orgDept');
+				      //执行重载
+				      table.reload('dg_user', {
+				        page: {
+				          curr: 1 //重新从第 1 页开始
+				        }
+				        ,where: {
+				        	keyword: searchStr.val(),
+				        	deptId: orgDept.val()
+				        }
+				      });
+				    }
+				  };  
+				$('#btn-search').on('click', function(){
+				  var type = $(this).data('type');
+				  active[type] ? active[type].call(this) : '';
+				});
+				
+				$("#orgDept").change(function(){
+					var type = $(this).data('type');
+					active[type] ? active[type].call(this) : '';
+				});
+				
+				$('input').keyup(function (event) {
+			        var e = event|| window.event;
+			        if (e.keyCode == "13") {
+			        	var type = "reload";
+						active[type] ? active[type].call(this) : '';
+			        }
+			    });
+			});
+			
+			
+			$(function() {
+				layui.use([ 'element', 'table', 'layer' ], function() {
+					var element = layui.element;
+				});
+				
+				initSelect("orgDept","/orgdept/selectjson/0","");
+			})
+			
+			function initSelect(id,url,defaultValue){
+				$.post(url,function(res){
+			        var txt="<option value=''>--所有--</option>";
+			        for(var i = 0;i <res.length;i++){  
+			            txt += "<option value='"+ res[i].id +"'>" + res[i].text+"</option>"; 
+			        }  
+			        document.getElementById(id).innerHTML=txt;
+			        //默认值赋值
+			        if(defaultValue!=null && defaultValue!=""){
+			        	$('#'+id).val(defaultValue);
+			        }
+			    },"json");  
+			}
+			
+			function doSel(){
+				 var checkStatus = layui.table.checkStatus('dg_user')
+			      ,data = checkStatus.data;
+				 if(data==null||data.length==0){
+					 layer.msg('请选择用户！', {icon: 2});
+					 return false;
+				 }
+				 var Userid = "";
+				 var UserName = "";
+				 for(var i = 0; i < data.length; i++){
+					 if(i>0){Userid += ','; UserName += ',';}
+					 Userid += data[i].userid;
+					 UserName += data[i].userName;
+				 }
+				 var fdName = /*[[${fdName}]]*/;
+				 var type = /*[[${type}]]*/;
+				 if(type=='0'||type==0){
+					 parent.$("#"+fdName).val(Userid);
+					 if(parent.$("#"+fdName+"_CN").is('span')){
+						 parent.$("#"+fdName+"_CN").text(UserName);
+					 }else{
+						 parent.$("#"+fdName+"_CN").val(UserName);
+					 }
+				 }else{
+					 parent.initFdName(Userid, UserName, GetUrlArg("_parameter"));
+				 }
+				 closeLayer();
+			}
+			
+		</script>
+	</body>
+</html>

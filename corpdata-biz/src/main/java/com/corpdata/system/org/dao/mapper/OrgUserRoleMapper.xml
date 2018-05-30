@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.corpdata.system.org.dao.OrgUserRoleMapper" >
+  <resultMap id="BaseResultMap" type="com.corpdata.system.org.entity.OrgUserRole" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="userid" property="userid" jdbcType="VARCHAR" />
+    <association property="orgRole" javaType="com.corpdata.system.org.entity.OrgRole">
+    	<id column="roleId" property="id"/>
+    </association>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, fk_role, userid
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from org_user_role
+    where id = #{id,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from org_user_role
+    where id = #{id,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByUserid" parameterType="java.lang.String" >
+    delete from org_user_role
+    where userid = #{userid,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.corpdata.system.org.entity.OrgUserRole" >
+    insert into org_user_role (id, fk_role, userid)
+    values (#{id,jdbcType=CHAR}, #{orgRole.id,jdbcType=CHAR}, #{userid,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.corpdata.system.org.entity.OrgUserRole" >
+    update org_user_role
+    set fk_role = #{fkRole,jdbcType=CHAR},
+      userid = #{userid,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=CHAR}
+  </update>
+</mapper>

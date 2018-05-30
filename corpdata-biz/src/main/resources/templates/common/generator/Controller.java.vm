@@ -1,0 +1,98 @@
+package ${package}.controller;
+
+import java.util.List;
+import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import ${package}.entity.${className};
+import ${package}.service.${className}Service;
+import com.corpdata.common.base.BaseController;
+import com.corpdata.common.result.Result;
+import com.corpdata.common.result.DataGrid;
+
+/**
+ * ${comments}
+ * 
+ * @author ${author}
+ * @email ${email}
+ * @date ${datetime}
+ */
+ 
+@Controller
+@RequestMapping("/${pathName}/${classname}")
+public class ${className}Controller extends BaseController{
+
+	@Autowired
+	private ${className}Service ${classname}Service;
+	
+	//列表页面
+	@GetMapping("/list")
+	public String list(Model model, HttpServletRequest request){
+	    return "${pathName}/${classname}/${classname}";
+	}
+	
+	//列表数据
+	@ResponseBody
+	@RequestMapping("/listdata")
+	public DataGrid<${className}> getList(DataGrid dt){
+		if (null == dt) {
+            return null;
+        }
+		return ${classname}Service.selectDataGrid(dt);
+	}
+	
+	//新增页面
+	@GetMapping("/toadd")
+	public String toAdd(){
+	    return "${pathName}/${classname}/${classname}_add";
+	}
+	
+	//新增数据
+	@ResponseBody
+	@PostMapping(value = "/add")
+	public Result add(${className} ${classname}) {
+		if (null == ${classname}) {
+            return null;
+        }
+		return ${classname}Service.insert(${classname});
+	}
+
+	//编辑页面
+	@GetMapping("/toedit/{${pk.attrname}}")
+	public String toEdit(@PathVariable("${pk.attrname}") ${pk.attrType} ${pk.attrname},Model model){
+		${className} ${classname} = ${classname}Service.selectById(${pk.attrname});
+		model.addAttribute("${classname}", ${classname});
+	    return "${pathName}/${classname}/edit";
+	}
+	
+	//编辑保存数据
+	@ResponseBody
+	@RequestMapping("/edit")
+	public Result update(${className} ${classname}){
+		return ${classname}Service.update(${classname});
+	}
+	
+	//删除
+	@ResponseBody
+	@PostMapping("/delete")
+	public Result delete(${pk.attrType} ${pk.attrname}){
+		return ${classname}Service.delete(${pk.attrname});
+	}
+	
+	//批量删除
+	@PostMapping("/batchdelete")
+	@ResponseBody
+	public Result batchDelete(@RequestParam("ids[]") ${pk.attrType}[] ${pk.attrname}s){
+		return ${classname}Service.batchDelete(${pk.attrname}s);
+	}
+	
+}

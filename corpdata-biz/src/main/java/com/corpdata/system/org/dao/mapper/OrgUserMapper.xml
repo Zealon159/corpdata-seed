@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.corpdata.system.org.dao.OrgUserMapper">
+  <resultMap id="BaseResultMap" type="com.corpdata.system.org.entity.OrgUser">
+    <id column="id" jdbcType="CHAR" property="id" />
+    <result column="Userid" jdbcType="VARCHAR" property="userid" />
+    <result column="User_Pwd" jdbcType="VARCHAR" property="userPwd" />
+    <result column="User_Name" jdbcType="VARCHAR" property="userName" />
+    <result column="Phone_number" jdbcType="VARCHAR" property="phoneNumber" />
+    <result column="Email_address" jdbcType="VARCHAR" property="emailAddress" />
+    <result column="Enabled_state" jdbcType="BIT" property="enabledState" />
+    <result column="Sort_number" jdbcType="INTEGER" property="sortNumber" />
+    <result column="creater" jdbcType="VARCHAR" property="creater" />
+    <result column="created" jdbcType="TIMESTAMP" property="created" />
+    <result column="modified" jdbcType="TIMESTAMP" property="modified" />
+    <association property="orgDept" javaType="com.corpdata.system.org.entity.OrgDept">
+    	<id column="d_id" jdbcType="CHAR" property="id" />
+    	<result column="d_folderName" jdbcType="VARCHAR" property="foldername" />
+    </association>
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from org_user
+    where id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.corpdata.system.org.entity.OrgUser">
+    insert into org_user (id,Fk_dept, Userid, User_Pwd, 
+      User_Name, Phone_number, Email_address, 
+      Enabled_state, Sort_number, creater, 
+      created, modified)
+    values (#{id,jdbcType=CHAR},#{orgDept.id,jdbcType=CHAR}, #{userid,jdbcType=VARCHAR}, #{userPwd,jdbcType=VARCHAR}, 
+      #{userName,jdbcType=VARCHAR}, #{phoneNumber,jdbcType=VARCHAR}, #{emailAddress,jdbcType=VARCHAR}, 
+      #{enabledState,jdbcType=BIT}, #{sortNumber,jdbcType=INTEGER}, #{creater,jdbcType=VARCHAR}, 
+      #{created,jdbcType=TIMESTAMP}, #{modified,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.corpdata.system.org.entity.OrgUser">
+    update org_user set 
+    Fk_dept=#{orgDept.id},
+    <if test="userPwd!=null">
+      User_Pwd = #{userPwd,jdbcType=VARCHAR},
+    </if>
+    <if test="userName!=null">
+      User_Name = #{userName,jdbcType=VARCHAR},
+    </if>
+    <if test="phoneNumber!=null">
+      Phone_number = #{phoneNumber,jdbcType=VARCHAR},
+    </if>
+    <if test="emailAddress!=null">
+      Email_address = #{emailAddress,jdbcType=VARCHAR},
+    </if>
+    <if test="enabledState!=null">
+      Enabled_state = #{enabledState,jdbcType=BIT},
+    </if>
+    <if test="sortNumber!=null">
+      Sort_number = #{sortNumber,jdbcType=INTEGER},
+    </if>
+    
+      modified = #{modified,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=CHAR}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select u.id, u.Userid, u.User_Pwd, u.User_Name, u.Phone_number, u.Email_address, u.Enabled_state, 
+    u.Sort_number, u.creater, u.created, u.modified,d.id d_id,d.folderName d_folderName
+    from org_user u
+    left join org_dept d on(u.fk_dept=d.id)
+    where u.id = #{id,jdbcType=CHAR}
+  </select>
+  <select id="getUserInfoByUserid" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select id, Userid, User_Pwd, User_Name, Phone_number, Email_address, Enabled_state, 
+    Sort_number, creater, created, modified
+    from org_user
+    where Userid = #{userId,jdbcType=CHAR} 
+    <!-- and User_Pwd=#{pwd,jdbcType=CHAR} -->
+  </select>
+  
+  <select id="selectAll" resultMap="BaseResultMap">
+    select u.id, u.Userid, u.User_Pwd, u.User_Name, u.Phone_number, u.Email_address, u.Enabled_state, 
+    u.Sort_number, u.creater, u.created, u.modified,d.id d_id,d.folderName d_folderName
+    from org_user u
+    left join org_dept d on(u.fk_dept=d.id)
+  </select>
+  
+  <select id="selectAllByKeyword" resultMap="BaseResultMap" parameterType="String">
+    select u.id, u.Userid, u.User_Pwd, u.User_Name, u.Phone_number, u.Email_address, u.Enabled_state, 
+    u.Sort_number, u.creater, u.created, u.modified,d.id d_id,d.folderName d_folderName
+    from org_user u
+    left join org_dept d on(u.fk_dept=d.id)
+    where 1=1 
+    <if test="keyword!=null">
+    	and (u.userid like CONCAT(CONCAT('%',#{keyword}), '%') 
+    		or u.User_Name like CONCAT(CONCAT('%', #{keyword}), '%')
+    		)
+    </if>
+    <if test="deptId!=null and deptId != ''">
+    	and  u.fk_dept = #{deptId} 
+    </if>
+  </select>
+  
+  <select id="selectByUserId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select * from org_user where userId = #{userId,jdbcType=CHAR}
+  </select>
+</mapper>

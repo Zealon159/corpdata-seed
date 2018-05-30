@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8" />
+		<title>用户表单</title>
+		<div th:replace="biz/common/common_form_header"></div>
+		<style>.row{margin: 0}</style>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$('#defaultForm').bootstrapValidator({
+		            message: 'This value is not valid',
+		            feedbackIcons: {
+		                valid: 'glyphicon glyphicon-ok',
+		                invalid: 'glyphicon glyphicon-remove',
+		                validating: 'glyphicon glyphicon-refresh'
+		            },
+		            fields: {
+		            	userName: {
+		                    validators: {
+		                        notEmpty: {
+		                            message: '中文名不能为空！'
+		                        }
+		                    }
+		                } ,
+		                phoneNumber:{
+		                	validators:{
+		                		 regexp: {//正则验证  
+		                             regexp: /^[1][3,4,5,7,8][0-9]{9}$/,  
+		                             message: '请输入正确手机号'  
+		                         }
+		                	}
+		                },
+		                emailAddress:{
+		                	validators:{
+		                		 emailAddress: {//验证email地址  
+		                             message: '请输入正确的email地址'  
+		                         }
+		                	}
+		                }
+		            }
+		        }).on('success.form.bv', function(e) {
+		            // Prevent form submission
+		            e.preventDefault();
+
+		            // Get the form instance
+		            var $form = $(e.target);
+
+		            // Get the BootstrapValidator instance
+		            var bv = $form.data('bootstrapValidator');
+
+		            // Use Ajax to submit form data
+		            $.post($form.attr('action'), $form.serialize(), function(result) {
+						window.parent.layer.msg(result.msg);
+						closeLayer();
+		            }, 'json');
+		        }); 
+			});
+			
+			//关闭层iframe
+			function closeLayer(){
+				var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+				parent.location.reload();
+				parent.layer.close(index);
+			}
+		</script>
+	</head>
+	<body>
+		 <div class="row">
+    		<div class="floor-msg">
+    			<form id="defaultForm" th:method="post" th:action="@{/orguser/edit}">
+	    			<div class="form-modal">
+						<div class="form-wrap clearfix">
+							
+							<div class="col-md-12 col-sm-12 col-xs-12">
+								<div class="form-group">
+								    <label for="">中文名</label>
+								    <input th:value="${user.userName}" type="text" name="userName" id="userName" class="form-control"  placeholder="请填写用户中文名">
+								</div>
+							</div>
+							<div class="col-md-12 col-sm-12 col-xs-12">
+								<div class="form-group">
+								    <label for="">手机号</label>
+								    <input th:value="${user.phoneNumber}" type="text" name="phoneNumber" id="phoneNumber" class="form-control"  >
+								</div>
+							</div>
+							<div class="col-md-12 col-sm-12 col-xs-12">
+								<div class="form-group">
+								    <label for="">电子邮件</label>
+								    <input th:value="${user.emailAddress}" type="text" name="emailAddress" id="emailAddress" class="form-control"  placeholder="如:abc@abc.com">
+								</div>
+							</div>
+							
+							<div class="col-md-6 col-sm-6 col-xs-6">
+								<input type="hidden" name="id" id="id" th:value="${user.id}" />
+								<button type="submit" class="btn btn-primary float-r">保存</button>
+							</div>
+						 	<div class="col-md-6 col-sm-6 col-xs-6">
+								<button type="button" class="btn btn-default" onclick="closeLayer();">取消</button>
+							</div>	
+							
+						</div>
+					</div>
+				</form>
+    		</div>
+    	</div>
+	</body>
+</html>

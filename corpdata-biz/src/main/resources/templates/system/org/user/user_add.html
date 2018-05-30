@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8" />
+		<title>用户表单</title>
+		<div th:replace="biz/common/common_form_header"></div>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				initSelect("orgDept","/orgdept/selectjson/0","");
+				$('#defaultForm').bootstrapValidator({
+		            message: 'This value is not valid',
+		            feedbackIcons: {
+		                valid: 'glyphicon glyphicon-ok',
+		                invalid: 'glyphicon glyphicon-remove',
+		                validating: 'glyphicon glyphicon-refresh'
+		            },
+		            fields: {
+		            	userid: {
+		                    validators: {
+		                        notEmpty: {
+		                            message: '登录名不能为空！'
+		                        }
+		                    }
+		                },userName: {
+		                    validators: {
+		                        notEmpty: {
+		                            message: '中文名不能为空！'
+		                        }
+		                    }
+		                },userPwd: {
+		                    validators: {
+		                        notEmpty: {
+		                            message: '登录密码不能为空！'
+		                        }
+		                    }
+		                },userPwd2: {
+		                    validators: {
+		                    	notEmpty: {
+		                            message: '密码确认不能为空！'
+		                        },callback: {
+		                	        message: '两次密码输入不一致！',
+		                	        callback:function(value, validator,$field){
+		                	        	var pwd = $("#userPwd").val();
+		                	        	return pwd==value;
+		                	        }
+		                	    }
+		                	}
+		                }
+		            }
+		        }).on('success.form.bv', function(e) {
+		            // Prevent form submission
+		            e.preventDefault();
+
+		            // Get the form instance
+		            var $form = $(e.target);
+
+		            // Get the BootstrapValidator instance
+		            var bv = $form.data('bootstrapValidator');
+
+		            // Use Ajax to submit form data
+		            $.post($form.attr('action'), $form.serialize(), function(result) {
+		            	parent.layui.table.reload('dg_user');
+						window.parent.layer.msg(result.msg);
+						closeLayer();
+		            }, 'json');
+		        });
+			});
+		</script>
+	</head>
+	<body>
+		<div class="building-details" id="building-details">
+	    	<div class="layui-tab-content">
+    			<form id="defaultForm" th:method="post" th:action="@{/orguser/add}">
+	    			<div class="form-modal">
+						<div class="form-wrap clearfix">
+							<div class="col-md-6 col-sm-6 col-xs-6">
+								<div class="form-group">
+								    <label for="">所属组织</label>
+								    <select id="orgDept" name="orgDept" class="form-control selectpicker">
+								   	</select>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-6 col-xs-6">
+								<div class="form-group">
+								    <label for="">排序号</label>
+								    <input type="text" name="sortNumber" class="form-control" placeholder="">
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-6 col-xs-6">
+								<div class="form-group">
+								    <label for="">登录名</label>
+								    <input type="text" name="userid" id="userid" class="form-control"  placeholder="请填写登录名">
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-6 col-xs-6">
+								<div class="form-group">
+								    <label for="">中文名</label>
+								    <input type="text" name="userName" id="userName" class="form-control"  placeholder="请填写用户中文名">
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-6 col-xs-6">
+								<div class="form-group">
+								    <label for="">密码</label>
+								    <input type="password" name="userPwd" id="userPwd" class="form-control"  >
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-6 col-xs-6">
+								<div class="form-group">
+								    <label for="">密码确认</label>
+								    <input type="password" name="userPwd2" id="userPwd2" class="form-control"  >
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-6 col-xs-6">
+								<div class="form-group">
+								    <label for="">手机号</label>
+								    <input type="text" name="phoneNumber" id="phoneNumber" class="form-control"  >
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-6 col-xs-6">
+								<div class="form-group">
+								    <label for="">电子邮件</label>
+								    <input type="text" name="emailAddress" id="emailAddress" class="form-control"  placeholder="如:abc@abc.com">
+								</div>
+							</div>
+							
+							<div class="col-md-6 col-sm-6 col-xs-6">
+								<button type="submit" class="btn btn-primary float-r">保存</button>
+							</div>
+						 	<div class="col-md-6 col-sm-6 col-xs-6">
+								<button type="button" class="btn btn-default" onclick="closeLayer();">取消</button>
+							</div>	
+							
+						</div>
+					</div>
+				</form>
+    		</div>
+    	</div>
+	</body>
+</html>

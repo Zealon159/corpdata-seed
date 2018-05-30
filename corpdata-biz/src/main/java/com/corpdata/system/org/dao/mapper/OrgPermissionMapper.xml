@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.corpdata.system.org.dao.OrgPermissionMapper">
+  <resultMap id="BaseResultMap" type="com.corpdata.system.org.entity.OrgPermission">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="ParentId" jdbcType="VARCHAR" property="parentid" />
+    <result column="PermissionName" jdbcType="VARCHAR" property="permissionname" />
+    <result column="Type" jdbcType="VARCHAR" property="type" />
+    <result column="ResourceUrl" jdbcType="VARCHAR" property="resourceurl" />
+    <result column="Permission" jdbcType="VARCHAR" property="permission" />
+    <result column="SortNum" jdbcType="VARCHAR" property="sortnum" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from org_permission
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.corpdata.system.org.entity.OrgPermission">
+    insert into org_permission (id, ParentId, PermissionName, 
+      Type, ResourceUrl, Permission, 
+      SortNum)
+    values (#{id,jdbcType=VARCHAR}, #{parentid,jdbcType=VARCHAR}, #{permissionname,jdbcType=VARCHAR}, 
+      #{type,jdbcType=VARCHAR}, #{resourceurl,jdbcType=VARCHAR}, #{permission,jdbcType=VARCHAR}, 
+      #{sortnum,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.corpdata.system.org.entity.OrgPermission">
+    update org_permission
+    set ParentId = #{parentid,jdbcType=VARCHAR},
+      PermissionName = #{permissionname,jdbcType=VARCHAR},
+      Type = #{type,jdbcType=VARCHAR},
+      ResourceUrl = #{resourceurl,jdbcType=VARCHAR},
+      Permission = #{permission,jdbcType=VARCHAR},
+      SortNum = #{sortnum,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select id, ParentId, PermissionName, Type, ResourceUrl, Permission, SortNum
+    from org_permission
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, ParentId, PermissionName, Type, ResourceUrl, Permission, SortNum
+    from org_permission
+  </select>
+  
+  <select id="getPermissionsByUser" resultType="String" parameterType="java.lang.String">
+  	select permission from org_permission where id in (select fk_permissionid from org_rolepermission where 
+  	fk_roleid in (select fk_role from org_user_role where userid=#{userId})
+  	) and type='button'
+  </select>
+</mapper>

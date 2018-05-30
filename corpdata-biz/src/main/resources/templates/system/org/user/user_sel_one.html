@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8" />
+		<title>用户管理</title>
+		<div th:replace="biz/common/common_grid_header"></div>
+		<style type="text/css">
+		.layui-table-view .layui-form-checkbox {
+		    height: 24px;
+		    line-height: 24px;
+		}
+		.my-search-icon {
+		    right: 25px;
+		}
+		.layui-table-view {
+		    margin: 0;
+		}
+		</style>
+	</head>
+	<body>
+		<div style="padding: 5px; height: 100%">
+			<div class="layui-row" style="height:100%">
+				<div class="search-box " style="height:40px">
+					
+						<div class="col-md-6 col-sm-6 col-xs-6">
+							 <div >
+							    <select id="orgDept" name="orgDept" class="form-control selectpicker" onchange="reloadList()">
+							   	</select>
+							   	<input type="hidden" id="deptId" name="deptId" placeholder="" th:value="${project.getDept().getId()}">
+							</div> 
+							<!-- <div class="form-group">
+							    所属楼盘:<span th:text="${project.projectName}"></span>
+							    <input type="text" class="form-control"  placeholder="" readonly th:value="${project.projectName}">
+							    <input type="hidden" id="projectId" name="projectId" placeholder="" th:value="${projectId}">
+							    <input type="hidden" id="deptId" name="deptId" placeholder="" th:value="${project.getDept().getId()}">
+							</div>  -->
+						</div>
+						<div class="col-md-6 col-sm-6 col-xs-6">
+							<div >
+							<input class="form-control" placeholder="关键字" type="text" width="100px" id="keyword"/>
+						    <i class="glyphicon glyphicon-search my-search-icon"  onclick="reloadList()"></i>
+							</div>
+						</div>
+					<div style="clear:both"></div>
+				</div>
+				<table class="layui-hide" id="LAY_table_user" lay-filter="user"></table> 
+				<script type="text/html" id="choose">
+
+  					<input type="checkbox" name="{{d.userName}}" value="{{d.userid}}" title="选择" lay-filter="chooseUser" >
+				</script>
+				<!-- <div style="width:100%;text-align:center;padding:10px">
+					 <button type="button" class="btn btn-primary" onClick="doSel()">确 定 </button> &nbsp; &nbsp; 
+				 	 <button type="button" class="btn btn-default" onClick="closeLayer();"> 取 消 </button> 	
+				</div> -->
+			</div>
+		</div>
+		
+		<script th:inline="javascript">
+		var keyword=$("#keyword").val();
+		var deptId = $("#deptId").val();
+			layui.use('table', function(){
+				var table = layui.table;
+			  	
+				//方法级渲染
+				table.render({
+					id:'dg_user',
+				    elem: '#LAY_table_user',
+				    url: '/orguser/find/',
+				    cols: [[
+				      {field:'userid', align:'left', title: '登录名'}
+				      ,{field:'userName', align:'left', title: '中文名'}
+				      ,{templet:'#choose', align:'center', title: '操作'}
+				    ]]
+				    ,page: true
+				    ,height: "full-45"
+				    ,where: {
+			     		keyword:keyword
+			     		,deptId:deptId
+			    	 }
+				});
+				//监听选择操作
+				  layui.form.on('checkbox(chooseUser)', function(obj){
+				    //layer.tips(this.value + ' ' + this.name , obj.othis);
+				    //console.log($(this).attr("dir"));
+				    doSel(this.value,this.name);
+				  });
+			});
+			
+			
+			$(function() {
+				layui.use([ 'element', 'table', 'layer' ], function() {
+					var element = layui.element;
+				});
+				deptId = $("#deptId").val();
+				initSelect("orgDept","/orgdept/selectjson/1",deptId);
+			})
+			
+			function doSel(Userid,UserName){
+				 /* var checkStatus = layui.table.checkStatus('dg_user')
+			      ,data = checkStatus.data;
+				 if(data==null||data.length==0){
+					 layer.msg('请选择用户！', {icon: 2});
+					 return false;
+				 }else if(data.length >1){
+					 layer.msg('只能选择一个用户！', {icon: 2});
+					 return false;
+				 }
+				 var Userid = data[0].userid;
+				 var UserName = data[0].userName; */
+				 var fdName = /*[[${fdName}]]*/;
+				 var type = /*[[${type}]]*/;
+				 if(type=='0'||type==0){
+					 parent.$("#"+fdName).val(Userid);
+					 if(parent.$("#"+fdName+"_CN").is('span')){
+						 parent.$("#"+fdName+"_CN").text(UserName);
+					 }else{
+						 parent.$("#"+fdName+"_CN").val(UserName);
+					 }
+				 }else{
+					 parent.initFdName(Userid, UserName);
+				 }
+				 closeLayer();
+			}
+			function reloadList(){
+				 keyword = $('#keyword').val();
+				deptId = $("#orgDept").val();
+			      //执行重载
+			      layui.table.reload('dg_user', {
+			        page: {
+			          curr: 1 //重新从第 1 页开始
+			        }
+			        ,where: {
+			            keyword: keyword
+			            ,deptId:deptId
+			        }
+			      });
+			}
+			
+			
+		</script>
+	</body>
+</html>

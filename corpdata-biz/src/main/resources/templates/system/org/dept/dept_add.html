@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8" />
+		<title>组织表单</title>
+		<div th:replace="biz/common/common_form_header"></div>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				initSelect("parentfolderid","/orgdept/selectjson/1","");
+				$('#defaultForm').bootstrapValidator({
+		            message: 'This value is not valid',
+		            feedbackIcons: {
+		                valid: 'glyphicon glyphicon-ok',
+		                invalid: 'glyphicon glyphicon-remove',
+		                validating: 'glyphicon glyphicon-refresh'
+		            },
+		            fields: {
+		            	foldername: {
+		                    message: 'The username is not valid',
+		                    validators: {
+		                        notEmpty: {
+		                            message: '组织名称不能为空！'
+		                        }
+		                    }
+		                }
+		            }
+		        }).on('success.form.bv', function(e) {
+		            // Prevent form submission
+		            e.preventDefault();
+
+		            // Get the form instance
+		            var $form = $(e.target);
+
+		            // Get the BootstrapValidator instance
+		            var bv = $form.data('bootstrapValidator');
+
+		            // Use Ajax to submit form data
+		            $.post($form.attr('action'), $form.serialize(), function(result) {
+		            	parent.layui.table.reload('dg_dept');
+						window.parent.layer.msg(result.msg);
+						closeLayer();
+		            }, 'json');
+		        });
+			});
+		</script>
+	</head>
+	<body>
+		<div class="building-details" id="building-details">
+    		<div class="layui-tab-content">
+    			<form id="defaultForm" th:method="post" th:action="@{/orgdept/add}">
+	    			<div class="form-modal">
+						<div class="form-wrap clearfix">
+							<div class="col-md-12 col-sm-12 col-xs-12">
+								<div class="form-group">
+								    <label for="">上级组织</label>
+								    <select id="parentfolderid" name="parentfolderid" class="form-control selectpicker">
+								   	</select>
+								</div>
+							</div>
+							<div class="col-md-12 col-sm-12 col-xs-12">
+								<div class="form-group">
+								    <label for="">组织名称</label>
+								    <input type="text" name="foldername" id="foldername" class="form-control"  placeholder="请填写组织名称">
+								</div>
+							</div>
+							<div class="col-md-12 col-sm-12 col-xs-12">
+								<div class="form-group">
+								    <label for="">排序号</label>
+								    <input type="text" name="sortNumber" class="form-control" placeholder="">
+								</div>
+							</div>
+							
+							<div class="col-md-6 col-sm-6 col-xs-6">
+								<button type="submit" class="btn btn-primary float-r">保存</button>
+							</div>
+						 	<div class="col-md-6 col-sm-6 col-xs-6">
+								<button type="button" class="btn btn-default" onclick="closeLayer();">取消</button>
+							</div>	
+							
+						</div>
+					</div>
+				</form>
+    		</div>
+    	</div>
+	</body>
+</html>

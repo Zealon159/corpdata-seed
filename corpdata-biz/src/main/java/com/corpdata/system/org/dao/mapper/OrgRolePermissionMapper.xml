@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.corpdata.system.org.dao.OrgRolePermissionMapper">
+  <resultMap id="BaseResultMap" type="com.corpdata.system.org.entity.OrgRolePermission">
+    <id column="id" jdbcType="CHAR" property="id" />
+    <association property="role" javaType="com.corpdata.system.org.entity.OrgRole">
+    	<id column="roleId" property="id"/>
+    </association>
+    <association property="permission" javaType="com.corpdata.system.org.entity.OrgPermission">
+    	<id column="permissionId" property="id"/>
+    </association>
+  </resultMap>
+  <delete id="deleteByRoleId" parameterType="java.lang.String">
+    delete from org_rolepermission
+    where fk_roleId = #{roleId,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.corpdata.system.org.entity.OrgRolePermission">
+    insert into org_rolepermission (id, Fk_Roleid, Fk_permissionId
+      )
+    values (#{id,jdbcType=CHAR}, #{role.id,jdbcType=CHAR}, #{permission.id,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.corpdata.system.org.entity.OrgRolePermission">
+    update org_rolepermission
+    set Fk_Roleid = #{fkRoleid,jdbcType=CHAR},
+      Fk_permissionId = #{fkPermissionid,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=CHAR}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select id, Fk_Roleid, Fk_permissionId
+    from org_rolepermission
+    where id = #{id,jdbcType=CHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, Fk_Roleid, Fk_permissionId
+    from org_rolepermission
+  </select>
+  	<select id="getOrgRolePermissionMapList" resultMap="BaseResultMap" parameterType="map">
+		SELECT
+			m.id id,m.Fk_Roleid,m.Fk_permissionId,
+			p.id permissionId,
+			r.id roleId
+		FROM
+			org_rolepermission m
+			INNER JOIN org_role r ON m.Fk_Roleid = r.id
+			INNER JOIN org_permission p ON m.Fk_permissionId = p.id
+		where 1 = 1
+		<if test="roleId != null" >
+	        and m.Fk_Roleid = '${roleId }'
+	    </if>
+	</select>
+</mapper>
