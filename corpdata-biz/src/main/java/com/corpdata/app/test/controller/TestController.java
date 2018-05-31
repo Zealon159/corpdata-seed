@@ -1,18 +1,24 @@
 package com.corpdata.app.test.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSON;
 import com.corpdata.app.test.entity.Test;
 import com.corpdata.app.test.service.TestService;
-import com.corpdata.core.result.Result;
-import com.corpdata.core.result.ResultGenerator;
+import com.corpdata.common.base.DataGridRequestEntity;
+import com.corpdata.common.result.DataGrid;
+import com.corpdata.common.result.Result;
+import com.corpdata.common.result.util.ResultUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
@@ -27,23 +33,39 @@ public class TestController {
 	@PostMapping("/add")
 	public Result add(Test model) {
 		testService.save(model);
-        return ResultGenerator.genSuccessResult();
+        return ResultUtil.success();
     }
 	
 	@ResponseBody
 	@PostMapping("/update")
 	public Result update(Test model) {
 		testService.update(model);
-        return ResultGenerator.genSuccessResult();
+        return ResultUtil.success();
+    }
+	
+	@GetMapping("/list")
+    public String list() {
+        return "/app/test/list";
     }
 	
 	@ResponseBody
 	@PostMapping("/listdata")
-    public Result list(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
-        PageHelper.startPage(page, size);
+    public DataGrid list(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer limit) {
+        PageHelper.startPage(page, limit);
         List<Test> list = testService.findAll();
         PageInfo pageInfo = new PageInfo(list);
-        return ResultGenerator.genSuccessResult(pageInfo);
+        return null;
+    }
+	
+	
+	@ResponseBody
+	@PostMapping("/listdata2")
+    public String list2(@RequestBody DataGridRequestEntity dgRequest) {//@RequestBody 
+        System.out.println("v:"+dgRequest.getParams());
+        System.out.println("page:"+dgRequest.getPage());
+        System.out.println("limit:"+dgRequest.getLimit());
+        List<Test> list = testService.findBy(dgRequest.getParams());
+        return JSON.toJSONString(list);
     }
 	
 	//delete

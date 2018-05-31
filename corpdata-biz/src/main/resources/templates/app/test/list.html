@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8" />
+		<title>Insert title here</title>
+		<script src="/js/jquery/jquery-2.1.1.min.js"></script>
+		<script type="text/javascript">
+			function getData(){
+				var params = {};
+				params.name = "李刚";  
+				params.pwd = "888";
+
+				//发送请求
+	        	$.ajax({
+	                url : "/app/test/listdata2",
+	                type : "POST",  
+	                //datatype:"json",  
+	                contentType: "application/json; charset=utf-8",  
+	                data : JSON.stringify({params:params,page:1,limit:10}),//JSON.stringify()
+	                success : function(data, stats) {  
+	                    alert(data);
+	                },  
+	                error : function(data) {  
+	                    alert("请求失败");  
+	                }  
+	            });  
+			}
+			
+			function addData(){
+				$.post("/app/test/add",{title:"aaaa",total:"33"},function(res){
+	        		alert(res.message);
+	            });
+			}
+		</script>
+	</head>
+	<body>
+		
+		<input value="getData" type="button" onclick="getData()"/>
+		
+		<input value="addData" type="button" onclick="addData()"/>
+		<div id="data"></div>
+	</body>
+</html>

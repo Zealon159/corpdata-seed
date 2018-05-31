@@ -14,8 +14,6 @@ import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.corpdata.common.result.Result;
 import com.corpdata.core.exception.ServiceException;
-import com.corpdata.core.result.ResultCode;
-
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
