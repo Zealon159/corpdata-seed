@@ -11,13 +11,12 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.corpdata.common.base.BaseController;
 import com.corpdata.common.result.DataGrid;
 import com.corpdata.system.generate.service.GeneratorService;
 
 @Controller
 @RequestMapping("/system/generator")
-public class GeneratorController extends BaseController{
+public class GeneratorController{
 	
 	@Autowired
 	private GeneratorService generatorService;

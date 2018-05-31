@@ -7,23 +7,28 @@
 		<script type="text/javascript">
 			function getData(){
 				var params = {};
-				params.name = "李刚";  
+				params.title = "z";  
 				params.pwd = "888";
-
+				
+				var data={params:params,page:1,limit:10};
 				//发送请求
+				$.post("/app/test/listdata2",data,function(res){
+					alert(res);
+	            });
+				/*
 	        	$.ajax({
 	                url : "/app/test/listdata2",
 	                type : "POST",  
 	                //datatype:"json",  
-	                contentType: "application/json; charset=utf-8",  
-	                data : JSON.stringify({params:params,page:1,limit:10}),//JSON.stringify()
+	                contentType: "application/text; charset=utf-8",  
+	                data : {params:params,page:1,limit:10},//JSON.stringify()
 	                success : function(data, stats) {  
 	                    alert(data);
 	                },  
 	                error : function(data) {  
 	                    alert("请求失败");  
 	                }  
-	            });  
+	            });  */
 			}
 			
 			function addData(){

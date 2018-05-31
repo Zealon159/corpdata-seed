@@ -2,13 +2,14 @@ package com.corpdata.core.base;
 
 import org.apache.ibatis.exceptions.TooManyResultsException;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import com.corpdata.common.api.pagehelper.PageConvertUtil;
+import com.corpdata.common.domain.DataGridRequestDTO;
+import com.corpdata.common.result.Result;
+import com.corpdata.common.result.util.ResultUtil;
 import com.corpdata.core.exception.ServiceException;
 import com.corpdata.system.org.entity.OrgDept;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-
 import tk.mybatis.mapper.entity.Condition;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -29,24 +30,38 @@ public abstract class AbstractService<T> implements Service<T> {
         modelClass = (Class<T>) pt.getActualTypeArguments()[0];
     }
 
-    public void save(T model) {
-        mapper.insertSelective(model);
+    public Result save(T model) {
+        if(mapper.insertSelective(model)>0){
+        	return ResultUtil.success();
+    	}else{
+    		return ResultUtil.fail();
+    	}
     }
 
-    public void save(List<T> models) {
+    public Result save(List<T> models) {
         mapper.insertList(models);
+        return ResultUtil.success();
     }
 
-    public void deleteById(String id) {
-        mapper.deleteByPrimaryKey(id);
+    public Result deleteById(String id) {
+    	if(mapper.deleteByPrimaryKey(id)>0){
+    		return ResultUtil.success();
+    	}else{
+    		return ResultUtil.fail();
+    	}
     }
 
-    public void deleteByIds(String ids) {
+    public Result deleteByIds(String ids) {
         mapper.deleteByIds(ids);
+        return ResultUtil.success();
     }
 
-    public void update(T model) {
-        mapper.updateByPrimaryKeySelective(model);
+    public Result update(T model) {
+        if(mapper.updateByPrimaryKeySelective(model)>0){
+        	return ResultUtil.success();
+    	}else{
+    		return ResultUtil.fail();
+    	}
     }
 
     public T findById(String id) {
@@ -77,12 +92,10 @@ public abstract class AbstractService<T> implements Service<T> {
     public List<T> findAll() {
         return mapper.selectAll();
     }
-    
-    public String findByPage(int pageNo, int pageSize,String... keyword) {
-		PageHelper.startPage(pageNo, pageSize);
-		//Page<T> list = mapper.selectAllByKeyword(keyword);
-		Page<T> list = (Page<T>) mapper.selectByCondition(keyword);
-		
+
+    public String findByPage(DataGridRequestDTO dgRequest) {
+		PageHelper.startPage(dgRequest.getPage(), dgRequest.getLimit());
+		Page<T> list = (Page<T>) mapper.selectAll();
 		return PageConvertUtil.getGridJson(list);
 	}
 }
