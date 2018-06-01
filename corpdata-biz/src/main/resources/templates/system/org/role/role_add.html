@@ -3,12 +3,12 @@
 	<head>
 		<meta charset="UTF-8" />
 		<title>新增角色</title>
-		<div th:replace="biz/common/common_form_header"></div>
+		<div th:replace="common/common_form_header"></div>
 	</head>
 <body>
 	<div class="building-details" id="building-details">
 	    <div class="layui-tab-content">
-			<form id="defaultForm" action="#" th:action="@{/orgrole/add}" th:method="post" >
+			<form id="defaultForm" action="#" th:action="@{/orgrole/save}" th:method="post" >
 				<div class="form-modal">
 					<div class="form-wrap clearfix">
 						<div class="col-md-6 col-sm-6 col-xs-6">

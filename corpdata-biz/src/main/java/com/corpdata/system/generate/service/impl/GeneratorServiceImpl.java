@@ -32,6 +32,7 @@ public class GeneratorServiceImpl implements GeneratorService {
 			
 			//查询列信息
 			List<Map<String, Object>> columns = generatorMapper.listColumns(tableName);
+			
 			//生成代码
 			GenUtils.generatorCode(table, columns, zip,packageName, packageName2);
 		}
@@ -45,7 +46,6 @@ public class GeneratorServiceImpl implements GeneratorService {
 	 * @param dt
 	 * @return
 	 */
-	@Cacheable(value = "tables")
 	public DataGrid<Map<String,Object>> selectDataGrid(DataGrid dt) {
 		PageHelper.startPage(dt.getPage(), dt.getSize());
 		Page<Map<String,Object>> rows = generatorMapper.list();

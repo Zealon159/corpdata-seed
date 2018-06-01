@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<title>角色管理</title>
-		<div th:replace="biz/common/common_grid_header"></div>
+		<div th:replace="common/common_grid_header"></div>
 	</head>
 	<body>
 		<div style="padding: 15px; height: 100%">
@@ -40,7 +40,7 @@
 						type : 2,
 						area : [ '600px', '316px' ],
 						shade : [ 0.8, '#393D49' ],
-						content : [ "/orgrole/toadd", 'no' ]
+						content : [ "/orgrole/add", 'no' ]
 					});
 				})
 			})
@@ -52,7 +52,8 @@
 				table.render({
 					id:'dg_role',
 				    elem: '#LAY_table_role',
-				    url: '/orgrole/find/',
+				    url: '/orgrole/listdata',
+				    method:'post',
 				    cols: [[
 				      //{checkbox: true, fixed: true},
 				      {field:'roleName', align:'left', title: '角色名称'}
@@ -90,7 +91,7 @@
 							type : 2,
 							area : [ '600px', '316px' ],
 							shade : [ 0.8, '#393D49' ],
-							content : [ "/orgrole/toedit/"+data.id, 'no' ]
+							content : [ "/orgrole/edit/"+data.id, 'no' ]
 						});
 				    }
 				});
@@ -104,7 +105,9 @@
 					          curr: 1 //重新从第 1 页开始
 					        }
 					        ,where: {
-					        	searchStr: searchStr.val()
+					        	params:{
+					        		searchStr: searchStr.val()
+					        	}
 					        }
 					      });
 					    }

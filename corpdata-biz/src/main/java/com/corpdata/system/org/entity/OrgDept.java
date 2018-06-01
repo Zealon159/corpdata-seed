@@ -3,6 +3,9 @@ package com.corpdata.system.org.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
 /**
  * 组织实体
  * @author wu
@@ -12,6 +15,8 @@ public class OrgDept implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	
+	@Id
+	@GeneratedValue(generator = "UUID")
     private String id;
 
     private String foldername;

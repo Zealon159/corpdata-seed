@@ -9,15 +9,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.corpdata.system.org.dao.OrgRoleMapper;
 import com.corpdata.system.org.dao.OrgRolePermissionMapper;
+import com.corpdata.system.org.entity.OrgDept;
 import com.corpdata.system.org.entity.OrgPermission;
 import com.corpdata.system.org.entity.OrgRole;
 import com.corpdata.system.org.entity.OrgRolePermission;
 import com.corpdata.system.security.shiro.util.UserUtil;
 import com.corpdata.common.api.pagehelper.PageConvertUtil;
 import com.corpdata.common.api.redis.RedisService;
+import com.corpdata.common.domain.DataGridRequestDTO;
 import com.corpdata.common.result.Result;
 import com.corpdata.common.result.util.ResultUtil;
 import com.corpdata.common.utils.CorpdataUtil;
+import com.corpdata.core.base.AbstractService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 
@@ -28,7 +31,7 @@ import com.github.pagehelper.PageHelper;
  */
 @Transactional
 @Service
-public class OrgRoleService {
+public class OrgRoleService extends AbstractService<OrgRole> {
 	
 	@Autowired
 	private OrgRoleMapper orgRoleMapper;
@@ -68,14 +71,11 @@ public class OrgRoleService {
 			return ResultUtil.fail();
 		}
 	}
-	
-	public String findByPage(int pageNo, int pageSize, String searchStr) {
-		PageHelper.startPage(pageNo, pageSize);
-		Map<String, Object> params = new HashMap<String, Object>();
-		if(CorpdataUtil.isNotBlank(searchStr)){
-			params.put("searchStr", searchStr);
-		}
-		Page<OrgRole> list = orgRoleMapper.selectAll(params);
+
+	@Override
+	public String findByPage(DataGridRequestDTO dgRequest) {
+		PageHelper.startPage(dgRequest.getPage(), dgRequest.getLimit());
+		Page<OrgRole> list =  (Page<OrgRole>) orgRoleMapper.selectAll(dgRequest.getParams());
 		return PageConvertUtil.getGridJson(list);
 	}
 	

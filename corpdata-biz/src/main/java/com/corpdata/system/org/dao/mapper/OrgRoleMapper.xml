@@ -9,35 +9,9 @@
     <result column="creater" jdbcType="VARCHAR" property="creater" />
     <result column="created" jdbcType="TIMESTAMP" property="created" />
     <result column="modified" jdbcType="TIMESTAMP" property="modified" />
-  </resultMap>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from org_role
-    where id = #{id,jdbcType=CHAR}
-  </delete>
-  <insert id="insert" parameterType="com.corpdata.system.org.entity.OrgRole">
-    insert into org_role (id, Role_Name, Role_Desc, 
-      Sort_number, creater, created, 
-      modified)
-    values (#{id,jdbcType=CHAR}, #{roleName,jdbcType=VARCHAR}, #{roleDesc,jdbcType=VARCHAR}, 
-      #{sortNumber,jdbcType=INTEGER}, #{creater,jdbcType=VARCHAR}, #{created,jdbcType=TIMESTAMP}, 
-      #{modified,jdbcType=TIMESTAMP})
-  </insert>
-  <update id="updateByPrimaryKey" parameterType="com.corpdata.system.org.entity.OrgRole">
-    update org_role
-    set Role_Name = #{roleName,jdbcType=VARCHAR},
-      Role_Desc = #{roleDesc,jdbcType=VARCHAR},
-      Sort_number = #{sortNumber,jdbcType=INTEGER},
-      creater = #{creater,jdbcType=VARCHAR},
-      created = #{created,jdbcType=TIMESTAMP},
-      modified = #{modified,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=CHAR}
-  </update>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select id, Role_Name, Role_Desc, Sort_number, creater, created, modified
-    from org_role
-    where id = #{id,jdbcType=CHAR}
-  </select>
-  <select id="selectAll" resultMap="BaseResultMap">
+  </resultMap> 
+  
+  <select id="selectAll" resultMap="BaseResultMap" parameterType="map">
     select id, Role_Name, Role_Desc, Sort_number, creater, created, modified
     from org_role 
     where 1 = 1
@@ -46,10 +20,12 @@
 	</if>
     order by Sort_number
   </select>
+  
   <select id="findOrgRoleList" parameterType="map" resultMap="BaseResultMap">
 		select id, Role_Name, Role_Desc, Sort_number, creater, created, modified
     from org_role order by Sort_number
-	</select>
+  </select>
+	
   <select id="getRolesByUser" resultType="String" parameterType="java.lang.String">
   	select fk_role from org_user_role where userid=#{userId}
   </select>

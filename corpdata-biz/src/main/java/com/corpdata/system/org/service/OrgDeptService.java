@@ -1,16 +1,17 @@
 package com.corpdata.system.org.service;
 
 import java.util.Date;
-import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.corpdata.system.org.dao.OrgDeptMapper;
 import com.corpdata.system.org.entity.OrgDept;
 import com.corpdata.system.security.shiro.util.UserUtil;
 import com.corpdata.common.api.pagehelper.PageConvertUtil;
+import com.corpdata.common.domain.DataGridRequestDTO;
 import com.corpdata.common.result.Result;
 import com.corpdata.common.result.util.ResultUtil;
 import com.corpdata.common.utils.CorpdataUtil;
+import com.corpdata.core.base.AbstractService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 
@@ -20,24 +21,21 @@ import com.github.pagehelper.PageHelper;
  * @date 2018年3月1日
  */
 @Service("orgDeptService")
-public class OrgDeptService {
+public class OrgDeptService extends AbstractService<OrgDept>{
 	
 	@Autowired
 	private OrgDeptMapper orgDeptMapper;
 	
-	public Result insert(OrgDept record) {
+	@Override
+	public Result save(OrgDept record) {
+		// TODO Auto-generated method stub
 		Date date = new Date();
 		record.setCreater(UserUtil.getCurrentUserid());
 		record.setCreated(date);
 		record.setModified(date);
-		record.setId(CorpdataUtil.getUUID());
 		String folderid = calculateFolderid(record.getParentfolderid());
 		record.setFolderid(folderid);
-		if (orgDeptMapper.insert(record)>0) {
-			return ResultUtil.success();
-		} else{
-			return ResultUtil.fail();
-		}
+		return super.save(record);
 	}
 	
 	public Result update(OrgDept record,String oldParentFolderid) {
@@ -47,30 +45,26 @@ public class OrgDeptService {
 			String folderid = calculateFolderid(record.getParentfolderid());
 			record.setFolderid(folderid);
 		}
-		if (orgDeptMapper.updateByPrimaryKey(record)>0) {
-			return ResultUtil.success();
-		} else{
-			return ResultUtil.fail();
-		}
+		return super.update(record);
 	}
 	
-	public Result delete(String id) {
-		if (orgDeptMapper.deleteByPrimaryKey(id)>0) {
-			return ResultUtil.success();
-		} else{
-			return ResultUtil.fail();
-		}
+	@Override
+	public Result deleteById(String id) {
+		// TODO Auto-generated method stub
+		return super.deleteById(id);
 	}
 	
-	public OrgDept selectByPrimaryKey(String id){
-		return orgDeptMapper.selectByPrimaryKey(id);
+	@Override
+	public String findByPage(DataGridRequestDTO dgRequest) {
+		// TODO Auto-generated method stub
+		
+		return super.findByPage(dgRequest);
 	}
-	
-	public String findByPage(int pageNo, int pageSize,String keyword) {
-		PageHelper.startPage(pageNo, pageSize);
-		Page<OrgDept> list = orgDeptMapper.selectAllByKeyword(keyword);
-		return PageConvertUtil.getGridJson(list);
-	}
+//	public String findByPage(int pageNo, int pageSize,String keyword) {
+//		PageHelper.startPage(pageNo, pageSize);
+//		Page<OrgDept> list = orgDeptMapper.selectAllByKeyword(keyword);
+//		return PageConvertUtil.getGridJson(list);
+//	}
 	
 	/**
 	 * 获取下拉json数据

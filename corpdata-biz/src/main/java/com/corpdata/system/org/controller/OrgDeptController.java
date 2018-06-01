@@ -1,14 +1,17 @@
 package com.corpdata.system.org.controller;
 
-import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.corpdata.system.log.WebLog;
 import com.corpdata.system.org.entity.OrgDept;
 import com.corpdata.system.org.service.OrgDeptService;
+import com.corpdata.common.domain.DataGridRequestDTO;
 import com.corpdata.common.result.Result;
 import com.corpdata.common.utils.CorpdataUtil;
 
@@ -24,49 +27,47 @@ public class OrgDeptController {
 	@Autowired
 	private OrgDeptService orgDeptService;
 	
-	@RequestMapping("/toadd")
+	@GetMapping("/add")
 	public String toadd(ModelMap map){
 		map.put("id", CorpdataUtil.getUUID());
 		return "system/org/dept/dept_add";
 	}
 	
+	@WebLog()
 	@ResponseBody
-	@RequestMapping("/add")
-	public Result add(OrgDept record){
-		return orgDeptService.insert(record);
+	@RequestMapping("/save")
+	public Result save(OrgDept record){
+		return orgDeptService.save(record);
 	}
 	
-	@RequestMapping("/toedit/{id}")
-	public String toedit(@PathVariable String id,ModelMap m){
-		OrgDept model = orgDeptService.selectByPrimaryKey(id);
+	@RequestMapping("/edit/{id}")
+	public String edit(@PathVariable String id,ModelMap m){
+		OrgDept model = orgDeptService.findById(id);
 		m.addAttribute("model", model);
 		return "system/org/dept/dept_edit";
 	}
 	
 	@ResponseBody
-	@RequestMapping("/edit")
-	public Result edit(OrgDept record,String oldParentFolderid){
+	@RequestMapping("/update")
+	public Result update(OrgDept record,String oldParentFolderid){
 		return orgDeptService.update(record,oldParentFolderid);
 	}
 	
 	@ResponseBody
 	@RequestMapping("/delete")
 	public Result delete(String id){
-		return orgDeptService.delete(id);
+		return orgDeptService.deleteById(id);
 	}
 	
-	@RequestMapping("/tolist")
-	public String tolist(ModelMap map){
+	@RequestMapping("/list")
+	public String list(ModelMap map){
 		return "system/org/dept/dept_list";
 	}
 	
 	@ResponseBody
-	@RequestMapping("/find/*")
-	public String findByPage(HttpServletRequest request){
-		int page = Integer.parseInt(request.getParameter("page"));
-		int limit = Integer.parseInt(request.getParameter("limit"));
-		String keyword = request.getParameter("keyword");
-		return orgDeptService.findByPage(page, limit ,keyword);
+	@RequestMapping("/listdata")
+	public String findByPage(DataGridRequestDTO dgRequest){
+		return orgDeptService.findByPage(dgRequest);
 	}
 	
 	/**

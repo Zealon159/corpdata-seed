@@ -33,8 +33,8 @@ public class ShiroConfig {
     public SecurityManager securityManager(){
         DefaultWebSecurityManager securityManager =  new DefaultWebSecurityManager();
         securityManager.setRealm(shiroRealm());
-//        securityManager.setCacheManager(redisCacheManager());
-//        securityManager.setSessionManager(sessionManager());
+        securityManager.setCacheManager(redisCacheManager());
+        securityManager.setSessionManager(sessionManager());
         return securityManager;
     }
     
@@ -59,8 +59,8 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/doLogin", "anon");
         filterChainDefinitionMap.put("/logout", "logout");
         filterChainDefinitionMap.put("/weixin/**", "anon");
-        //filterChainDefinitionMap.put("/**", "authc");
-        filterChainDefinitionMap.put("/**", "anon");
+        filterChainDefinitionMap.put("/**", "authc");
+        //filterChainDefinitionMap.put("/**", "anon");
         // 登录页面
         shiroFilterFactoryBean.setLoginUrl("/login");
         // 登录成功后要跳转的链接

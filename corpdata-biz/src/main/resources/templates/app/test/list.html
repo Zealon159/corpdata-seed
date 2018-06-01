@@ -2,47 +2,145 @@
 <html xmlns:th="http://www.thymeleaf.org">
 	<head>
 		<meta charset="UTF-8" />
-		<title>Insert title here</title>
-		<script src="/js/jquery/jquery-2.1.1.min.js"></script>
-		<script type="text/javascript">
-			function getData(){
-				var params = {};
-				params.title = "z";  
-				params.pwd = "888";
-				
-				var data={params:params,page:1,limit:10};
-				//发送请求
-				$.post("/app/test/listdata2",data,function(res){
-					alert(res);
-	            });
-				/*
-	        	$.ajax({
-	                url : "/app/test/listdata2",
-	                type : "POST",  
-	                //datatype:"json",  
-	                contentType: "application/text; charset=utf-8",  
-	                data : {params:params,page:1,limit:10},//JSON.stringify()
-	                success : function(data, stats) {  
-	                    alert(data);
-	                },  
-	                error : function(data) {  
-	                    alert("请求失败");  
-	                }  
-	            });  */
-			}
-			
-			function addData(){
-				$.post("/app/test/add",{title:"aaaa",total:"33"},function(res){
-	        		alert(res.message);
-	            });
-			}
-		</script>
+		<title>角色管理</title>
+		<div th:replace="common/common_grid_header"></div>
 	</head>
 	<body>
+		<div style="padding: 15px; height: 100%">
+			<div class="layui-row">
+				<div class="search-box flex-between">
+				    <div class="my-search-box mag-r26" id="my-search-box">
+					    <input type="text" id="searchStr" class="form-control"  placeholder="" width="100px">
+					    <a href="javascript:void(0)" id='btn-search' data-type="reload"><i class='glyphicon glyphicon-search my-search-icon'></i></a>
+				    </div>
+				    <button class="layui-btn layui-btn-sm layui-btn-primary"  id="add-disc">
+				      <i class="layui-icon">&#xe61f;</i>新增
+				    </button>
+				</div>
+				<table class="layui-hide" id="LAY_table_role" lay-filter="role"></table> 
+			</div>
+		</div>
 		
-		<input value="getData" type="button" onclick="getData()"/>
+		<script type="text/html" id="toolBar">
+			<a class="layui-btn layui-btn-xs" lay-event="permission">权限分配</a>
+  			<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">编辑</a>
+  			<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+		</script>
+		<script>
+			$(function() {
+				layui.use([ 'element', 'table', 'layer' ], function() {
+					var element = layui.element;
+				});
+				
+				//弹出框
+				$("#add-disc").on("click",function() {
+					layer.open({
+						title : [ '角色信息',
+								'font-size:18px;text-align:center;padding:0' ],
+						type : 2,
+						area : [ '600px', '316px' ],
+						shade : [ 0.8, '#393D49' ],
+						content : [ "/orgrole/toadd", 'no' ]
+					});
+				})
+			})
 		
-		<input value="addData" type="button" onclick="addData()"/>
-		<div id="data"></div>
+			layui.use('table', function(){
+				var table = layui.table;
+				var params =  {
+	        		title:"333"
+	        	};
+				//方法级渲染
+				table.render({
+					id:'dg_role',
+				    elem: '#LAY_table_role',
+				    url: '/app/test/listdata',
+				    method:'post',
+				    where:{params:params},
+				    cols: [[
+				      //{checkbox: true, fixed: true},
+				      //,{field:'id', title: 'ID', sort: true, fixed: true}
+				      {field:'id', align:'left', title: 'id'}
+				      ,{field:'title', align:'left', title: '标题',  sort: true}
+				      ,{field:'total', align:'center', title: '总数'}
+				      ,{fixed: 'right', width:200, align:'center', toolbar: '#toolBar'}
+				    ]]
+				    ,page: true
+				    ,height: 450
+				});
+				
+				//监听工具条
+				table.on('tool(role)', function(obj){
+				    var data = obj.data;
+				    if(obj.event == 'permission'){
+				    	layer.open({
+							title : [ '权限分配','font-size:18px;text-align:center;padding:0' ],
+							type : 2,
+							area : [ '600px', '416px' ],
+							shade : [ 0.7, '#393D49' ],
+							content : [ "/orgrole/topermissionmanage/"+data.id, 'no' ]
+						});
+				    }else if(obj.event == 'del'){
+				      	layer.confirm('真的删除数据吗？', function(index){
+				        	//发送删除请求
+				        	$.post("/orgrole/delete",{id:data.id},function(res){
+				        		obj.del();
+					        	layer.close(index);
+					        	layer.msg(res.msg);
+				            },"json");
+				      	});
+				    } else if(obj.event == 'edit'){
+				    	layer.open({
+							title : [ '角色信息','font-size:18px;text-align:center;padding:0' ],
+							type : 2,
+							area : [ '600px', '316px' ],
+							shade : [ 0.8, '#393D49' ],
+							content : [ "/orgrole/toedit/"+data.id, 'no' ]
+						});
+				    }
+				});
+				
+				var active = {
+					    reload: function(){
+					      var searchStr = $('#searchStr');
+					      //执行重载
+					      table.reload('dg_role', {
+					        page: {
+					          curr: 1 //重新从第 1 页开始
+					        }
+					        ,where: {
+					        	searchStr: searchStr.val()
+					        }
+					      });
+					    }
+					  };  
+					$('#btn-search').on('click', function(){
+					  var type = $(this).data('type');
+					  active[type] ? active[type].call(this) : '';
+					});
+					
+					$('input').keyup(function (event) {
+				        var e = event|| window.event;
+				        if (e.keyCode == "13") {
+				        	var type = "reload";
+				        	layui.table.reload('dg_role', {
+						        page: {
+						          curr: 1 //重新从第 1 页开始
+						        }
+						        ,where: {
+						        	params: {
+						        		title:this.value
+						        	}
+						        }
+						    });
+							//active[type] ? active[type].call(this) : '';
+				        }
+				    });
+			});
+			
+			
+			
+			
+		</script>
 	</body>
 </html>

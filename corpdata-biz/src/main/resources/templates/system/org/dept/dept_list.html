@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<title>组织管理</title>
-		<div th:replace="biz/common/common_grid_header"></div>
+		<div th:replace="common/common_grid_header"></div>
 	</head>
 	<body>
 		<div style="padding: 15px; height: 100%">
@@ -34,7 +34,8 @@
 				table.render({
 					id:'dg_dept',
 				    elem: '#LAY_table_dept',
-				    url: '/orgdept/find/',
+				    url: '/orgdept/listdata',
+				    method:'post',
 				    cols: [[
 				      //{checkbox: true, fixed: true},
 				      {field:'foldername', title: '组织名称'}
@@ -68,7 +69,7 @@
 							type : 2,
 							area : [ '600px', '316px' ],
 							shade : [ 0.8, '#393D49' ],
-							content : [ "/orgdept/toedit/"+data.id, 'no' ]
+							content : [ "/orgdept/edit/"+data.id, 'no' ]
 						});
 				    }
 				});
@@ -93,7 +94,7 @@
 						type : 2,
 						area : [ '600px', '316px' ],
 						shade : [ 0.8, '#393D49' ],
-						content : [ "/orgdept/toadd", 'no' ]
+						content : [ "/orgdept/add", 'no' ]
 					});
 				})
 				

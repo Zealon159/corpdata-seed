@@ -2,7 +2,7 @@ package com.corpdata.common.domain;
 
 import java.util.Map;
 /**
- * 分页查询请求数据封装类
+ * 分页查询请求参数包装类
  * @author zealon
  * 
  */
@@ -12,7 +12,7 @@ public class DataGridRequestDTO {
 	//每页显示数
 	private int limit;
 	//查询关键字
-	private String keywords;
+	private String keyword;
 	//查询条件
 	private Map<String,Object> params;
 	
@@ -28,11 +28,11 @@ public class DataGridRequestDTO {
 	public void setLimit(int limit) {
 		this.limit = limit;
 	}
-	public String getKeywords() {
-		return keywords;
+	public String getKeyword() {
+		return keyword;
 	}
-	public void setKeywords(String keywords) {
-		this.keywords = keywords;
+	public void setKeywords(String keyword) {
+		this.keyword = keyword;
 	}
 	public Map<String, Object> getParams() {
 		return params;

@@ -81,7 +81,7 @@ public class RedisConfig extends CachingConfigurerSupport {
 		// 设置不同的cache的name不同的过期时间
 		Map<String, Long> expries = Maps.newHashMap();
 		// 数据字典缓存（8h）
-		expries.put("data_dic_json", 8 * 60 * 60L); 
+		expries.put("data_dic_json", 8 * 60 * 60L);
 		cacheManager.setExpires(expries);
 		List<String> cacheNames = cacheProperties.getCacheNames();
 		if (!cacheNames.isEmpty()) {

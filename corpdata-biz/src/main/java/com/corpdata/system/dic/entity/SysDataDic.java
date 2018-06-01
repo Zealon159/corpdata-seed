@@ -2,6 +2,7 @@ package com.corpdata.system.dic.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+
 /**
  * 系统数据字典实体
  * @author zealon
@@ -10,7 +11,7 @@ import java.util.Date;
 public class SysDataDic implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
-
+	
 	private String id;
 
     private String dicName;

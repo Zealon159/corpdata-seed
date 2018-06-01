@@ -3,12 +3,12 @@ package com.corpdata.system.dic.dao;
 import java.util.List;
 import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
-
 import com.corpdata.system.dic.entity.SysDicType;
 import com.github.pagehelper.Page;
 
 @Mapper
-public interface SysDicTypeMapper {
+public interface SysDicTypeMapper{
+	
     int deleteByPrimaryKey(String id);
 
     int insert(SysDicType record);

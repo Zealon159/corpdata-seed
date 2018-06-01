@@ -2,19 +2,14 @@ package com.corpdata.system.org.dao;
 
 import java.util.List;
 import java.util.Map;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
+import com.corpdata.core.base.Mapper;
 import com.corpdata.system.org.entity.OrgDept;
 import com.github.pagehelper.Page;
 
-@Mapper
-public interface OrgDeptMapper {
-    int deleteByPrimaryKey(String id);
+public interface OrgDeptMapper extends Mapper<OrgDept> {
 
-    int insert(OrgDept record);
-
-    OrgDept selectByPrimaryKey(String id);
-    
     Page<OrgDept> selectAll();
 
     Page<OrgDept> selectAllByKeyword(@Param("keyword") String keyword);

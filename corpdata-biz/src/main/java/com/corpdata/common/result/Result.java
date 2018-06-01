@@ -13,12 +13,12 @@ public class Result implements Serializable {
 	
 	private int code;
     private String error;
-    private Object message;
+    private Object msg;
 
-    public Result(int code, String error, Object message) {
+    public Result(int code, String error, Object msg) {
         this.code = code;
         this.error = error;
-        this.message = message;
+        this.msg = msg;
     }
     public Result(int code, String error) {
         this.code = code;
@@ -45,11 +45,11 @@ public class Result implements Serializable {
         this.error = error;
     }
 
-    public Object getMessage() {
-        return message;
+    public Object getMsg() {
+        return msg;
     }
 
-    public void setMessage(Object message) {
-        this.message = message;
+    public void setMessage(Object msg) {
+        this.msg = msg;
     }
 }

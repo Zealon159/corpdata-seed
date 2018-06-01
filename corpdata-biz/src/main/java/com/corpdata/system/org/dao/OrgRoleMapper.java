@@ -1,24 +1,17 @@
 package com.corpdata.system.org.dao;
 
+import com.corpdata.core.base.Mapper;
 import com.corpdata.system.org.entity.OrgRole;
 import com.github.pagehelper.Page;
-
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.annotations.Mapper;
 
-@Mapper
-public interface OrgRoleMapper {
+public interface OrgRoleMapper extends Mapper<OrgRole> {
+	
     int deleteByPrimaryKey(String id);
-
-    int insert(OrgRole record);
-
-    OrgRole selectByPrimaryKey(String id);
-
-    Page<OrgRole> selectAll(Map<String, Object> params);
-
-    int updateByPrimaryKey(OrgRole record);
+    
+    Page<OrgRole> selectAll(Map<String,Object> params);
     
     List<String> getRolesByUser(String userid);
     

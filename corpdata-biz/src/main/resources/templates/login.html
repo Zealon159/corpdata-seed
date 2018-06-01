@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>商业地产首页</title>
+	<link rel="stylesheet" href="/font/iconfont.css">
+	<link rel="stylesheet" href="/js/plugin/bootstrap/css/bootstrap.min.css">
+	<script src="/js/jquery/jquery-2.1.1.min.js"></script>
+	<script src="/js/plugin/bootstrap/js/bootstrap.min.js"></script>
+	<script src='/js/plugin/bootstrapValidator/bootstrapValidator.min.js'></script>
+</head>
+<style>
+	.top15{
+		margin-top: 15px;
+	}
+	.top20{
+		margin-top: 20px;
+	}
+	html,body{
+		width: 100%;
+		height: 100%;
+		background:url(images/login_bj.jpg) no-repeat center;
+		overflow:hidden;
+	}
+	.container{
+		position: absolute;
+	    top:50%;
+	    left:50%;
+	    margin-top:-220px;
+	    margin-left:-570px;
+		max-width: 1400px;
+		padding:20px 20px;
+		z-index: 99
+	}
+	.passport_container{
+		width: 400px;
+		padding: 60px 20px;
+		margin:0 auto;
+		background: rgba(255,255,255,.4);
+		text-align: center;
+		
+
+	}
+	.btn-warning{
+		background: #c7161e;
+		border-color: #c7161e;
+	}
+	.btn-warning:hover{
+		background: #c1141c;
+	}
+	.icon-color{
+		color: #fff
+	}
+	.login-tit h3{
+		color: #fff;
+		font-size:22px
+	}
+	.login-tit .line{
+		width: 80px;
+		display: inline-block;
+		height: 1px;
+		margin-bottom: 6px;
+		background: #fff;
+	}
+	.login-tit span:nth-child(1){
+		margin-right:8px;
+	}
+	.login-tit span:nth-child(2){
+		margin-left:8px;
+	}
+	.canvas-box{
+		width: 100%;
+		position: absolute;
+		top:0;
+		left:0;
+	}
+	.input-group-addon{
+		background-color:#d5d5d5;
+	}
+	.help-block{
+		color: red
+	}
+</style>
+
+<body >
+	<div id="particles-js" class="canvas-box"></div>
+	<div class="container">
+		<div class="passport_container">
+			<div class="row">
+				<a href="#"><img src="images/logo_red.png" alt="元霆logo"></a>
+			</div>
+			<div class="row" style="font-size:14px;color:#c8161e;color:rgba(255,255,255,0.5);letter-spacing: 3px;">
+				激活商业地产价值
+			</div>
+			<div class="row login-tit">
+				<h3><span class="line"></span>用户登录<span class="line"></span></h3>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<form id="login_form" action="" method="get" style="width: 290px;margin:0 auto">
+						<input type="hidden" value="" name="redirectUrl">
+						<div class="input-group top15">
+						  <span class="input-group-addon"><i class="iconfont icon-wo icon-color"></i></span>
+						  <input type="text" id="loginName" name="loginName" class="form-control" placeholder="请输入账号"  required  data-bv-notempty-message="请输入账号" pattern="^[a-zA-Z0-9_-]{4,16}$" data-bv-regexp-message="账号格式不正确">
+						</div>
+						<div class="input-group top20">
+						  <span class="input-group-addon"><i class="iconfont icon-suo icon-color"></i></span>
+						  <input type="password" id="pwd" name="pwd" class="form-control" placeholder="密码"  required data-bv-notempty-message="请输入密码" pattern="^[a-zA-Z0-9_-]{4,16}$" data-bv-regexp-message="密码格式不正确">
+						</div>
+						<div class="checkbox row top15">
+							<div class="col-md-6">
+							  <label>
+							    <input type="checkbox" name="remember" value="1"> 记住密码
+							  </label>
+						  </div>
+						  <!-- <div class="col-md-6">
+							  <label>
+							   <a href="#">忘记密码?</a>
+							  </label>
+						  </div> -->
+						</div>
+						<button class="btn btn-block btn-warning top15" type="submit" id="login_btn">立即登录</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+</body>
+<script src="/js/plugin/particles.js"></script>
+<script src="/js/plugin/app.js"></script>
+<script>
+	$(function(){
+		var strCookie=document.cookie; 
+		var arrCookie=strCookie.split(";"); 
+		for(var i=0;i<arrCookie.length;i++){ 
+			var arr=arrCookie[i].split("="); 
+			//找到名称为userId的cookie，并返回它的值 
+			if("name"==arr[0].replace(/(^\s*)|(\s*$)/g, "")){ 
+				$("#loginName").val(arr[1]);
+				$("input[type=checkbox][name='remember']").attr('checked', 'true');
+				
+			}else if("psw"==arr[0].replace(/(^\s*)|(\s*$)/g, "")){
+				$("#pwd").val(arr[1]);
+			}
+		} 
+		$('#login_form').bootstrapValidator({
+        }).on('success.form.bv', function(e) {
+        	e.preventDefault();
+			var loginName = $("#loginName").val().trim();
+			var pwd = $("#pwd").val().trim();
+			var url = "doLogin";
+			var remenber="0";
+			if($('input[type=checkbox]:checked').val()!=null){
+				remenber=$('input[type=checkbox]:checked').val();
+			}
+			jQuery.ajax({
+		        type:"post",
+		        async:false,
+		        url:url,
+		        dataType:"json",
+		        data:{userId:loginName,pwd:pwd,remenber:remenber},
+		        success:function(data){
+		        	//var dataObj = eval("("+data+")");
+		        	if(data.success==true){
+		        		var targetUrl = data.url;
+		        		location.href=targetUrl;
+		        	}else{
+		        		alert(data.msg);
+		        	}
+		        }
+			});
+		});
+	})
+</script>
+</html>
