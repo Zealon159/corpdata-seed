@@ -20,7 +20,7 @@ import com.corpdata.common.utils.CorpdataUtil;
  * @date 2018年3月1日
  */
 @Controller
-@RequestMapping("orgrole")
+@RequestMapping("system/role")
 public class OrgRoleController {
 	
 	@Autowired

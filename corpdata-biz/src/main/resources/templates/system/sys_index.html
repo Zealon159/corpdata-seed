@@ -3,8 +3,11 @@
 	<head>
 	  <meta charset="utf-8">
 	  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-	  <title>layout 后台大布局 - Layui</title>
+	  <title>系统管理</title>
 	  <link rel="stylesheet" href="/js/plugin/layui/css/layui.css">
+	  <link rel="stylesheet" href="/css/t/font_tnyc012u2rlwstt9.css" media="all" />
+      <link rel="stylesheet" href="/css/main.css" media="all" />
+	  
 	</head>
 	<body class="layui-layout-body">
 		<div class="layui-layout layui-layout-admin">
@@ -12,6 +15,9 @@
 		    <div class="layui-logo">layui 后台布局</div>
 		    <!-- 头部区域（可配合layui已有的水平导航） -->
 		    <ul class="layui-nav layui-layout-left">
+		      <!-- 显示/隐藏菜单 -->
+              <a href="javascript:" class="iconfont hideMenu icon-menu1"></a>
+		    
 		      <li class="layui-nav-item"><a href="">控制台</a></li>
 		      <li class="layui-nav-item"><a href="">商品管理</a></li>
 		      <li class="layui-nav-item"><a href="">用户</a></li>
@@ -27,27 +33,35 @@
 		    <ul class="layui-nav layui-layout-right">
 		      <li class="layui-nav-item">
 		        <a href="javascript:;">
-		          <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
-		          贤心
+		          <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1527930446356&di=0cd41f25abd30fe67131803502e4cea7&imgtype=jpg&src=http%3A%2F%2Fimg2.imgtn.bdimg.com%2Fit%2Fu%3D3431299442%2C477087491%26fm%3D214%26gp%3D0.jpg" class="layui-nav-img">
+		          <shiro:principal property="userName"/>
 		        </a>
 		        <dl class="layui-nav-child">
 		          <dd><a href="">基本资料</a></dd>
 		          <dd><a href="">安全设置</a></dd>
 		        </dl>
 		      </li>
-		      <li class="layui-nav-item"><a href="">退了</a></li>
+		      <li class="layui-nav-item"><a href="">退出</a></li>
 		    </ul>
 		  </div>
 		  
+		  <!-- 左侧区域 -->
 		  <div class="layui-side layui-bg-black">
-		    <div class="layui-side-scroll">
+		    <div class="user-photo">
+              <a class="img" title="我的头像" ><img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1527930446356&di=0cd41f25abd30fe67131803502e4cea7&imgtype=jpg&src=http%3A%2F%2Fimg2.imgtn.bdimg.com%2Fit%2Fu%3D3431299442%2C477087491%26fm%3D214%26gp%3D0.jpg"></a>
+              <p>你好！<span class="userName" ><shiro:principal property="userName"/></span></p>
+            </div>
+		    <div class="navBar layui-side-scroll">
 		      <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
-		      <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+		      <ul class="layui-nav layui-nav-tree"   lay-filter="myNav">
 		        <li class="layui-nav-item layui-nav-itemed">
-		          <a class="" href="javascript:;">所有商品</a>
+		          <a href="javascript:;"><i class="layui-icon" style="font-size: 20px" data-icon=""></i><cite>系统管理</cite><span class="layui-nav-more"></span></a>
 		          <dl class="layui-nav-child">
-		            <dd><a href="javascript:;">列表一</a></dd>
-		            <dd><a href="javascript:;">列表二</a></dd>
+		            <dd>
+		            	<a href="javascript:;" style="font-size: 20px" data-url="/system/role/list"><i class="layui-icon" style="font-size: 20px" data-icon=""></i>
+		            <cite>角色管理</cite></a>
+		            </dd>
+		            <dd><a href="/system/role/list" target="centerFrame">列表二</a></dd>
 		            <dd><a href="javascript:;">列表三</a></dd>
 		            <dd><a href="">超链接</a></dd>
 		          </dl>
@@ -66,23 +80,32 @@
 		    </div>
 		  </div>
 		  
-		  <div class="layui-body">
-		    <!-- 内容主体区域 -->
-		    <div style="padding: 15px;">内容主体区域</div>
-		  </div>
+		  <!-- 右侧内容 -->
+	    <div class="layui-body" style="buttom:0px">
+            <div class="layui-tab-content clildFrame">
+                <div class="layui-tab-item layui-show">
+                    <iframe src="" id="centerFrame" name="centerFrame"></iframe>
+                </div>
+            </div>
+	    </div>
+
 		  
-		  <div class="layui-footer">
-		    <!-- 底部固定区域 -->
-		    © layui.com - 底部固定区域
-		  </div>
 		</div>
 		<script src="/js/plugin/layui/layui.js"></script>
 		<script>
-		//JavaScript代码区域
-		layui.use('element', function(){
-		  var element = layui.element;
-		  
-		});
+			layui.use('element', function(){
+			  var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
+			  
+			  //监听导航点击
+			  element.on('nav(myNav)', function(elem){
+			    //console.log(elem)
+			    alert(elem.data-url());
+			  });
+			});
 		</script>
+		<!-- 
+		<script type="text/javascript" src="https://admin.mysiteforme.com/static/js/leftNav.js?v=2.0"></script>
+		<script type="text/javascript" src="https://admin.mysiteforme.com/static/js/index.js?t=3.0"></script>
+		 -->
 	</body>
 </html>

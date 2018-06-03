@@ -6,17 +6,24 @@
 		<div th:replace="common/common_grid_header"></div>
 	</head>
 	<body>
-		<div style="padding: 15px; height: 100%">
-			<div class="layui-row">
-				<div class="search-box flex-between">
-				    <div class="my-search-box mag-r26" id="my-search-box">
-					    <input type="text" id="searchStr" class="form-control"  placeholder="" width="100px">
-					    <a href="javascript:void(0)" id='btn-search' data-type="reload"><i class='glyphicon glyphicon-search my-search-icon'></i></a>
-				    </div>
-				    <button class="layui-btn layui-btn-sm layui-btn-primary"  id="add-disc">
-				      <i class="layui-icon">&#xe61f;</i>新增
-				    </button>
-				</div>
+		<fieldset class="layui-elem-field">
+		    <div class="layui-field-box">
+		    <form class="layui-form">
+		        <div class="layui-inline">
+		            <input id="searchStr" placeholder="关键字" class="layui-input layui-input-sm search_input">
+		        </div>
+		        <div class="layui-inline">
+		            <a class="layui-btn layui-btn-sm" lay-filter="searchForm">查询</a>
+		        </div>
+		        <div class="layui-inline">
+		            <a class="layui-btn layui-btn-sm layui-btn-normal" data-type="addUser" id="add-disc"> <i class="layui-icon">&#xe61f;</i>新增</a>
+		        </div>
+		    </form>
+		    </div>
+		</fieldset>
+		
+		<div style="height: 100%">
+			<div class="layui-row"> 
 				<table class="layui-hide" id="LAY_table_role" lay-filter="role"></table> 
 			</div>
 		</div>
@@ -40,7 +47,7 @@
 						type : 2,
 						area : [ '600px', '316px' ],
 						shade : [ 0.8, '#393D49' ],
-						content : [ "/orgrole/add", 'no' ]
+						content : [ "/system/role/add", 'no' ]
 					});
 				})
 			})
@@ -52,7 +59,7 @@
 				table.render({
 					id:'dg_role',
 				    elem: '#LAY_table_role',
-				    url: '/orgrole/listdata',
+				    url: '/system/role/listdata',
 				    method:'post',
 				    cols: [[
 				      //{checkbox: true, fixed: true},
