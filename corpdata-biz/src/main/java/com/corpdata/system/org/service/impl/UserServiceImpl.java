@@ -76,6 +76,12 @@ public class UserServiceImpl extends AbstractService<OrgUser> implements UserSer
 		return set;
 	}
 
+	@Override
+	public OrgUser findById(String id) {
+		// TODO Auto-generated method stub
+		return orgUserMapper.selectByPrimaryKey(id);
+	}
+	
 	public String findByPage(DataGridRequestDTO dgRequest) {
 		PageHelper.startPage(dgRequest.getPage(), dgRequest.getLimit());
 		if(dgRequest.getParams()!=null && dgRequest.getParams().get("deptId")!=null){
@@ -173,7 +179,7 @@ public class UserServiceImpl extends AbstractService<OrgUser> implements UserSer
 	 * @return
 	 */
 	public Result modPassword(String id, String newPassword) {
-		OrgUser user = super.findById(id);
+		OrgUser user = findById(id);
 		String password = ShiroUserPwdUtil.generateEncryptPwd(user.getUserid(), newPassword);//密码加密
 		user.setUserPwd(password);
 		return super.update(user);

@@ -55,6 +55,12 @@ public class OrgDeptService extends AbstractService<OrgDept>{
 	}
 	
 	@Override
+	public OrgDept findById(String id) {
+		// TODO Auto-generated method stub
+		return orgDeptMapper.selectByPrimaryKey(id);
+	}
+	
+	@Override
 	public String findByPage(DataGridRequestDTO dgRequest) {
 		// TODO Auto-generated method stub
 		PageHelper.startPage(dgRequest.getPage(), dgRequest.getLimit());

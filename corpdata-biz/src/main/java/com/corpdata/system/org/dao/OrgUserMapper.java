@@ -8,7 +8,7 @@ import com.github.pagehelper.Page;
 
 public interface OrgUserMapper extends Mapper<OrgUser>{
 	
-    OrgUser selectById(String id);
+	OrgUser selectByPrimaryKey(String id);
     
     OrgUser getUserInfoByUserid(@Param("userId") String userId);
 

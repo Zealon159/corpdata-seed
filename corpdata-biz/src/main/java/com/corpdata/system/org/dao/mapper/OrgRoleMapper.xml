@@ -11,6 +11,12 @@
     <result column="modified" jdbcType="TIMESTAMP" property="modified" />
   </resultMap> 
   
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select id, Role_Name, Role_Desc, Sort_number, creater, created, modified
+    from org_role
+    where id = #{id,jdbcType=CHAR}
+  </select>
+  
   <select id="selectAll" resultMap="BaseResultMap" parameterType="map">
     select id, Role_Name, Role_Desc, Sort_number, creater, created, modified
     from org_role 

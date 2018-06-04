@@ -60,6 +60,12 @@ public class OrgRoleService extends AbstractService<OrgRole> {
 	}
 	
 	@Override
+	public OrgRole findById(String id) {
+		// TODO Auto-generated method stub
+		return orgRoleMapper.selectByPrimaryKey(id);
+	}
+	
+	@Override
 	public String findByPage(DataGridRequestDTO dgRequest) {
 		PageHelper.startPage(dgRequest.getPage(), dgRequest.getLimit());
 		Page<OrgRole> list =  (Page<OrgRole>) orgRoleMapper.selectAll(dgRequest.getParams());

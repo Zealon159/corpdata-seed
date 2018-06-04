@@ -15,6 +15,12 @@
     id, folderName, folderid, ParentFolderid, Sort_number, creater, created, modified
   </sql>
 
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from org_dept
+    where id = #{id,jdbcType=CHAR}
+  </select>
   
   <select id="selectAll" resultMap="BaseResultMap" parameterType="map">
     select id, folderName, folderid, ParentFolderid, Sort_number, creater, created, modified 

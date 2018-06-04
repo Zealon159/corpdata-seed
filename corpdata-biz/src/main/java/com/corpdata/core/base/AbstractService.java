@@ -1,17 +1,12 @@
 package com.corpdata.core.base;
 
-import org.apache.ibatis.exceptions.TooManyResultsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.corpdata.common.api.pagehelper.PageConvertUtil;
 import com.corpdata.common.domain.DataGridRequestDTO;
 import com.corpdata.common.result.Result;
 import com.corpdata.common.result.util.ResultUtil;
-import com.corpdata.core.exception.ServiceException;
-import com.corpdata.system.org.entity.OrgDept;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import tk.mybatis.mapper.entity.Condition;
-import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
@@ -31,7 +26,7 @@ public abstract class AbstractService<T> implements Service<T> {
     }
 
     public Result save(T record) {
-        if(mapper.insertSelective(record)>0){
+        if(mapper.insert(record)>0){
         	return ResultUtil.success();
     	}else{
     		return ResultUtil.fail();
@@ -51,10 +46,10 @@ public abstract class AbstractService<T> implements Service<T> {
     	}
     }
 
-    public Result deleteByIds(String ids) {
-        mapper.deleteByIds(ids);
-        return ResultUtil.success();
-    }
+//    public Result deleteByIds(String ids) {
+//        mapper.deleteByIds(ids);
+//        return ResultUtil.success();
+//    }
 
     public Result update(T record) {
         if(mapper.updateByPrimaryKeySelective(record)>0){
@@ -64,38 +59,13 @@ public abstract class AbstractService<T> implements Service<T> {
     	}
     }
 
-    public T findById(String id) {
-        return mapper.selectByPrimaryKey(id);
-    }
-
-    @Override
-    public T findBy(String fieldName, Object value) throws TooManyResultsException {
-        try {
-            T model = modelClass.newInstance();
-            Field field = modelClass.getDeclaredField(fieldName);
-            field.setAccessible(true);
-            field.set(model, value);
-            return mapper.selectOne(model);
-        } catch (ReflectiveOperationException e) {
-            throw new ServiceException(e.getMessage(), e);
-        }
-    }
-
-    public List<T> findByIds(String ids) {
-        return mapper.selectByIds(ids);
-    }
-
-    public List<T> findByCondition(Condition condition) {
-        return mapper.selectByCondition(condition);
-    }
-
-    public List<T> findAll() {
-        return mapper.select(null);
-    }
+//    public List<T> findByIds(String ids) {
+//        return mapper.selectByIds(ids);
+//    }
 
     public String findByPage(DataGridRequestDTO dgRequest) {
 		PageHelper.startPage(dgRequest.getPage(), dgRequest.getLimit());
-		Page<T> list = (Page<T>) mapper.select(null);
+		Page<T> list = null;//(Page<T>) mapper.select(null);
 		return PageConvertUtil.getGridJson(list);
 	}
 }

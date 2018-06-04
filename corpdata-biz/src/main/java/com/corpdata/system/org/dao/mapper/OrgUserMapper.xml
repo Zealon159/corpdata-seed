@@ -19,7 +19,7 @@
     </association>
   </resultMap>
 
-  <select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select u.id, u.Userid, u.User_Pwd, u.User_Name, u.Phone_number, u.Email_address, u.Enabled_state, 
     u.Sort_number, u.creater, u.created, u.modified,d.id d_id,d.folderName d_folderName
     from org_user u

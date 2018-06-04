@@ -20,6 +20,6 @@ public interface UserService {
 	public Result update(OrgUser user,String orgDeptId);
 	public Result delete(String id);
 	public OrgUser getUserInfoByUserid(String userId);
-	//OrgUser selectByPrimaryKey(String id);
+	OrgUser findById(String id);
 	OrgUser selectByUserId(String userid);
 }

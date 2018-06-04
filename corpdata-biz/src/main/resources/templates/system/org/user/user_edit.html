@@ -3,10 +3,10 @@
 	<head>
 		<meta charset="UTF-8" />
 		<title>用户表单</title>
-		<div th:replace="biz/common/common_form_header"></div>
+		<div th:replace="/common/common_form_header"></div>
 		<script type="text/javascript">
 			$(document).ready(function() {
-				initSelect("orgDept","/orgdept/selectjson/0",$("#oldOrdDeptId").val());
+				initSelect("orgDept","/system/org/dept/selectjson/0",$("#oldOrdDeptId").val());
 				$('#defaultForm').bootstrapValidator({
 		            message: 'This value is not valid',
 		            feedbackIcons: {
@@ -46,7 +46,7 @@
 	<body>
 		<div class="building-details" id="building-details">
 	    	<div class="layui-tab-content">
-    			<form id="defaultForm" th:method="post" th:action="@{/orguser/edit}">
+    			<form id="defaultForm" th:method="post" th:action="@{/system/org/user/update}">
 	    			<div class="form-modal">
 						<div class="form-wrap clearfix">
 							<div class="col-md-6 col-sm-6 col-xs-6">

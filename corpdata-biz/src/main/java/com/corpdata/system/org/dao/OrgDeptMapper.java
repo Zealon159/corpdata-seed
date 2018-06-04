@@ -9,7 +9,9 @@ import com.corpdata.system.org.entity.OrgDept;
 import com.github.pagehelper.Page;
 
 public interface OrgDeptMapper extends Mapper<OrgDept> {
-
+	
+	OrgDept selectByPrimaryKey(String id);
+	
     Page<OrgDept> selectAll(Map<String,Object> params);
     
     int updateByPrimaryKey(OrgDept record);

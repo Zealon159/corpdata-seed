@@ -8,7 +8,9 @@ import java.util.Map;
 
 
 public interface OrgRoleMapper extends Mapper<OrgRole> {
-    
+	
+	OrgRole selectByPrimaryKey(String id);
+	
     Page<OrgRole> selectAll(Map<String,Object> params);
     
     List<String> getRolesByUser(String userid);
