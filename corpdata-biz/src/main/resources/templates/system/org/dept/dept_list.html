@@ -6,18 +6,21 @@
 		<div th:replace="common/common_grid_header"></div>
 	</head>
 	<body>
-		<div style="padding: 15px; height: 100%">
+		<fieldset class="layui-elem-field">
+		    <div class="layui-field-box">
+		        <div class="layui-inline">
+		            <input id="keyword" placeholder="关键字" class="layui-input layui-input-sm search_input">
+		        </div>
+		        <div class="layui-inline">
+		            <a class="layui-btn layui-btn-sm" id="btn-search" lay-filter="searchForm">查询</a>
+		        </div>
+		        <div class="layui-inline">
+		            <a class="layui-btn layui-btn-sm layui-btn-normal" data-type="addUser" id="add-disc"> <i class="layui-icon">&#xe61f;</i>新增</a>
+		        </div>
+		    </div>
+		</fieldset>
+		<div style="height: 100%">
 			<div class="layui-row">
-				<div class="search-box flex-between">
-					<div class="my-search-box" id="my-search-box">
-					    <input class="form-control" id="keyword" placeholder="关键字" type="text" width="100px" />
-					    <i class="glyphicon glyphicon-search my-search-icon"></i>
-				    </div>
-				    <button class="layui-btn layui-btn-sm layui-btn-primary"  id="add-disc">
-				      <i class="layui-icon">&#xe61f;</i>新增
-				    </button>
-				</div>
-				
 				<table class="layui-hide" id="LAY_table_dept" lay-filter="dept"></table> 
 			</div>
 		</div>
@@ -34,7 +37,7 @@
 				table.render({
 					id:'dg_dept',
 				    elem: '#LAY_table_dept',
-				    url: '/orgdept/listdata',
+				    url: '/system/org/dept/listdata',
 				    method:'post',
 				    cols: [[
 				      //{checkbox: true, fixed: true},
@@ -56,7 +59,7 @@
 				    } else if(obj.event == 'del'){
 				      	layer.confirm('真的删除数据吗？', function(index){
 				        	//发送删除请求
-				        	$.post("/orgdept/delete",{id:data.id},function(res){
+				        	$.post("/system/org/dept/delete",{id:data.id},function(res){
 				        		obj.del();
 					        	layer.close(index);
 					        	layer.msg(res.msg);
@@ -69,7 +72,7 @@
 							type : 2,
 							area : [ '600px', '316px' ],
 							shade : [ 0.8, '#393D49' ],
-							content : [ "/orgdept/edit/"+data.id, 'no' ]
+							content : [ "/system/org/dept/edit/"+data.id, 'no' ]
 						});
 				    }
 				});
@@ -94,7 +97,7 @@
 						type : 2,
 						area : [ '600px', '316px' ],
 						shade : [ 0.8, '#393D49' ],
-						content : [ "/orgdept/add", 'no' ]
+						content : [ "/system/org/dept/add", 'no' ]
 					});
 				})
 				
@@ -108,7 +111,9 @@
 					          curr: 1 //重新从第 1 页开始
 					        }
 					        ,where: {
-					        	keyword: keyword
+					        	params:{
+					        		keyword: keyword
+					        	}
 					        }
 					    });
 			        }

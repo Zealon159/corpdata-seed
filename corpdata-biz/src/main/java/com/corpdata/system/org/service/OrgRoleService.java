@@ -42,36 +42,23 @@ public class OrgRoleService extends AbstractService<OrgRole> {
 	@Autowired
 	RedisService redisService;
 	
-	public Result insert(OrgRole record) {
-		record.setId(CorpdataUtil.getUUID());
+	@Override
+	public Result save(OrgRole record) {
+		// TODO Auto-generated method stub
 		Date date = new Date();
 		record.setCreater(UserUtil.getCurrentUserid());
 		record.setCreated(date);
 		record.setModified(date);
-		if (orgRoleMapper.insert(record)>0) {
-			return ResultUtil.success();
-		}else{
-			return ResultUtil.fail();
-		}
+		return super.save(record);
 	}
 	
+	@Override
 	public Result update(OrgRole record) {
+		// TODO Auto-generated method stub
 		record.setModified(new Date());
-		if (orgRoleMapper.updateByPrimaryKey(record)>0) {
-			return ResultUtil.success();
-		}else{
-			return ResultUtil.fail();
-		}
+		return super.update(record);
 	}
 	
-	public Result delete(String id) {
-		if (orgRoleMapper.deleteByPrimaryKey(id)>0) {
-			return ResultUtil.success();
-		}else{
-			return ResultUtil.fail();
-		}
-	}
-
 	@Override
 	public String findByPage(DataGridRequestDTO dgRequest) {
 		PageHelper.startPage(dgRequest.getPage(), dgRequest.getLimit());

@@ -57,14 +57,10 @@ public class OrgDeptService extends AbstractService<OrgDept>{
 	@Override
 	public String findByPage(DataGridRequestDTO dgRequest) {
 		// TODO Auto-generated method stub
-		
-		return super.findByPage(dgRequest);
+		PageHelper.startPage(dgRequest.getPage(), dgRequest.getLimit());
+		Page<OrgDept> list = orgDeptMapper.selectAll(dgRequest.getParams());
+		return PageConvertUtil.getGridJson(list);
 	}
-//	public String findByPage(int pageNo, int pageSize,String keyword) {
-//		PageHelper.startPage(pageNo, pageSize);
-//		Page<OrgDept> list = orgDeptMapper.selectAllByKeyword(keyword);
-//		return PageConvertUtil.getGridJson(list);
-//	}
 	
 	/**
 	 * 获取下拉json数据

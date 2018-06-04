@@ -3,12 +3,17 @@ package com.corpdata.system.org.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
 public class OrgUser implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
 	private OrgDept orgDept;
 	
+	@Id
+	@GeneratedValue(generator = "UUID")
 	private String id;
 
     private String userid;

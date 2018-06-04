@@ -10,9 +10,7 @@ import com.github.pagehelper.Page;
 
 public interface OrgDeptMapper extends Mapper<OrgDept> {
 
-    Page<OrgDept> selectAll();
-
-    Page<OrgDept> selectAllByKeyword(@Param("keyword") String keyword);
+    Page<OrgDept> selectAll(Map<String,Object> params);
     
     int updateByPrimaryKey(OrgDept record);
     

@@ -20,7 +20,7 @@ import com.corpdata.common.utils.CorpdataUtil;
  * @date 2018年3月1日
  */
 @Controller
-@RequestMapping("system/role")
+@RequestMapping("system/org/role")
 public class OrgRoleController {
 	
 	@Autowired
@@ -35,12 +35,12 @@ public class OrgRoleController {
 	@ResponseBody
 	@RequestMapping("/save")
 	public Result save(OrgRole record){
-		return orgRoleService.insert(record);
+		return orgRoleService.save(record);
 	}
 	
 	@RequestMapping("/edit/{id}")
 	public String edit(ModelMap map,@PathVariable("id") String id){
-		map.put("orgrole", orgRoleService.selectByPrimaryKey(id));
+		map.put("orgrole", orgRoleService.findById(id));
 		return "system/org/role/role_edit";
 	}
 	
@@ -53,7 +53,7 @@ public class OrgRoleController {
 	@ResponseBody
 	@RequestMapping("/delete")
 	public Result delete(String id){
-		return orgRoleService.delete(id);
+		return orgRoleService.deleteById(id);
 	}
 	
 	@RequestMapping("/list")

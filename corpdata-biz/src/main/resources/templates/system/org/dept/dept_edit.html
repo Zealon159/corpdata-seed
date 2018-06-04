@@ -3,10 +3,10 @@
 	<head>
 		<meta charset="UTF-8" />
 		<title>组织表单</title>
-		<div th:replace="biz/common/common_form_header"></div>
+		<div th:replace="common/common_form_header"></div>
 		<script type="text/javascript">
 			$(document).ready(function() {
-				initSelect("parentfolderid","/orgdept/selectjson/1",$("#oldParentFolderid").val());
+				initSelect("parentfolderid","/system/org/dept/selectjson/1",$("#oldParentFolderid").val());
 				$('#defaultForm').bootstrapValidator({
 		            message: 'This value is not valid',
 		            feedbackIcons: {
@@ -56,7 +56,7 @@
 	<body>
 		<div class="building-details" id="building-details">
     		<div class="layui-tab-content">
-    			<form id="defaultForm" th:method="post" th:action="@{/orgdept/edit}">
+    			<form id="defaultForm" th:method="post" th:action="@{/system/org/dept/update}">
 	    			<div class="form-modal">
 						<div class="form-wrap clearfix">
 							<div class="col-md-12 col-sm-12 col-xs-12">

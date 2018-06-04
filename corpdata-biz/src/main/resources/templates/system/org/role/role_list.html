@@ -8,17 +8,15 @@
 	<body>
 		<fieldset class="layui-elem-field">
 		    <div class="layui-field-box">
-		    <form class="layui-form">
 		        <div class="layui-inline">
 		            <input id="searchStr" placeholder="关键字" class="layui-input layui-input-sm search_input">
 		        </div>
 		        <div class="layui-inline">
-		            <a class="layui-btn layui-btn-sm" lay-filter="searchForm">查询</a>
+		            <a class="layui-btn layui-btn-sm" id="btn-search" lay-filter="searchForm">查询</a>
 		        </div>
 		        <div class="layui-inline">
 		            <a class="layui-btn layui-btn-sm layui-btn-normal" data-type="addUser" id="add-disc"> <i class="layui-icon">&#xe61f;</i>新增</a>
 		        </div>
-		    </form>
 		    </div>
 		</fieldset>
 		
@@ -47,7 +45,7 @@
 						type : 2,
 						area : [ '600px', '316px' ],
 						shade : [ 0.8, '#393D49' ],
-						content : [ "/system/role/add", 'no' ]
+						content : [ "/system/org/role/add", 'no' ]
 					});
 				})
 			})
@@ -59,7 +57,7 @@
 				table.render({
 					id:'dg_role',
 				    elem: '#LAY_table_role',
-				    url: '/system/role/listdata',
+				    url: '/system/org/role/listdata',
 				    method:'post',
 				    cols: [[
 				      //{checkbox: true, fixed: true},
@@ -86,7 +84,7 @@
 				    }else if(obj.event == 'del'){
 				      	layer.confirm('真的删除数据吗？', function(index){
 				        	//发送删除请求
-				        	$.post("/orgrole/delete",{id:data.id},function(res){
+				        	$.post("/system/org/role/delete",{id:data.id},function(res){
 				        		obj.del();
 					        	layer.close(index);
 					        	layer.msg(res.msg);
@@ -98,39 +96,39 @@
 							type : 2,
 							area : [ '600px', '316px' ],
 							shade : [ 0.8, '#393D49' ],
-							content : [ "/orgrole/edit/"+data.id, 'no' ]
+							content : [ "/system/org/role/edit/"+data.id, 'no' ]
 						});
 				    }
 				});
 				
 				var active = {
-					    reload: function(){
-					      var searchStr = $('#searchStr');
-					      //执行重载
-					      table.reload('dg_role', {
-					        page: {
-					          curr: 1 //重新从第 1 页开始
-					        }
-					        ,where: {
-					        	params:{
-					        		searchStr: searchStr.val()
-					        	}
-					        }
-					      });
-					    }
-					  };  
-					$('#btn-search').on('click', function(){
-					  var type = $(this).data('type');
-					  active[type] ? active[type].call(this) : '';
-					});
-					
-					$('input').keyup(function (event) {
-				        var e = event|| window.event;
-				        if (e.keyCode == "13") {
-				        	var type = "reload";
-							active[type] ? active[type].call(this) : '';
+				    reload: function(){
+				      var searchStr = $('#searchStr');
+				      //执行重载
+				      table.reload('dg_role', {
+				        page: {
+				          curr: 1 //重新从第 1 页开始
 				        }
-				    });
+				        ,where: {
+				        	params:{
+				        		searchStr: searchStr.val()
+				        	}
+				        }
+				      });
+				    }
+				};  
+				$('#btn-search').on('click', function(){
+				  	var type = $(this).data('type');
+				  	active[type] ? active[type].call(this) : '';
+				});
+				
+				$('#searchStr').keyup(function (event) {
+			        var e = event|| window.event;
+			        if (e.keyCode == "13") {
+			        	var type = "reload";
+						active[type] ? active[type].call(this) : '';
+			        }
+			    });
 			});
 		</script>
 	</body>

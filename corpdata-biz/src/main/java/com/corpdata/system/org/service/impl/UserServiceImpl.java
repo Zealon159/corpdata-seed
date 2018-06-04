@@ -12,15 +12,18 @@ import com.corpdata.system.org.dao.OrgPermissionMapper;
 import com.corpdata.system.org.dao.OrgRoleMapper;
 import com.corpdata.system.org.dao.OrgUserMapper;
 import com.corpdata.system.org.entity.OrgDept;
+import com.corpdata.system.org.entity.OrgRole;
 import com.corpdata.system.org.entity.OrgUser;
 import com.corpdata.system.org.service.UserService;
 import com.corpdata.system.security.shiro.util.ShiroUserPwdUtil;
 import com.corpdata.system.security.shiro.util.UserUtil;
 import com.corpdata.common.api.pagehelper.PageConvertUtil;
 import com.corpdata.common.api.redis.RedisService;
+import com.corpdata.common.domain.DataGridRequestDTO;
 import com.corpdata.common.result.Result;
 import com.corpdata.common.result.util.ResultUtil;
 import com.corpdata.common.utils.CorpdataUtil;
+import com.corpdata.core.base.AbstractService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 
@@ -30,7 +33,7 @@ import com.github.pagehelper.PageHelper;
  * @date 2018年3月1日
  */
 @Service("userService")
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends AbstractService<OrgUser> implements UserService {
 
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());  
 	
@@ -73,15 +76,15 @@ public class UserServiceImpl implements UserService {
 		return set;
 	}
 
-	public String findByPage(int pageNo, int pageSize,String keyword, String deptId) {
-		PageHelper.startPage(pageNo, pageSize);
-		if(("root").equals(deptId) || ("").equals(deptId)){
-			deptId = null;
+	public String findByPage(DataGridRequestDTO dgRequest) {
+		PageHelper.startPage(dgRequest.getPage(), dgRequest.getLimit());
+		if(dgRequest.getParams()!=null && dgRequest.getParams().get("deptId")!=null){
+			if(dgRequest.getParams().get("deptId").equals("root")){
+				dgRequest.getParams().put("deptId", null);
+			}
 		}
-		if(("").equals(keyword)){
-			keyword = null;
-		}
-		Page<OrgUser> list = orgUserMapper.selectAllByKeyword(keyword, deptId);
+		Page<OrgUser> list = orgUserMapper.selectAll(dgRequest.getParams());
+		//Page<OrgUser> list = orgUserMapper.selectAllByKeyword(keyword, deptId);
 		return PageConvertUtil.getGridJson(list);
 	}
 	
@@ -125,7 +128,7 @@ public class UserServiceImpl implements UserService {
 		OrgUser user = orgUserMapper.getUserInfoByUserid(userId);
 		return user;
 	}
-
+	
 	public Result insert(OrgUser record,String orgDeptId) {
 		Date date = new Date();
 		record.setId(CorpdataUtil.getUUID());
@@ -136,11 +139,7 @@ public class UserServiceImpl implements UserService {
 		record.setOrgDept(new OrgDept(orgDeptId));
 		String newPwd = ShiroUserPwdUtil.generateEncryptPwd(record.getUserid(), record.getUserPwd());
 		record.setUserPwd(newPwd);
-		if(orgUserMapper.insert(record)>0){
-			return ResultUtil.success();
-		}else{
-			return ResultUtil.fail();
-		}
+		return super.save(record);
 	}
 	
 	public Result update(OrgUser record,String orgDeptId){
@@ -148,11 +147,7 @@ public class UserServiceImpl implements UserService {
 		if(null != orgDeptId && !("").equals(orgDeptId)){
 			record.setOrgDept(new OrgDept(orgDeptId));
 		}
-		if(orgUserMapper.updateByPrimaryKey(record)>0){
-			return ResultUtil.success();
-		}else{
-			return ResultUtil.fail();
-		}
+		return super.update(record);
 	}
 	
 	public Result delete(String id){
@@ -167,13 +162,10 @@ public class UserServiceImpl implements UserService {
 		return r;
 	}
 	
-	public OrgUser selectByPrimaryKey(String id){
-		return orgUserMapper.selectByPrimaryKey(id);
-	}
-	
 	public OrgUser selectByUserId(String UserId){
 		return orgUserMapper.selectByUserId(UserId);
 	}
+	
 	/**
 	 * 修改用户密码
 	 * @param id
@@ -181,14 +173,10 @@ public class UserServiceImpl implements UserService {
 	 * @return
 	 */
 	public Result modPassword(String id, String newPassword) {
-		OrgUser user = selectByPrimaryKey(id);
+		OrgUser user = super.findById(id);
 		String password = ShiroUserPwdUtil.generateEncryptPwd(user.getUserid(), newPassword);//密码加密
 		user.setUserPwd(password);
-		if(orgUserMapper.updateByPrimaryKey(user)>0){
-			return ResultUtil.success();
-		}else{
-			return ResultUtil.fail();
-		}
+		return super.update(user);
 	}
 
 }

@@ -21,7 +21,7 @@ import com.corpdata.common.utils.CorpdataUtil;
  * @date 2018年3月1日
  */
 @Controller
-@RequestMapping("system/dept")
+@RequestMapping("system/org/dept")
 public class OrgDeptController {
 	
 	@Autowired

@@ -6,7 +6,7 @@
 		<div th:replace="common/common_form_header"></div>
 		<script type="text/javascript">
 			$(document).ready(function() {
-				initSelect("parentfolderid","/orgdept/selectjson/1","");
+				initSelect("parentfolderid","/system/org/dept/selectjson/1","");
 				$('#defaultForm').bootstrapValidator({
 		            message: 'This value is not valid',
 		            feedbackIcons: {
@@ -47,7 +47,7 @@
 	<body>
 		<div class="building-details" id="building-details">
     		<div class="layui-tab-content">
-    			<form id="defaultForm" th:method="post" th:action="@{/orgdept/save}">
+    			<form id="defaultForm" th:method="post" th:action="@{/system/org/dept/save}">
 	    			<div class="form-modal">
 						<div class="form-wrap clearfix">
 							<div class="col-md-12 col-sm-12 col-xs-12">

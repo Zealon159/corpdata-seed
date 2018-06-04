@@ -16,19 +16,13 @@
   </sql>
 
   
-  <select id="selectAll" resultMap="BaseResultMap">
+  <select id="selectAll" resultMap="BaseResultMap" parameterType="map">
     select id, folderName, folderid, ParentFolderid, Sort_number, creater, created, modified 
-    from org_dept order by folderid
-  </select>
-  
-  <select id="selectAllByKeyword" resultMap="BaseResultMap" parameterType="String">
-    select id, folderName, folderid, ParentFolderid, Sort_number, creater, created, modified 
-    from org_dept 
-    where 1=1 
+    from org_dept where 1=1 
     <if test="keyword!=null">
-    	and (folderName like CONCAT(CONCAT('%',#{keyword}), '%') )
+    	and (folderName like '%${keyword}%')
     </if>
-     order by folderid
+    order by folderid
   </select>
   
   <select id="selectAllByCombox" resultType="map">

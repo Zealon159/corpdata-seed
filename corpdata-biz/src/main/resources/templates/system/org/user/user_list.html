@@ -3,7 +3,7 @@
 	<head> 
 		<meta charset="UTF-8" />
 		<title> 用户管理</title>
-		<div th:replace="biz/common/common_grid_header"></div>
+		<div th:replace="common/common_grid_header"></div>
 	</head>
 	<body>
 		<div style="padding: 15px; height: 100%">
@@ -35,7 +35,7 @@
 				table.render({
 					id:'dg_user',
 				    elem: '#LAY_table_user',
-				    url: '/orguser/find/',
+				    url: '/system/org/user/listdata',
 				    cols: [[
 				      //{checkbox: true, fixed: true},
 				      {field:'userid', align:'left', title: '登录名'}
@@ -55,7 +55,7 @@
 				    } else if(obj.event == 'del'){
 				      	layer.confirm('确认要删除吗，删除后不能恢复', function(index){
 				        	//发送删除请求
-				        	$.post("/orguser/delete",{id:data.id},function(res){
+				        	$.post("/system/org/user/delete",{id:data.id},function(res){
 				        		if(res.success){
 				        			obj.del();	
 				        			layer.msg(res.msg);
@@ -71,7 +71,7 @@
 							type : 2,
 							area : [ '600px', '406px' ],
 							shade : [ 0.8, '#393D49' ],
-							content : [ "/orguser/toedit/"+data.id, 'no' ]
+							content : [ "/system/org/user/edit/"+data.id, 'no' ]
 						});
 				    } else if(obj.event == 'permission'){
 				    	layer.open({
@@ -79,7 +79,7 @@
 							type : 2,
 							area : [ '600px', '406px' ],
 							shade : [ 0.8, '#393D49' ],
-							content : [ "/orgrole/assign/"+data.userid, 'no' ]
+							content : [ "/system/org/role/assign/"+data.userid, 'no' ]
 						});
 				    }
 				});
@@ -103,7 +103,7 @@
 						type : 2,
 						area : [ '600px', '436px' ],
 						shade : [ 0.8, '#393D49' ],
-						content : [ "/orguser/toadd", 'no' ]
+						content : [ "/system/org/user/toadd", 'no' ]
 					});
 				})
 				

@@ -15,6 +15,7 @@ import com.corpdata.system.org.entity.OrgUser;
 import com.corpdata.system.org.service.impl.UserServiceImpl;
 import com.corpdata.system.security.shiro.util.ShiroUserPwdUtil;
 import com.corpdata.system.security.shiro.util.UserUtil;
+import com.corpdata.common.domain.DataGridRequestDTO;
 import com.corpdata.common.result.Result;
 import com.corpdata.common.utils.CorpdataUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -26,35 +27,35 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @date 2018年3月1日
  */
 @Controller
-@RequestMapping("orguser")
+@RequestMapping("system/org/user")
 public class OrgUserController {
 
 	@Autowired
 	private UserServiceImpl userService;
 	
-	@RequestMapping("/toadd")
-	public String toadd(ModelMap map){
+	@RequestMapping("/add")
+	public String add(ModelMap map){
 		map.put("id", CorpdataUtil.getUUID());
 		return "system/org/user/user_add";
 	}
 	
 	@ResponseBody
-	@RequestMapping("/add")
-	public Result insert(OrgUser user,String orgDept){
-		return userService.insert(user,orgDept);	
+	@RequestMapping("/save")
+	public Result save(OrgUser record,String orgDept){
+		return userService.insert(record,orgDept);	
 	}
 	
-	@RequestMapping("/toedit/{id}")
-	public String toedit(@PathVariable String id,ModelMap m){
-		OrgUser model = userService.selectByPrimaryKey(id);
+	@RequestMapping("/edit/{id}")
+	public String edit(@PathVariable String id,ModelMap m){
+		OrgUser model = userService.findById(id);
 		m.addAttribute("model", model);
 		return "system/org/user/user_edit";
 	}
 	
 	@ResponseBody
-	@RequestMapping("/edit")
-	public Result edit(OrgUser model,String orgDept){
-		return userService.update(model,orgDept);
+	@RequestMapping("/update")
+	public Result update(OrgUser record,String orgDept){
+		return userService.update(record,orgDept);
 	}
 	
 	@ResponseBody
@@ -63,19 +64,15 @@ public class OrgUserController {
 		return userService.delete(id);
 	}
 
-	@RequestMapping("/tolist")
-	public String tolist(ModelMap map){
+	@RequestMapping("/list")
+	public String list(ModelMap map){
 		return "system/org/user/user_list";
 	}
 	
 	@ResponseBody
-	@RequestMapping("/find/*")
-	public String findByPage(HttpServletRequest request){
-		int page = Integer.parseInt(request.getParameter("page"));
-		int limit = Integer.parseInt(request.getParameter("limit"));
-		String keyword = request.getParameter("keyword");
-		String deptId = request.getParameter("deptId");
-		String jsonData = userService.findByPage(page, limit, keyword, deptId);
+	@RequestMapping("/listdata")
+	public String findByPage(DataGridRequestDTO dgRequest){
+		String jsonData = userService.findByPage(dgRequest);
 		return jsonData;	
 	}
 	
@@ -92,7 +89,7 @@ public class OrgUserController {
 	 */
 	@RequestMapping("/toEditInformation")
 	public String toEditInformation(ModelMap map){
-		OrgUser user = userService.selectByPrimaryKey(UserUtil.getCurrentOrgUser().getId());
+		OrgUser user = userService.findById(UserUtil.getCurrentOrgUser().getId());
 		map.put("user", user);
 		return "system/org/user/user_edit_information";
 	}
@@ -102,7 +99,7 @@ public class OrgUserController {
 	 */
 	@RequestMapping("/toModPassword")
 	public String toModPassword(ModelMap map){
-		OrgUser user = userService.selectByPrimaryKey(UserUtil.getCurrentOrgUser().getId());
+		OrgUser user = userService.findById(UserUtil.getCurrentOrgUser().getId());
 		map.put("user", user);
 		return "system/org/user/user_edit_password";
 	}
@@ -115,7 +112,7 @@ public class OrgUserController {
 	@ResponseBody
 	@RequestMapping("/checkPassword")
 	public String checkPassword(String oldPassword){
-		OrgUser user = userService.selectByPrimaryKey(UserUtil.getCurrentOrgUser().getId());
+		OrgUser user = userService.findById(UserUtil.getCurrentOrgUser().getId());
 		boolean result = true;
 		String password = ShiroUserPwdUtil.generateEncryptPwd(user.getUserid(), oldPassword);//密码加密
 		//判断录入的密码是否跟数据库存储的一致

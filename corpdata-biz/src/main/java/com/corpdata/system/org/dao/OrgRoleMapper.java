@@ -8,8 +8,6 @@ import java.util.Map;
 
 
 public interface OrgRoleMapper extends Mapper<OrgRole> {
-	
-    int deleteByPrimaryKey(String id);
     
     Page<OrgRole> selectAll(Map<String,Object> params);
     
