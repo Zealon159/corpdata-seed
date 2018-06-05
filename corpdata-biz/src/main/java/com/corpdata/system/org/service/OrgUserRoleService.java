@@ -10,6 +10,7 @@ import com.corpdata.system.org.entity.OrgUserRole;
 import com.corpdata.common.result.Result;
 import com.corpdata.common.result.util.ResultUtil;
 import com.corpdata.common.utils.CorpdataUtil;
+import com.corpdata.core.base.AbstractBaseService;
 
 /**
  * 用户角色关联服务类
@@ -17,35 +18,11 @@ import com.corpdata.common.utils.CorpdataUtil;
  * @date 2018年3月1日
  */
 @Service("OrgUserRoleService")
-public class OrgUserRoleService {
+public class OrgUserRoleService extends AbstractBaseService<OrgUserRole>{
 	
 	@Autowired
 	private OrgUserRoleMapper orgUserRoleMapper;
 	
-	public Result insert(OrgUserRole record) {
-		record.setId(CorpdataUtil.getUUID());
-		if (orgUserRoleMapper.insert(record)>0) {
-			return ResultUtil.success();
-		} else{
-			return ResultUtil.fail();
-		}
-	}
-	
-	public Result update(OrgUserRole record) {
-		if (orgUserRoleMapper.updateByPrimaryKey(record)>0) {
-			return ResultUtil.success();
-		} else{
-			return ResultUtil.fail();
-		}
-	}
-	
-	public Result delete(String id) {
-		if (orgUserRoleMapper.deleteByPrimaryKey(id)>0) {
-			return ResultUtil.success();
-		} else{
-			return ResultUtil.fail();
-		}
-	}
 	
 	public OrgUserRole selectByPrimaryKey(String id){
 		return orgUserRoleMapper.selectByPrimaryKey(id);

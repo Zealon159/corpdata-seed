@@ -3,12 +3,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<title>分配角色权限</title>
-		<link rel="stylesheet" href="/js/plugin/layui-v2.2.5/layui/css/layui.css">
-		<link rel="stylesheet" href="/js/plugin/bootstrap/css/bootstrap.min.css">
-		<link rel="stylesheet" href="/css/reset.css">
-		<script src="/js/jquery-2.1.1.min.js"></script>
-		<script src="/js/plugin/layui-v2.2.5/layui/layui.js"></script>
-		<script src="/js/common.js"></script>
+		<div th:replace="common/common_form_header"></div>
 		<!-- ztree -->
 		<link rel="stylesheet" href="/js/plugin/zTree_v3/css/zTreeStyle/zTreeStyle.css" type="text/css">
 		<script type="text/javascript" src="/js/plugin/zTree_v3/js/jquery.ztree.all.min.js"></script>
@@ -24,7 +19,7 @@
 					},
 				async:{
 					enable:true,
-					url:"/orgpermission/gettreejson",
+					url:"/system/org/permission/gettreejson",
 					autoParam:["id","name"]
 				},
 				callback: {
@@ -52,7 +47,7 @@
 			//保存角色和权限的映射
 			function savePermission(){
 				var roleId = $("#roleId").val();
-				var url="/orgrole/savepermission";
+				var url="/system/org/role/savepermission";
 				var nodes=zTree.getCheckedNodes(true);
 				var permissionIds="";
 				for(var i=0;i<nodes.length;i++){
@@ -87,7 +82,7 @@
 			}
 			function getRolePer(){
 				var roleId = $("#roleId").val();
-				var url="/orgpermission/findRolePermmission";
+				var url="/system/org/permission/findRolePermmission";
 				jQuery.ajax({
 			        type:"post",
 			        async:false,

@@ -11,7 +11,7 @@
     <result column="modified" jdbcType="TIMESTAMP" property="modified" />
     <result column="Type_Name" jdbcType="TIMESTAMP" property="typeName" />
   </resultMap>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+  <delete id="deleteById" parameterType="java.lang.String">
     delete from sys_data_dic
     where id = #{id,jdbcType=CHAR}
   </delete>
@@ -23,7 +23,7 @@
       #{dicType,jdbcType=VARCHAR}, #{creater,jdbcType=VARCHAR}, #{created,jdbcType=TIMESTAMP}, 
       #{modified,jdbcType=TIMESTAMP})
   </insert>
-  <update id="updateByPrimaryKey" parameterType="com.corpdata.system.dic.entity.SysDataDic">
+  <update id="update" parameterType="com.corpdata.system.dic.entity.SysDataDic">
     update sys_data_dic
     set Dic_Name = #{dicName,jdbcType=VARCHAR},
       Sort_Number = #{sortNumber,jdbcType=INTEGER},
@@ -31,12 +31,13 @@
       modified = #{modified,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=CHAR}
   </update>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
     select id, Dic_Name, Sort_Number, Dic_type, creater, created, modified
     from sys_data_dic
     where id = #{id,jdbcType=CHAR}
   </select>
-  <select id="selectAllByCondition" resultMap="BaseResultMap">
+  
+  <select id="selectAll" resultMap="BaseResultMap" parameterType="map">
     select 
     	dic.id, dic.Dic_Name, dic.Sort_Number, dic.Dic_type, 
     	dic.creater, dic.created, dic.modified, 
@@ -45,13 +46,14 @@
 		LEFT JOIN sys_dic_type type on dic.Dic_type = type.Type_code
     where 1=1
 	<if test="searchStr != null">
-		and (dic.id = #{searchStr} or dic.dic_name like concat(concat('%',#{searchStr}),'%')) 
+		and (dic.id = '${searchStr}' or dic.dic_name like '%${searchStr}%') 
 	</if>
 	<if test="dictype != null">
-		and dic.Dic_type = #{dictype}
+		and dic.Dic_type = '${dictype}'
 	</if>
 	order by dic.Dic_type asc,dic.Sort_Number asc
   </select>
+  
   <select id="selectAllByCombox" resultType="map">
     select id, dic_name text from sys_data_dic order by sort_number
   </select>

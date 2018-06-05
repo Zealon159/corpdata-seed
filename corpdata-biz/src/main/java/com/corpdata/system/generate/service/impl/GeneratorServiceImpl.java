@@ -8,6 +8,9 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+
+import com.corpdata.common.api.pagehelper.PageConvertUtil;
+import com.corpdata.common.domain.DataGridRequestDTO;
 import com.corpdata.common.result.DataGrid;
 import com.corpdata.system.generate.dao.GeneratorMapper;
 import com.corpdata.system.generate.service.GeneratorService;
@@ -46,10 +49,9 @@ public class GeneratorServiceImpl implements GeneratorService {
 	 * @param dt
 	 * @return
 	 */
-	public DataGrid<Map<String,Object>> selectDataGrid(DataGrid dt) {
-		PageHelper.startPage(dt.getPage(), dt.getSize());
-		Page<Map<String,Object>> rows = generatorMapper.list();
-		dt.setTotalAndRows(rows.getTotal(), rows);
-		return dt;
+	public String findByPage(DataGridRequestDTO dgRequest) {
+		PageHelper.startPage(dgRequest.getPage(), dgRequest.getLimit());
+		Page<Map<String,Object>> list = generatorMapper.list();
+		return PageConvertUtil.getGridJson(list);
 	}
 }

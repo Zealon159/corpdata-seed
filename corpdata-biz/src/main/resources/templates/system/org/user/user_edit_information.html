@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<title>用户表单</title>
-		<div th:replace="biz/common/common_form_header"></div>
+		<div th:replace="/common/common_form_header"></div>
 		<style>.row{margin: 0}</style>
 		<script type="text/javascript">
 			$(document).ready(function() {
@@ -67,7 +67,7 @@
 	<body>
 		 <div class="row">
     		<div class="floor-msg">
-    			<form id="defaultForm" th:method="post" th:action="@{/orguser/edit}">
+    			<form id="defaultForm" th:method="post" th:action="@{/system/org/user/update}">
 	    			<div class="form-modal">
 						<div class="form-wrap clearfix">
 							

@@ -1,24 +1,16 @@
 package com.corpdata.system.org.entity;
 
-import java.io.Serializable;
-import java.util.Date;
-
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import com.corpdata.core.base.BaseEntity;
 
 /**
  * 组织实体
  * @author wu
  * @date 2018年2月26日
  */
-public class OrgDept implements Serializable{
+public class OrgDept extends BaseEntity{
 	
 	private static final long serialVersionUID = 1L;
 	
-	@Id
-	@GeneratedValue(generator = "UUID")
-    private String id;
-
     private String foldername;
 
     private String folderid;
@@ -27,11 +19,6 @@ public class OrgDept implements Serializable{
 
     private Integer sortNumber;
 
-    private String creater;
-
-    private Date created;
-
-    private Date modified;
 
     public OrgDept(){}
     
@@ -39,14 +26,6 @@ public class OrgDept implements Serializable{
 		super();
 		this.id = id;
 	}
-
-	public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id == null ? null : id.trim();
-    }
 
     public String getFoldername() {
         return foldername;
@@ -78,29 +57,5 @@ public class OrgDept implements Serializable{
 
     public void setSortNumber(Integer sortNumber) {
         this.sortNumber = sortNumber;
-    }
-
-    public String getCreater() {
-        return creater;
-    }
-
-    public void setCreater(String creater) {
-        this.creater = creater == null ? null : creater.trim();
-    }
-
-    public Date getCreated() {
-        return created;
-    }
-
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-
-    public Date getModified() {
-        return modified;
-    }
-
-    public void setModified(Date modified) {
-        this.modified = modified;
     }
 }

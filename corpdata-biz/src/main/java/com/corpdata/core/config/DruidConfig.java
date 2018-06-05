@@ -1,4 +1,4 @@
-package com.corpdata.common.config;
+package com.corpdata.core.config;
 
 import com.alibaba.druid.support.http.StatViewServlet;
 import com.alibaba.druid.support.http.WebStatFilter;

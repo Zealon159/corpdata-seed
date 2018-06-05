@@ -12,15 +12,14 @@
 	<body class="layui-layout-body">
 		<div class="layui-layout layui-layout-admin">
 		  <div class="layui-header">
-		    <div class="layui-logo">layui 后台布局</div>
+		    <div class="layui-logo">基础开发平台</div>
 		    <!-- 头部区域（可配合layui已有的水平导航） -->
 		    <ul class="layui-nav layui-layout-left">
 		      <!-- 显示/隐藏菜单 -->
               <a href="javascript:" class="iconfont hideMenu icon-menu1"></a>
 		    
 		      <li class="layui-nav-item"><a href="">控制台</a></li>
-		      <li class="layui-nav-item"><a href="">商品管理</a></li>
-		      <li class="layui-nav-item"><a href="">用户</a></li>
+		      <li class="layui-nav-item"><a href="">系统监控</a></li>
 		      <li class="layui-nav-item">
 		        <a href="javascript:;">其它系统</a>
 		        <dl class="layui-nav-child">
@@ -88,9 +87,21 @@
 		            	</a>
 		            </dd>
 		            <dd>
-		            	<a href="/system/org/role/list" target="centerFrame" data-url="/system/org/role/list">
+		            	<a href="/system/org/role/list" target="centerFrame">
 		            		<i class="layui-icon">&#xe705;</i>
 		            		<cite>系统日志</cite>
+		            	</a>
+		            </dd>
+		            <dd>
+		            	<a href="/system/data-dic/index" target="centerFrame">
+		            		<i class="layui-icon">&#xe663;</i>
+		            		<cite>数据字典</cite>
+		            	</a>
+		            </dd>
+		            <dd>
+		            	<a href="/system/generator/list" target="centerFrame">
+		            		<i class="layui-icon">&#xe64e;</i>
+		            		<cite>代码生成</cite>
 		            	</a>
 		            </dd>
 		          </dl>

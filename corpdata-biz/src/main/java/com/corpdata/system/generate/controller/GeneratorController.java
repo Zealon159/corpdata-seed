@@ -1,7 +1,6 @@
 package com.corpdata.system.generate.controller;
 
 import java.io.IOException;
-import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
@@ -11,7 +10,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.corpdata.common.result.DataGrid;
+import com.corpdata.common.domain.DataGridRequestDTO;
 import com.corpdata.system.generate.service.GeneratorService;
 
 @Controller
@@ -42,11 +41,8 @@ public class GeneratorController{
 	
 	@RequestMapping("/listdata")
 	@ResponseBody
-	public DataGrid<Map<String,Object>> getList(DataGrid dt){
-		if (null == dt) {
-            return null;
-        }
-		return generatorService.selectDataGrid(dt);
+	public String getList(DataGridRequestDTO dgRequest){
+		return generatorService.findByPage(dgRequest);
 	}
 	
 	//生成选项

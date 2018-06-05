@@ -1,20 +1,12 @@
 package com.corpdata.system.org.entity;
 
-import java.io.Serializable;
-import java.util.Date;
+import com.corpdata.core.base.BaseEntity;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-
-public class OrgUser implements Serializable{
+public class OrgUser extends BaseEntity {
 
 	private static final long serialVersionUID = 1L;
 
 	private OrgDept orgDept;
-	
-	@Id
-	@GeneratedValue(generator = "UUID")
-	private String id;
 
     private String userid;
 
@@ -30,16 +22,6 @@ public class OrgUser implements Serializable{
 
     private Integer sortNumber;
 
-    private String creater;
-
-    private Date created;
-
-    private Date modified;
-
-    public String getId() {
-        return id;
-    }
-
     public OrgDept getOrgDept() {
 		return orgDept;
 	}
@@ -47,12 +29,6 @@ public class OrgUser implements Serializable{
 	public void setOrgDept(OrgDept orgDept) {
 		this.orgDept = orgDept;
 	}
-
-
-
-	public void setId(String id) {
-        this.id = id == null ? null : id.trim();
-    }
 
     public String getUserid() {
         return userid;
@@ -108,29 +84,5 @@ public class OrgUser implements Serializable{
 
     public void setSortNumber(Integer sortNumber) {
         this.sortNumber = sortNumber;
-    }
-
-    public String getCreater() {
-        return creater;
-    }
-
-    public void setCreater(String creater) {
-        this.creater = creater == null ? null : creater.trim();
-    }
-
-    public Date getCreated() {
-        return created;
-    }
-
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-
-    public Date getModified() {
-        return modified;
-    }
-
-    public void setModified(Date modified) {
-        this.modified = modified;
     }
 }

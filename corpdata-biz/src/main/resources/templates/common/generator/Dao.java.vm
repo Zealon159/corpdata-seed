@@ -1,31 +1,15 @@
 package ${package}.dao;
 
 import ${package}.entity.${className};
-import java.util.List;
-import java.util.Map;
-import com.github.pagehelper.Page;
-import org.apache.ibatis.annotations.Mapper;
+import com.corpdata.core.base.BaseMapper;
 
 /**
- * ${comments}
+ * ${comments} 持久层接口
  * @author ${author}
  * @email ${email}
  * @date ${datetime}
+ * 
  */
-@Mapper
-public interface ${className}Dao {
+public interface ${className}Mapper {
 
-	${className} selectById(${pk.attrType} ${pk.attrname});
-	
-	Page<${className}> selectList(Map<String,Object> params);
-	
-	int selectCount(Map<String,Object> params);
-	
-	int insert(${className} ${classname});
-	
-	int update(${className} ${classname});
-	
-	int delete(${pk.attrType} ${pk.columnName});
-	
-	int batchDelete(${pk.attrType}[] ${pk.attrname}s);
 }

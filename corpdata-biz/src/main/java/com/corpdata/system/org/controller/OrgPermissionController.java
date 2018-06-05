@@ -12,7 +12,7 @@ import com.corpdata.system.org.service.OrgPermissionService;
  * @date 2018年3月1日
  */
 @Controller
-@RequestMapping("orgpermission")
+@RequestMapping("system/org/permission")
 public class OrgPermissionController {
 	
 	@Autowired

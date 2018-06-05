@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.corpdata.core.base.AbstractBaseService;
 import com.corpdata.system.org.dao.OrgPermissionMapper;
 import com.corpdata.system.org.dao.OrgRolePermissionMapper;
 import com.corpdata.system.org.entity.OrgPermission;
@@ -16,7 +18,8 @@ import com.corpdata.system.org.entity.OrgRolePermission;
  * @date 2018年3月1日
  */
 @Service
-public class OrgPermissionService {
+public class OrgPermissionService extends AbstractBaseService<OrgPermission>{
+	
 	@Autowired
 	private OrgPermissionMapper orgPermissionMapper;
 	
@@ -24,7 +27,7 @@ public class OrgPermissionService {
 	private OrgRolePermissionMapper orgRolePermissionMapper;
 	
 	public OrgPermission selectByPrimaryKey(String id){
-		return orgPermissionMapper.selectByPrimaryKey(id);
+		return orgPermissionMapper.selectById(id);
 	}
 	
 	/**

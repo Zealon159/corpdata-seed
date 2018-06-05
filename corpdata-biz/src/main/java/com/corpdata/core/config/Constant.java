@@ -1,4 +1,4 @@
-package com.corpdata.common.config;
+package com.corpdata.core.config;
 
 public class Constant {
     //演示系统账户

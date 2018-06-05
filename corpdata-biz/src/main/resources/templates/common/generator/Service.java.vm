@@ -1,34 +1,15 @@
 package ${package}.service;
 
 import ${package}.entity.${className};
-import java.util.List;
-import java.util.Map;
-import com.github.pagehelper.Page;
-import com.corpdata.common.result.Result;
-import com.corpdata.common.result.DataGrid;
+import com.corpdata.core.base.BaseService;
 
 /**
  * ${comments}
- * 
  * @author ${author}
  * @email ${email}
  * @date ${datetime}
+ * 
  */
-public interface ${className}Service {
+public interface ${className}Service extends BaseService<${className}>{
 	
-	${className} selectById(${pk.attrType} ${pk.attrname});
-	
-	DataGrid<${className}> selectDataGrid(DataGrid dg);
-	
-	Page<${className}> selectList(Map<String, Object> params);
-	
-	int selectCount(Map<String, Object> params);
-	
-	Result insert(${className} ${classname});
-	
-	Result update(${className} ${classname});
-	
-	Result delete(${pk.attrType} ${pk.attrname});
-	
-	Result batchDelete(${pk.attrType}[] ${pk.attrname}s);
 }

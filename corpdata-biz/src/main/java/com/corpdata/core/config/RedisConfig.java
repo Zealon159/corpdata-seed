@@ -1,4 +1,4 @@
-package com.corpdata.common.config;
+package com.corpdata.core.config;
 
 import java.lang.reflect.Method;
 import java.net.UnknownHostException;

@@ -28,7 +28,7 @@ public class OrgDeptController {
 	private OrgDeptService orgDeptService;
 	
 	@GetMapping("/add")
-	public String toadd(ModelMap map){
+	public String add(ModelMap map){
 		map.put("id", CorpdataUtil.getUUID());
 		return "system/org/dept/dept_add";
 	}

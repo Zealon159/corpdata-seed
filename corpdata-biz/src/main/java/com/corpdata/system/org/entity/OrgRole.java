@@ -1,38 +1,16 @@
 package com.corpdata.system.org.entity;
 
-import java.io.Serializable;
-import java.util.Date;
+import com.corpdata.core.base.BaseEntity;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-
-public class OrgRole implements Serializable{
+public class OrgRole extends BaseEntity{
 
 	private static final long serialVersionUID = 1L;
-
-	@Id
-	@GeneratedValue(generator = "UUID")
-	private String id;
 
     private String roleName;
 
     private String roleDesc;
 
     private Integer sortNumber;
-
-    private String creater;
-
-    private Date created;
-
-    private Date modified;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id == null ? null : id.trim();
-    }
 
     public String getRoleName() {
         return roleName;
@@ -58,27 +36,4 @@ public class OrgRole implements Serializable{
         this.sortNumber = sortNumber;
     }
 
-    public String getCreater() {
-        return creater;
-    }
-
-    public void setCreater(String creater) {
-        this.creater = creater == null ? null : creater.trim();
-    }
-
-    public Date getCreated() {
-        return created;
-    }
-
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-
-    public Date getModified() {
-        return modified;
-    }
-
-    public void setModified(Date modified) {
-        this.modified = modified;
-    }
 }

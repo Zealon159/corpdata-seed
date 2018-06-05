@@ -3,19 +3,11 @@ package com.corpdata.system.org.dao;
 import java.util.List;
 import java.util.Map;
 import org.apache.ibatis.annotations.Param;
-
-import com.corpdata.core.base.Mapper;
+import com.corpdata.core.base.BaseMapper;
 import com.corpdata.system.org.entity.OrgDept;
-import com.github.pagehelper.Page;
 
-public interface OrgDeptMapper extends Mapper<OrgDept> {
+public interface OrgDeptMapper extends BaseMapper<OrgDept> {
 	
-	OrgDept selectByPrimaryKey(String id);
-	
-    Page<OrgDept> selectAll(Map<String,Object> params);
-    
-    int updateByPrimaryKey(OrgDept record);
-    
     List<Map<String,Object>> selectAllByCombox();
     
     /**

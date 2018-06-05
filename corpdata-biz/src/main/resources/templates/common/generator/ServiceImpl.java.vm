@@ -2,19 +2,11 @@ package ${package}.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.List;
-import java.util.Map;
-import java.util.Date;
-import ${package}.dao.${className}Dao;
+import org.springframework.transaction.annotation.Transactional;
+import com.corpdata.core.base.AbstractBaseService;
+import ${package}.dao.${className}Mapper;
 import ${package}.entity.${className};
 import ${package}.service.${className}Service;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
-import com.corpdata.common.utils.UUIDUtil;
-import com.corpdata.common.result.Result;
-import com.corpdata.common.result.DataGrid;
-import com.corpdata.common.result.util.ResultUtil;
-import com.corpdata.security.shiro.util.UserUtil;
 
 /**
  * ${comments}
@@ -24,115 +16,7 @@ import com.corpdata.security.shiro.util.UserUtil;
  * @date ${datetime}
  */
 @Service
-public class ${className}ServiceImpl implements ${className}Service {
-
-	@Autowired
-	private ${className}Dao ${classname}Dao;
-	
-	@Override
-	public ${className} selectById(${pk.attrType} ${pk.attrname}){
-		return ${classname}Dao.selectById(${pk.attrname});
-	}
-	
-	/**
-	 * 查询分页数据列表
-	 * 
-	 * @param dg：数据列表对象
-	 * @return：DataGrid
-	 */
-	@Override
-	public DataGrid<${className}> selectDataGrid(DataGrid dg) {
-		PageHelper.startPage(dg.getPage(), dg.getSize());
-		Page<${className}> rows = ${classname}Dao.selectList(dg.getSearchParams());
-		dg.setTotalAndRows(rows.getTotal(), rows);
-		return dg;
-	}
-	
-	/**
-	 * 查询数据列表
-	 * 
-	 * @param params：数据列表对象
-	 * @return
-	 */
-	public Page<${className}> selectList(Map<String, Object> params) {
-		return ${classname}Dao.selectList(params);
-	}
-	
-	/**
-	 * 查询总数量
-	 * 
-	 * @param params:参数集
-	 * @return：Internet
-	 */
-	@Override
-	public int selectCount(Map<String, Object> params){
-		return ${classname}Dao.selectCount(params);
-	}
-	
-	/**
-	 * 新增数据
-	 * 
-	 * @param ${classname}
-	 * @return
-	 */
-	@Override
-	public Result insert(${className} ${classname}){
-		Date date = new Date();
-		${classname}.setId(UUIDUtil.getUUID());
-		${classname}.setCreated(date);
-		${classname}.setModified(date);
-		${classname}.setCreater(UserUtil.getCurrentUserid());
-		if(${classname}Dao.insert(${classname})>0){
-			return ResultUtil.success();
-		}else{
-			return ResultUtil.fail();
-		}
-	}
-	
-	/**
-	 * 修改数据
-	 * 
-	 * @param ${classname}
-	 * @return
-	 */
-	@Override
-	public Result update(${className} ${classname}){
-		${classname}.setModified(new Date());
-		if(${classname}Dao.update(${classname})>0){
-			return ResultUtil.success();
-		}else{
-			return ResultUtil.fail();
-		}
-	}
-	
-	/**
-	 * 按id删除数据
-	 * 
-	 * @param ${pk.attrname}
-	 * @return
-	 */
-	@Override
-	public Result delete(${pk.attrType} ${pk.attrname}){
-		if(${classname}Dao.delete(${pk.attrname})>0){
-			return ResultUtil.success();
-		}else{
-			return ResultUtil.fail();
-		}
-	}
-	
-	/**
-	 * 按ids批量删除数据
-	 * 
-	 * @param ${pk.attrname}
-	 * @return
-	 */
-	@Override
-	public Result batchDelete(${pk.attrType}[] ${pk.attrname}s){
-		if(${classname}Dao.batchDelete(${pk.attrname}s)>0){
-			return ResultUtil.success();
-		}else{
-			return ResultUtil.fail();
-		}
-	}
+@Transactional
+public class ${className}ServiceImpl extends AbstractBaseService<${className}> implements ${className}Service {
 	
 }

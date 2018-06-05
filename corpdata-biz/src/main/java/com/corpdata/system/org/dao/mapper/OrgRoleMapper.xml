@@ -3,15 +3,36 @@
 <mapper namespace="com.corpdata.system.org.dao.OrgRoleMapper">
   <resultMap id="BaseResultMap" type="com.corpdata.system.org.entity.OrgRole">
     <id column="id" jdbcType="CHAR" property="id" />
-    <result column="Role_Name" jdbcType="VARCHAR" property="roleName" />
-    <result column="Role_Desc" jdbcType="VARCHAR" property="roleDesc" />
-    <result column="Sort_number" jdbcType="INTEGER" property="sortNumber" />
-    <result column="creater" jdbcType="VARCHAR" property="creater" />
-    <result column="created" jdbcType="TIMESTAMP" property="created" />
-    <result column="modified" jdbcType="TIMESTAMP" property="modified" />
+    <result column="Role_Name" property="roleName" />
+    <result column="Role_Desc"  property="roleDesc" />
+    <result column="Sort_number"  property="sortNumber" />
+    <result column="creater" property="creater" />
+    <result column="created" property="created" />
+    <result column="modified"  property="modified" />
   </resultMap> 
-  
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <insert id="insert" parameterType="com.corpdata.system.org.entity.OrgRole">
+    insert into org_role (id, Role_Name, Role_Desc, 
+      Sort_number, creater, created, 
+      modified)
+    values (#{id,jdbcType=CHAR}, #{roleName,jdbcType=VARCHAR}, #{roleDesc,jdbcType=VARCHAR}, 
+      #{sortNumber,jdbcType=INTEGER}, #{creater,jdbcType=VARCHAR}, #{created,jdbcType=TIMESTAMP}, 
+      #{modified,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="update" parameterType="com.corpdata.system.org.entity.OrgRole">
+    update org_role
+    set Role_Name = #{roleName,jdbcType=VARCHAR},
+      Role_Desc = #{roleDesc,jdbcType=VARCHAR},
+      Sort_number = #{sortNumber,jdbcType=INTEGER},
+      creater = #{creater,jdbcType=VARCHAR},
+      created = #{created,jdbcType=TIMESTAMP},
+      modified = #{modified,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=CHAR}
+  </update>
+  <delete id="deleteById" parameterType="java.lang.String">
+    delete from org_role
+    where id = #{id,jdbcType=CHAR}
+  </delete>
+  <select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
     select id, Role_Name, Role_Desc, Sort_number, creater, created, modified
     from org_role
     where id = #{id,jdbcType=CHAR}

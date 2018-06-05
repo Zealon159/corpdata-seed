@@ -12,7 +12,7 @@
 		            <input id="searchStr" placeholder="关键字" class="layui-input layui-input-sm search_input">
 		        </div>
 		        <div class="layui-inline">
-		            <a class="layui-btn layui-btn-sm" id="btn-search" lay-filter="searchForm">查询</a>
+		            <a class="layui-btn layui-btn-sm" id="btn-search" lay-filter="searchForm"><i class="layui-icon">&#xe615;</i>查询</a>
 		        </div>
 		        <div class="layui-inline">
 		            <a class="layui-btn layui-btn-sm layui-btn-normal" data-type="addUser" id="add-disc"> <i class="layui-icon">&#xe61f;</i>新增</a>
@@ -79,7 +79,7 @@
 							type : 2,
 							area : [ '600px', '416px' ],
 							shade : [ 0.7, '#393D49' ],
-							content : [ "/orgrole/topermissionmanage/"+data.id, 'no' ]
+							content : [ "/system/org/role/topermissionmanage/"+data.id, 'no' ]
 						});
 				    }else if(obj.event == 'del'){
 				      	layer.confirm('真的删除数据吗？', function(index){

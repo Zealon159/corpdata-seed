@@ -10,7 +10,7 @@
     <result column="Permission" jdbcType="VARCHAR" property="permission" />
     <result column="SortNum" jdbcType="VARCHAR" property="sortnum" />
   </resultMap>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+  <delete id="deleteById" parameterType="java.lang.String">
     delete from org_permission
     where id = #{id,jdbcType=VARCHAR}
   </delete>
@@ -22,7 +22,7 @@
       #{type,jdbcType=VARCHAR}, #{resourceurl,jdbcType=VARCHAR}, #{permission,jdbcType=VARCHAR}, 
       #{sortnum,jdbcType=VARCHAR})
   </insert>
-  <update id="updateByPrimaryKey" parameterType="com.corpdata.system.org.entity.OrgPermission">
+  <update id="update" parameterType="com.corpdata.system.org.entity.OrgPermission">
     update org_permission
     set ParentId = #{parentid,jdbcType=VARCHAR},
       PermissionName = #{permissionname,jdbcType=VARCHAR},
@@ -32,7 +32,7 @@
       SortNum = #{sortnum,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
     select id, ParentId, PermissionName, Type, ResourceUrl, Permission, SortNum
     from org_permission
     where id = #{id,jdbcType=VARCHAR}

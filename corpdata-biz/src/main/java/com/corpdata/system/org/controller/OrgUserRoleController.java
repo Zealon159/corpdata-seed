@@ -14,7 +14,7 @@ import com.corpdata.system.org.service.OrgUserRoleService;
  * @date 2018年3月1日
  */
 @Controller
-@RequestMapping("orguserrole")
+@RequestMapping("system/org/userrole")
 public class OrgUserRoleController {
 
 	@Autowired
@@ -23,12 +23,12 @@ public class OrgUserRoleController {
 	@ResponseBody
 	@RequestMapping("/add")
 	public Result add(OrgUserRole record){
-		return orgUserRoleService.insert(record);
+		return orgUserRoleService.save(record);
 	}
 	
 	//保存用户角色
 	@ResponseBody
-	@RequestMapping("saveUserRoles")
+	@RequestMapping("/saveUserRoles")
 	public Result saveUserRoles(String userId,String roles){
 		return orgUserRoleService.createUserRoles(userId, roles);
 	}

@@ -14,8 +14,33 @@
   <sql id="Base_Column_List" >
     id, folderName, folderid, ParentFolderid, Sort_number, creater, created, modified
   </sql>
-
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+  
+  <insert id="insert" parameterType="com.corpdata.system.org.entity.OrgDept" >
+    insert into org_dept (id, folderName, folderid, 
+      ParentFolderid, Sort_number, creater, 
+      created, modified)
+    values (#{id,jdbcType=CHAR}, #{foldername,jdbcType=VARCHAR}, #{folderid,jdbcType=VARCHAR}, 
+      #{parentfolderid,jdbcType=VARCHAR}, #{sortNumber,jdbcType=INTEGER}, #{creater,jdbcType=VARCHAR}, 
+      #{created,jdbcType=TIMESTAMP}, #{modified,jdbcType=TIMESTAMP})
+  </insert>
+  
+  <update id="update" parameterType="com.corpdata.system.org.entity.OrgDept" >
+    update org_dept
+    set folderName = #{foldername,jdbcType=VARCHAR},
+    <if test="folderid!=null">
+    	folderid = #{folderid,jdbcType=VARCHAR},
+    </if>
+      ParentFolderid = #{parentfolderid,jdbcType=VARCHAR},
+      Sort_number = #{sortNumber,jdbcType=INTEGER},
+      modified = #{modified,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=CHAR}
+  </update>
+  
+  <delete id="deleteById" parameterType="java.lang.String" >
+    delete from org_dept where id = #{id,jdbcType=CHAR}
+  </delete>
+  
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
     from org_dept

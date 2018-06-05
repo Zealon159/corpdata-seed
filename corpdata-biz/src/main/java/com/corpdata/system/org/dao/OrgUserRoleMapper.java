@@ -1,17 +1,11 @@
 package com.corpdata.system.org.dao;
 
-import org.apache.ibatis.annotations.Mapper;
-
+import com.corpdata.core.base.BaseMapper;
 import com.corpdata.system.org.entity.OrgUserRole;
  
-
-@Mapper
-public interface OrgUserRoleMapper {
-    int deleteByPrimaryKey(String id);
-    
+public interface OrgUserRoleMapper extends BaseMapper<OrgUserRole> {
+	
     int deleteByUserid(String userid);
-
-    int insert(OrgUserRole record);
 
     int insertSelective(OrgUserRole record);
 
@@ -19,5 +13,4 @@ public interface OrgUserRoleMapper {
 
     int updateByPrimaryKeySelective(OrgUserRole record);
 
-    int updateByPrimaryKey(OrgUserRole record);
 }

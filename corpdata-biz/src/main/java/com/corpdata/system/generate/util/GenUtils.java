@@ -21,9 +21,9 @@ import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 
-import com.corpdata.common.config.Constant;
 import com.corpdata.common.utils.BDException;
 import com.corpdata.common.utils.DateUtils;
+import com.corpdata.core.config.Constant;
 import com.corpdata.system.generate.domain.ColumnDO;
 import com.corpdata.system.generate.domain.TableDO;
 

@@ -13,34 +13,34 @@ import com.corpdata.common.result.Result;
 import com.corpdata.common.utils.CorpdataUtil;
 
 @Controller
-@RequestMapping("sys/sysDicType")
+@RequestMapping("system/data-dic-type")
 public class SysDicTypeController {
 	
 	@Autowired
 	private SysDicTypeService sysDicTypeService;
 	
 
-	@RequestMapping("/toadd")
-	public String toadd(ModelMap map){
+	@RequestMapping("/add")
+	public String add(ModelMap map){
 		map.put("id", CorpdataUtil.getUUID());
 		return "system/org/role/add";
 	}
 	
 	@ResponseBody
-	@RequestMapping("/add")
-	public Result add(SysDicType record){
+	@RequestMapping("/save")
+	public Result save(SysDicType record){
 		return sysDicTypeService.insert(record);
 	}
 
-	@RequestMapping("/toedit")
-	public String toedit(ModelMap map){
+	@RequestMapping("/edit")
+	public String edit(ModelMap map){
 		//map.put("id", projectAlbumService.selectByPrimaryKey(id));
 		return "system/org/role/add";
 	}
 	
 	@ResponseBody
-	@RequestMapping("/edit")
-	public Result edit(SysDicType record){
+	@RequestMapping("/update")
+	public Result update(SysDicType record){
 		return sysDicTypeService.update(record);
 	}
 	

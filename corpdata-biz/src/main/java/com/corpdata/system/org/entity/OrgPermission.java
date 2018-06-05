@@ -1,14 +1,10 @@
 package com.corpdata.system.org.entity;
 
-import java.io.Serializable;
+import com.corpdata.core.base.BaseEntity;
 
-public class OrgPermission implements Serializable {
-    /**
-	 * 
-	 */
+public class OrgPermission extends BaseEntity {
+
 	private static final long serialVersionUID = 1L;
-
-	private String id;
 
     private String parentid;
 
@@ -22,13 +18,6 @@ public class OrgPermission implements Serializable {
 
     private String sortnum;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id == null ? null : id.trim();
-    }
 
     public String getParentid() {
         return parentid;

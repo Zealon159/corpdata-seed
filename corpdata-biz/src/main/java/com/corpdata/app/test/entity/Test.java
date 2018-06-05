@@ -1,24 +1,15 @@
 package com.corpdata.app.test.entity;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import com.corpdata.core.base.BaseEntity;
 
-public class Test {
+public class Test extends BaseEntity{
 	
-	@Id
-	@GeneratedValue(generator = "UUID")
-	private String id;
-	
+	private static final long serialVersionUID = 1L;
+
 	private String title;
 	
 	private int total;
 	
-	public String getId() {
-		return id;
-	}
-	public void setId(String id) {
-		this.id = id;
-	}
 	public String getTitle() {
 		return title;
 	}

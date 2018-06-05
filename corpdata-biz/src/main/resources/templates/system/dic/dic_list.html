@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8" />
+		<title>数据字典管理</title>
+		<div th:replace="/common/common_grid_header"></div>
+	</head>
+	<body>
+		<fieldset class="layui-elem-field">
+		    <div class="layui-field-box">
+		        <div class="layui-inline">
+		            <input id="searchStr" placeholder="关键字" class="layui-input layui-input-sm search_input">
+		        </div>
+		        <div class="layui-inline">
+		            <a class="layui-btn layui-btn-sm" id="btn-search" lay-filter="searchForm"><i class="layui-icon">&#xe615;</i>查询</a>
+		        </div>
+		        <div class="layui-inline">
+		            <a class="layui-btn layui-btn-sm layui-btn-primary" data-type="addUser" id="add-disc"> <i class="layui-icon">&#xe61f;</i>新增</a>
+		        </div>
+		    </div>
+		</fieldset>
+		<div>
+			<div class="layui-row">
+				<table class="layui-hide" id="LAY_table_user" lay-filter="user"></table> 
+			</div>
+		</div>
+		<script type="text/html" id="barDemo">
+  			<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit" onclick="edit('{{d.id}}')">编辑</a>
+  			<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" onclick="del('{{d.id}}','{{d.dicType}}')">删除</a>
+		</script>
+		<script th:inline="javascript">
+			var dictype = /*[[${dictype}]]*/;
+		
+			$(function() {
+				
+				layui.use([ 'element', 'table', 'layer' ], function() {
+					var element = layui.element;
+				});
+				//弹出框
+				$("#add-disc").on("click",
+					function() {
+						layer.open({
+							title : [ '数据字典',
+									'font-size:18px;text-align:center;padding:0' ],
+							type : 2,
+							area : [ '500px', '350px' ],
+							shade : [ 0.8, '#393D49' ],
+							content : [ "/system/data-dic/add?dictype="+dictype, 'no' ]
+						});
+					})
+					
+				$('input').keyup(function (event) {
+			        var e = event|| window.event;
+			        if (e.keyCode == "13") {
+			        	var searchStr = $('#searchStr');
+			        	layui.table.reload('testReload', {
+					        page: {
+					          curr: 1 //重新从第 1 页开始
+					        }
+					        ,where: {
+					        	params:{searchStr: searchStr.val()}
+					        }
+					    });
+			        }
+			    });
+			})
+			
+			layui.use('table', function(){
+				var table = layui.table;
+				//方法级渲染
+				table.render({
+					elem: '#LAY_table_user',
+				    url: '/system/data-dic/listdata/'+dictype+'/',
+				    method:'post',
+				    cols: [[
+				     	{checkbox: true, fixed: true}
+				      	,{field:'dicName', align:'left', title: '字典名称'}
+				      	,{field:'typeName', align:'left', title: '类型',  sort: true}
+				      	,{field:'dicType', align:'left', title: '类型code',  sort: true}
+				      	,{field:'sortNumber', align:'center', title: '排序',sort: true}
+				      	,{fixed: 'right', width:178, align:'center', toolbar: '#barDemo'}
+				    ]]
+				    ,id: 'testReload'
+				    ,page: true
+				});
+				var $ = layui.$, active = {
+				    reload: function(){
+				      var searchStr = $('#searchStr');
+				      //执行重载
+				      table.reload('testReload', {
+				        page: {
+				          curr: 1 //重新从第 1 页开始
+				        }
+				        ,where: {
+				        	params:{
+				            	searchStr: searchStr.val()
+				        	}
+				        }
+				      });
+				    }
+				};
+				  
+				$('#btn-search').on('click', function(){
+				    var type = $(this).data('type');
+				    active[type] ? active[type].call(this) : '';
+				});
+			});
+			
+			function edit(id){
+				layer.open({
+				  title: ['楼盘详情','font-size:18px;text-align:center;padding:0'],
+				  type:2,
+				  area: ['500px','350px'],
+				  shade: [0.8, '#393D49'],
+				  content: ["/system/data-dic/edit/"+id]
+				});  
+			}
+
+			function del(id,dicType){
+				layer.confirm('确认要删除吗，删除后不能恢复', function(index){
+					$.post("/system/data-dic/delete",{id:id,dicType:dicType}, function(result) {
+						layer.msg(result.msg);
+						layui.table.reload('testReload');
+						
+				    }, 'json');
+				});
+			}
+		</script>
+	</body>
+</html>

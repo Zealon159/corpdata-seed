@@ -6,17 +6,21 @@
 		<div th:replace="common/common_grid_header"></div>
 	</head>
 	<body>
-		<div style="padding: 15px; height: 100%">
+		<fieldset class="layui-elem-field">
+		    <div class="layui-field-box">
+		        <div class="layui-inline">
+		            <input id="keyword" placeholder="关键字" class="layui-input layui-input-sm search_input">
+		        </div>
+		        <div class="layui-inline">
+		            <a class="layui-btn layui-btn-sm" id="btn-search" lay-filter="searchForm"><i class="layui-icon">&#xe615;</i>查询</a>
+		        </div>
+		        <div class="layui-inline">
+		            <a class="layui-btn layui-btn-sm layui-btn-normal" data-type="addUser" id="add-disc"> <i class="layui-icon">&#xe61f;</i>新增</a>
+		        </div>
+		    </div>
+		</fieldset>
+		<div style="height: 100%">
 			<div class="layui-row">
-				<div class="search-box flex-between">
-					<div class="my-search-box" id="my-search-box">
-					    <input class="form-control" id="keyword" placeholder="关键字" type="text" width="100px" />
-					    <i class="glyphicon glyphicon-search my-search-icon"></i>
-				    </div>
-				    <button class="layui-btn layui-btn-sm layui-btn-primary"  id="add-disc">
-				      <i class="layui-icon">&#xe61f;</i>新增 
-				    </button>
-				</div>
 				<table class="layui-hide" id="LAY_table_user" lay-filter="user"></table> 
 			</div>
 		</div>
@@ -103,7 +107,7 @@
 						type : 2,
 						area : [ '600px', '436px' ],
 						shade : [ 0.8, '#393D49' ],
-						content : [ "/system/org/user/toadd", 'no' ]
+						content : [ "/system/org/user/add", 'no' ]
 					});
 				})
 				
@@ -117,7 +121,7 @@
 					          curr: 1 //重新从第 1 页开始
 					        }
 					        ,where: {
-					        	keyword: keyword
+					        	params:{keyword: keyword}
 					        }
 					    });
 			        }

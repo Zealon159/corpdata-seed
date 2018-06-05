@@ -11,8 +11,6 @@ public class DataGridRequestDTO {
 	private int page;
 	//每页显示数
 	private int limit;
-	//查询关键字
-	private String keyword;
 	//查询条件
 	private Map<String,Object> params;
 	
@@ -27,12 +25,6 @@ public class DataGridRequestDTO {
 	}
 	public void setLimit(int limit) {
 		this.limit = limit;
-	}
-	public String getKeyword() {
-		return keyword;
-	}
-	public void setKeywords(String keyword) {
-		this.keyword = keyword;
 	}
 	public Map<String, Object> getParams() {
 		return params;

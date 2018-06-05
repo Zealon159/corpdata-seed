@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8" />
+		<title>数据表</title>
+		<div th:replace="/common/common_grid_header"></div>
+	</head>
+	<body>
+		<fieldset class="layui-elem-field">
+		    <div class="layui-field-box">
+		        <div class="layui-inline">
+		            <input id="keyword" placeholder="关键字" class="layui-input layui-input-sm search_input">
+		        </div>
+		        <div class="layui-inline">
+		            <a class="layui-btn layui-btn-sm" id="btn-search" lay-filter="searchForm">
+		            	<i class="layui-icon">&#xe615;</i>查询
+		            </a>
+		        </div>
+		        <div class="layui-inline">
+		            <a class="layui-btn layui-btn-sm layui-btn-normal" id="btn-gen" onclick="genCodes()">
+		            	<i class="layui-icon">&#xe64e;</i> 批量生成
+		            </a>
+		        </div>
+		    </div>
+		</fieldset>
+		<div>
+			<div class="layui-row">
+				<table class="layui-hide" id="datagrid" lay-filter="tables"></table> 
+			</div>
+		</div>
+		<script type="text/html" id="toolBar">
+  			<a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="gen"> <i class="layui-icon">&#xe64e;</i> 生成 </a>
+		</script>
+		<script type="text/javascript">
+			layui.use('table', function(){
+				var table = layui.table;
+				//方法级渲染
+				table.render({
+					id:'dg_dept',
+				    elem: '#datagrid',
+				    url: '/system/generator/listdata',
+				    method:'post',
+				    cols: [[
+				      	{checkbox: true, fixed: true},
+			            {field:'tableName',title:'表名称',sort: true},
+			            {field:'tableComment',title:'说明'},
+						{field:'engine',title:'engine',width:100},
+						{field:'createTime',title:'createTime',width:200},
+						{fixed: 'right',title:'操作', width:178, align:'center', toolbar: '#toolBar'}
+				    ]]
+				    ,page: true
+				    ,height: 500
+				});
+				
+				//监听工具条
+				table.on('tool(tables)', function(obj){
+				    var data = obj.data;
+				    if(obj.event == 'gen'){
+				    	var url = "/system/generator/option?tables="+data.tableName;
+				    	//iframe层
+				    	layer.open({
+				    	    type: 2,
+				    	  	title: '生成选项',
+				    	  	shadeClose: true,
+				    	  	shade: 0.5,
+				    	  	area: ['620px', '360px'],
+				    	  	content: url //iframe的url
+				    	});
+				    }
+				});
+			});
+			
+			//批量生成
+			function genCodes(){
+				var table = layui.table;
+				var checkStatus = table.checkStatus('dg_dept');
+				var data = checkStatus.data;
+				if(data.length==0){
+					layer.alert("至少选择一个数据表!");
+				}else{
+					var tables="";
+		            $.each(data, function (i, r) {
+		            	if(i>0){tables+=",";}
+		            	tables+=r.tableName;
+				    });
+			    	var url = "/system/generator/option?tables="+tables;
+			    	layer.open({
+			    	    type: 2,
+			    	  	title: '生成选项',
+			    	  	shadeClose: true,
+			    	  	shade: 0.5,
+			    	  	area: ['620px', '360px'],
+			    	  	content: url //iframe的url
+			    	});
+				}
+			}
+		</script>
+	</body>
+</html>

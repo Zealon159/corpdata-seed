@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<title>用户管理</title>
-		<div th:replace="biz/common/common_grid_header"></div>
+		<div th:replace="/common/common_grid_header"></div>
 		<style type="text/css">
 		
 		.my-search-icon {
@@ -53,7 +53,7 @@
 				table.render({
 					id:'dg_user',
 				    elem: '#LAY_table_user',
-				    url: '/orguser/find/',
+				    url: '/system/org/user/find/',
 				    cols: [[
 				      {checkbox: true, fixed: true}
 				      ,{field:'userid', align:'left', title: '登录名'}
@@ -106,7 +106,7 @@
 					var element = layui.element;
 				});
 				
-				initSelect("orgDept","/orgdept/selectjson/0","");
+				initSelect("orgDept","/system/org/dept/selectjson/0","");
 			})
 			
 			function initSelect(id,url,defaultValue){

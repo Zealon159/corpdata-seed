@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.corpdata.app.test.entity.Test;
 import com.corpdata.app.test.service.TestService;
-import com.corpdata.common.api.redis.RedisService;
 import com.corpdata.common.domain.DataGridRequestDTO;
 import com.corpdata.common.result.Result;
 import com.corpdata.system.log.WebLog;
@@ -21,8 +20,6 @@ public class TestController {
 	
 	@Autowired
 	private TestService testService;
-	@Autowired
-	private RedisService redisService;
 	
 	@GetMapping("/add")
     public String add() {
@@ -71,11 +68,4 @@ public class TestController {
 		return testService.findByPage(dgRequest);
     }
 
-	@GetMapping("/test")
-    public String test() {
-		redisService.set("post_users:zealon", "aaa,bbb,ccc");
-//		String str = redisService.getObject("post_users:admin").toString();
-//		System.out.println(str);
-        return "/app/test/role_list";
-    }
 }

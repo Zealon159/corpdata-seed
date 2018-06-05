@@ -1,19 +1,12 @@
 package com.corpdata.system.org.service;
 
-import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.corpdata.system.org.dao.OrgDeptMapper;
 import com.corpdata.system.org.entity.OrgDept;
-import com.corpdata.system.security.shiro.util.UserUtil;
-import com.corpdata.common.api.pagehelper.PageConvertUtil;
-import com.corpdata.common.domain.DataGridRequestDTO;
 import com.corpdata.common.result.Result;
-import com.corpdata.common.result.util.ResultUtil;
 import com.corpdata.common.utils.CorpdataUtil;
-import com.corpdata.core.base.AbstractService;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
+import com.corpdata.core.base.AbstractBaseService;
 
 /**
  * 用户部门服务类
@@ -21,51 +14,25 @@ import com.github.pagehelper.PageHelper;
  * @date 2018年3月1日
  */
 @Service("orgDeptService")
-public class OrgDeptService extends AbstractService<OrgDept>{
+public class OrgDeptService extends AbstractBaseService<OrgDept>{
 	
 	@Autowired
 	private OrgDeptMapper orgDeptMapper;
 	
 	@Override
 	public Result save(OrgDept record) {
-		// TODO Auto-generated method stub
-		Date date = new Date();
-		record.setCreater(UserUtil.getCurrentUserid());
-		record.setCreated(date);
-		record.setModified(date);
 		String folderid = calculateFolderid(record.getParentfolderid());
 		record.setFolderid(folderid);
 		return super.save(record);
 	}
 	
 	public Result update(OrgDept record,String oldParentFolderid) {
-		record.setModified(new Date());
 		//上级组织发生了变动，需要重新计算层级ID
 		if(!oldParentFolderid.equals(record.getParentfolderid())){
 			String folderid = calculateFolderid(record.getParentfolderid());
 			record.setFolderid(folderid);
 		}
 		return super.update(record);
-	}
-	
-	@Override
-	public Result deleteById(String id) {
-		// TODO Auto-generated method stub
-		return super.deleteById(id);
-	}
-	
-	@Override
-	public OrgDept findById(String id) {
-		// TODO Auto-generated method stub
-		return orgDeptMapper.selectByPrimaryKey(id);
-	}
-	
-	@Override
-	public String findByPage(DataGridRequestDTO dgRequest) {
-		// TODO Auto-generated method stub
-		PageHelper.startPage(dgRequest.getPage(), dgRequest.getLimit());
-		Page<OrgDept> list = orgDeptMapper.selectAll(dgRequest.getParams());
-		return PageConvertUtil.getGridJson(list);
 	}
 	
 	/**
@@ -104,7 +71,7 @@ public class OrgDeptService extends AbstractService<OrgDept>{
 		}
 		//父级id不是根目录，需要加上父级组织的层级编号
 		if(!parentFolderid.equals("root")){
-			OrgDept parentOrg = orgDeptMapper.selectByPrimaryKey(parentFolderid);
+			OrgDept parentOrg = orgDeptMapper.selectById(parentFolderid);
 			newFolderid = parentOrg.getFolderid()+newFolderid;
 		}
 		return newFolderid;

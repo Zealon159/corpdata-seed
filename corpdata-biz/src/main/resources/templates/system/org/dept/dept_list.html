@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<title>组织管理</title>
-		<div th:replace="common/common_grid_header"></div>
+		<div th:replace="/common/common_grid_header"></div>
 	</head>
 	<body>
 		<fieldset class="layui-elem-field">
@@ -12,7 +12,7 @@
 		            <input id="keyword" placeholder="关键字" class="layui-input layui-input-sm search_input">
 		        </div>
 		        <div class="layui-inline">
-		            <a class="layui-btn layui-btn-sm" id="btn-search" lay-filter="searchForm">查询</a>
+		            <a class="layui-btn layui-btn-sm" id="btn-search" lay-filter="searchForm"><i class="layui-icon">&#xe615;</i>查询</a>
 		        </div>
 		        <div class="layui-inline">
 		            <a class="layui-btn layui-btn-sm layui-btn-normal" data-type="addUser" id="add-disc"> <i class="layui-icon">&#xe61f;</i>新增</a>

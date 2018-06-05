@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<title>用户管理</title>
-		<div th:replace="biz/common/common_grid_header"></div>
+		<div th:replace="/common/common_grid_header"></div>
 		<style type="text/css">
 		.layui-table-view .layui-form-checkbox {
 		    height: 24px;
@@ -65,7 +65,7 @@
 				table.render({
 					id:'dg_user',
 				    elem: '#LAY_table_user',
-				    url: '/orguser/find/',
+				    url: '/system/org/user/find/',
 				    cols: [[
 				      {field:'userid', align:'left', title: '登录名'}
 				      ,{field:'userName', align:'left', title: '中文名'}
@@ -92,7 +92,7 @@
 					var element = layui.element;
 				});
 				deptId = $("#deptId").val();
-				initSelect("orgDept","/orgdept/selectjson/1",deptId);
+				initSelect("orgDept","/system/org/dept/selectjson/1",deptId);
 			})
 			
 			function doSel(Userid,UserName){

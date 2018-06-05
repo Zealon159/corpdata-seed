@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8" />
+		<title>数据字典管理</title>
+		<div th:replace="/common/common_grid_header"></div>
+		<style>
+			.layui-layout-admin .layui-side,.layui-layout-admin .layui-body{
+				top:0;
+			}
+			.layui-nav-tree .layui-nav-child dd.layui-this, .layui-nav-tree .layui-nav-child dd.layui-this a, .layui-nav-tree .layui-this, .layui-nav-tree .layui-this>a, .layui-nav-tree .layui-this>a:hover{
+				background-color: rgb(78,84,101);
+			}
+			.layui-nav .layui-nav-child dd.layui-this a, .layui-nav-child dd.layui-this,
+			.layui-nav-tree .layui-this,
+			.layui-nav-tree .layui-this a{
+				background-color: transparent;
+			}
+			.layui-side{
+				background-color:rgb(57,61,73);
+			}
+			.layui-nav-tree .layui-nav-bar{
+				background-color: #21a0ed;
+			}
+			/* .layui-nav-child dd:hover a{
+				background-color: #21a0ed !important;
+			}
+			.layui-nav-tree .layui-nav-child a:hover{
+				background-color: #21a0ed !important;
+			} */
+			.my-nav-two .layui-nav-item  a{
+				color:#fff;
+			}
+		</style>
+	</head>
+	<body style="background: #edeef2">
+		<div class="layui-layout-body">
+		<div class="layui-layout layui-layout-admin">
+		
+			<div class="layui-side">
+				<div class="layui-side-scroll">
+					<ul class="layui-nav layui-nav-tree layui-inline my-nav-two"  lay-filter="demo" id="nav">
+					</ul>
+				</div>
+			</div>
+			<div class="layui-body" style="background: #edeef2;overflow: hidden">
+				<iframe frameborder="0" id="tabDicIframe" width="100%" height="100%"></iframe>
+			</div>
+		</div>
+	</div>
+</body>	
+		<script type="text/javascript" th:inline="javascript">
+			$(function() {
+				layui.use([ 'element', 'table', 'layer' ], function() {
+					var element = layui.element;
+				});
+				
+				var pageJson = /*[[${pageJson}]]*/;
+				var html = "";
+				if(pageJson.code==1){
+					var project = pageJson["project"];
+					html += "<li class='layui-nav-item'><a href='javascript:;'>楼盘</a><dl class='layui-nav-child'>";
+					for (var i = 0; i < project.length; i++) {
+						var data = project[i];
+						html += "<dd><a href='javascript:;' data-code='"+data.typeCode+"' onclick='toDic(this)'>"+data.typeName+"</a></dd>";
+					}
+					html += "</dl></li>";
+					var customer = pageJson["customer"];
+					html += "<li class='layui-nav-item'><a href='javascript:;'>客户</a><dl class='layui-nav-child'>";
+					for (var i = 0; i < customer.length; i++) {
+						var data = customer[i];
+						html += "<dd><a href='javascript:;' data-code='"+data.typeCode+"' onclick='toDic(this)'>"+data.typeName+"</a></dd>";
+					}
+					html += "</dl></li>";
+					var contract = pageJson["contract"];
+					html += "<li class='layui-nav-item'><a href='javascript:;'>合同</a><dl class='layui-nav-child'>";
+					for (var i = 0; i < contract.length; i++) {
+						var data = contract[i];
+						html += "<dd><a href='javascript:;' data-code='"+data.typeCode+"' onclick='toDic(this)'>"+data.typeName+"</a></dd>";
+					}
+					html += "</dl></li>";
+				}
+				$("#nav").append(html);
+				
+				$("#tabDicIframe").attr("src", "/system/data-dic/list/0");
+			});
+			
+			function toDic(obj){
+				var dataCode = $(obj).attr("data-code");
+				$("#tabDicIframe").attr("src", "/system/data-dic/list/"+dataCode);
+			}
+		</script>
+
+</html>

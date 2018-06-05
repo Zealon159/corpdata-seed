@@ -1,24 +1,14 @@
 package com.corpdata.system.org.entity;
 
-import java.io.Serializable;
+import com.corpdata.core.base.BaseEntity;
 
-public class OrgUserRole implements Serializable{
+public class OrgUserRole extends BaseEntity {
 	
 	private static final long serialVersionUID = 1L;
-	
-    private String id;
 
     private OrgRole orgRole;
 
     private String userid;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id == null ? null : id.trim();
-    }
 
 	public OrgRole getOrgRole() {
 		return orgRole;
