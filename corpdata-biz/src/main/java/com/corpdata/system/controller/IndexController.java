@@ -7,8 +7,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("system")
 public class IndexController {
 	
-	@RequestMapping("/index")
+	@RequestMapping("")
 	public String index(){
 		return "system/sys_index";
+	}
+	
+	@RequestMapping("post-tool")
+	public String postTool(){
+		return "system/post_tool";
 	}
 }

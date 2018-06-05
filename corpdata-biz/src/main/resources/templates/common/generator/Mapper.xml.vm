@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!CTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="${package}.dao.${className}Mapper">
 	<resultMap id="BaseResultMap" type="${package}.entity.${className}">
 #foreach($column in $columns)
-    #if($column.columnName == $pk.columnName )<id column="id" jdbcType="CHAR" property="id" />
+    #if($column.columnName == $pk.columnName )
+    <id column="id" jdbcType="CHAR" property="id" />
     #end
 #if($column.columnName != $pk.columnName )<result column="$column.columnName" property="$column.attrname" />
     #end
 #end
-  	</resultMap> 
+</resultMap>
+
+  	<sql id="Base_Column_List" >
+    	#foreach($column in $columns)`$column.columnName`#if($velocityCount != $columns.size()),#end#end
+  	</sql>
   	
   	<insert id="insert" parameterType="${package}.entity.${className}"#if($pk.extra == 'auto_increment') useGeneratedKeys="true" keyProperty="$pk.attrname"#end>
 		insert into ${tableName}
@@ -36,7 +40,7 @@
 		update ${tableName} 
 		<set>
 #foreach($column in $columns)
-#if($column.columnName != $pk.columnName)
+#if($column.columnName != $pk.columnName && $column.columnName!='creater' && $column.columnName!='created')
 			<if test="$column.attrname != null">`$column.columnName` = #{$column.attrname}#if($velocityCount != $columns.size()), #end</if>
 #end
 #end
@@ -55,8 +59,9 @@
 		</foreach>
 	</delete>
 	
-	<select id="selectById" resultType="${package}.entity.${className}" parameterType="java.lang.String" resultMap="BaseResultMap">
-		select #foreach($column in $columns)`$column.columnName`#if($velocityCount != $columns.size()),#end#end from ${tableName} where ${pk.columnName} = #{id}
+	<select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" /> 
+		from ${tableName} where ${pk.columnName} = #{id}
 	</select>
 	
  	<select id="selectCount" resultType="int">
@@ -64,7 +69,7 @@
 	</select>
 
 	<select id="selectAll" parameterType="map" resultMap="BaseResultMap">
-		select #foreach($column in $columns)`$column.columnName`#if($velocityCount != $columns.size()),#end#end from ${tableName}
+		select <include refid="Base_Column_List" />  from ${tableName}
         where 1=1 
 	</select>
 	

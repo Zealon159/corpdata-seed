@@ -1,4 +1,4 @@
-package ${package}.controller;
+package com.corpdata.app.fruit.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,86 +9,86 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RequestParam;
-import ${package}.entity.${className};
-import ${package}.service.${className}Service;
+import com.corpdata.app.fruit.entity.Fruit;
+import com.corpdata.app.fruit.service.FruitService;
 import com.corpdata.common.domain.DataGridRequestDTO;
 import com.corpdata.common.result.Result;
 import com.corpdata.system.log.WebLog;
 
 /**
- * ${comments}
  * 
- * @author ${author}
- * @email ${email}
- * @date ${datetime}
+ * 
+ * @author zealon
+ * @email zealon@126.com
+ * @date 2018-06-05 22:20:22
  */
  
 @Controller
-@RequestMapping("${pathName}")
-public class ${className}Controller{
+@RequestMapping("app/fruit")
+public class FruitController{
 
 	@Autowired
-	private ${className}Service ${classname}Service;
+	private FruitService fruitService;
 	
 	//新增页面
 	@GetMapping("/add")
 	public String add(){
-		return "${pathName}/${classname}_add";
+		return "app/fruit/fruit_add";
 	}
 	
 	//保存数据
 	@ResponseBody
 	@RequestMapping("/save")
-	public Result save(${className} record){
-		return ${classname}Service.save(record);
+	public Result save(Fruit record){
+		return fruitService.save(record);
 	}
 	
 	//编辑页面
 	@RequestMapping("/edit/{id}")
-	public String edit(@PathVariable("${pk.attrname}") ${pk.attrType} ${pk.attrname},ModelMap map){
-		map.put("record", ${classname}Service.findById(${pk.attrname}));
-		return "${pathName}/${classname}_edit";
+	public String edit(@PathVariable("id") String id,ModelMap map){
+		map.put("record", fruitService.findById(id));
+		return "app/fruit/fruit_edit";
 	}
 	
 	//更新数据
 	@ResponseBody
 	@RequestMapping("/update")
-	public Result update(${className} record){
-		return ${classname}Service.update(record);
+	public Result update(Fruit record){
+		return fruitService.update(record);
 	}
 	
 	//删除
 	@ResponseBody
 	@PostMapping("/delete")
-	public Result delete(${pk.attrType} ${pk.attrname}){
-		return ${classname}Service.deleteById(${pk.attrname});
+	public Result delete(String id){
+		return fruitService.deleteById(id);
 	}
 	
 	//批量删除
 	@ResponseBody
 	@PostMapping("/deletes")
-	public Result deletes(@RequestParam("ids[]") ${pk.attrType}[] ${pk.attrname}s){
-		return ${classname}Service.deleteByIds(${pk.attrname}s);
+	public Result deletes(@RequestParam("ids[]") String[] ids){
+		return fruitService.deleteByIds(ids);
 	}
 	
 	//详情页面
 	@GetMapping("/details/{id}")
 	public String details(ModelMap map,@PathVariable("id") String id){
-		map.put("record", ${classname}Service.findById(id));
-	    return "${pathName}/${classname}_details";
+		map.put("record", fruitService.findById(id));
+	    return "app/fruit/fruit_details";
 	}
 	
 	//列表页面
 	@GetMapping("/list")
 	public String list(){
-	    return "${pathName}/${classname}_list";
+	    return "app/fruit/fruit_list";
 	}
 	
 	//列表数据
 	@ResponseBody
 	@RequestMapping("/listdata")
 	public String findByPage(DataGridRequestDTO dgRequest){
-		return ${classname}Service.findByPage(dgRequest);
+		return fruitService.findByPage(dgRequest);
 	}
 	
 }

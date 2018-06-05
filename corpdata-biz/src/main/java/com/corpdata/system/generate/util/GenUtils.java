@@ -35,9 +35,9 @@ public class GenUtils {
     public static List<String> getTemplates() {
         List<String> templates = new ArrayList<String>();
         templates.add("templates/common/generator/entity.java.vm");
-        templates.add("templates/common/generator/Dao.java.vm");
+        templates.add("templates/common/generator/Mapper.java.vm");
         templates.add("templates/common/generator/Mapper.xml.vm");
-        //templates.add("templates/common/generator/Mapper.java.vm");
+        //templates.add("templates/common/generator/Mapper1.java.vm");
         templates.add("templates/common/generator/Service.java.vm");
         templates.add("templates/common/generator/ServiceImpl.java.vm");
         templates.add("templates/common/generator/Controller.java.vm");
@@ -122,6 +122,12 @@ public class GenUtils {
         map.put("author", config.getString("author"));
         map.put("email", config.getString("email"));
         map.put("datetime", DateUtils.format(new Date(), DateUtils.DATE_TIME_PATTERN));
+        
+        //判断是否包含需引用的数据类型
+        boolean hasDecimal = hasType(tableDO.getColumns(),"decimal");
+        map.put("hasBigDecimal", hasDecimal);
+        boolean hasDatetime = hasType(tableDO.getColumns(),"datetime");
+        map.put("hasDatetime", hasDatetime);
         VelocityContext context = new VelocityContext(map);
 
         //获取模板列表
@@ -143,7 +149,6 @@ public class GenUtils {
             }
         }
     }
-
 
     /**
      * 列名转换成Java属性名
@@ -250,5 +255,24 @@ public class GenUtils {
 //		}
 
         return null;
+    }
+    
+    /**
+     * 判断是否包含有匹配的数据类型
+     * @param list
+     * @param dataType
+     * @return
+     */
+    public static boolean hasType(List<ColumnDO> list,String dataType){
+    	boolean has = false;
+    	for(ColumnDO column : list){
+    		if(dataType.equals(column.getDataType())){
+    			if(!column.getColumnName().equals("created") && !column.getColumnName().equals("modified")){
+    				has = true;
+    				break;
+    			}
+    		}
+    	}
+    	return has;	
     }
 }

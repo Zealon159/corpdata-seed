@@ -60,8 +60,8 @@ public abstract class AbstractBaseService<T> implements BaseService<T> {
     	}
     }
 
-    public Result deleteByIds(String ids) {
-        mapper.deleteByIds(ids);
+    public Result deleteByIds(String[] ids) {
+        mapper.deleteByIds(ids.toString()); //todo
         return ResultUtil.success();
     }
     

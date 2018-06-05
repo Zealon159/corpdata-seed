@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<title>Post工具</title>
+<div th:replace="/common/common_grid_header"></div>
+</head>
+<body>
+	<div style="width:50%; float:left">
+		<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+		  <ul class="layui-tab-title">
+		    <li class="layui-this">请求设置</li>
+		  </ul>
+		  <div class="layui-tab-content">
+		    <div class="layui-form-item">
+		    	<label class="layui-form-label">POST</label>
+		    	<div class="layui-input-block">
+		      		<input type="text" value="/app/fruit/save" name="post_url" id="post_url" placeholder="请输入" class="layui-input">
+		    	</div>
+		  	</div>
+		  	<div class="layui-form-item">
+		    	<label class="layui-form-label">BODY</label>
+		    	<div class="layui-input-block">
+		      		<div class="list-top flex-between">
+						<div>
+							 <div class="form-group">
+				    			<input type="button" class="layui-btn layui-btn-sm" value="+参数" onclick="addParams()" />
+				    			<input type="button" class="layui-btn layui-btn-sm layui-btn-primary" id="clearFreeList" onclick="clearParams()" value="清空"/>
+				    		 </div>
+						</div>
+					</div>
+					<div class="list-content">
+						<ul class="params-list">
+							
+						</ul>
+					</div>
+		    	</div>
+		  	</div>
+		  	<div class="layui-form-item">
+		    	<div class="layui-input-block">
+		      		<button class="layui-btn layui-btn-normal" onclick="sendPostRequest()"><i class="layui-icon">&#xe609;</i>   Send</button>
+		    	</div>
+		  	</div>
+		  </div>
+		</div>  
+	</div>
+	<div style="width:50%; float:left">
+		<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+		  <ul class="layui-tab-title">
+		    <li class="layui-this">响应结果</li>
+		  </ul>
+		  <div class="layui-tab-content">
+		  	<div id="div_response">
+		  		
+		  	</div>
+		  </div>
+		</div>  
+	</div>
+	<script type="text/javascript">
+		function sendPostRequest(){
+			var count = $(".params-list").children().length;
+			var url = $("#post_url").val();
+			if(url==""){
+				alert("请填写Url！");
+				return false;
+			}
+			if(count==0){
+				alert("请填写参数！");
+				return false;
+			}
+			
+			//参数转换处理
+			var formData="{";
+			for(i=0;i<count;i++){
+				if(i>0){formData+=",";}
+				formData+="\""+$("#key"+i).val()+"\":\""+$("#value"+i).val()+"\"";
+			}
+			formData+="}";
+			var postData = JSON.parse(formData);
+			
+			//请求
+			$.post(url,postData,function(data,status){
+		        //alert("Data: " + data + "nStatus: " + status);
+		        var rsHtml = "<h4>repsonse</h4>"+JSON.stringify(data);
+		        $("#div_response").html(rsHtml);
+		    });
+			
+		}
+	
+		function addParams(){
+			var cont=$(".params-list").children().length;
+			var str=`<li style='padding-bottom:5px'>
+						<div>
+							<input  type="text" id="key`+cont+`" class="form-control lay-date" style="display: inline-block;width: 140px" placeholder="Key"> 
+						    <input type="text" id="value`+cont+`" class="form-control lay-date"  style="display: inline-block;width: 140px" placeholder="Value">
+						</div>
+					</li>`
+					cont++;
+			$(".params-list").append(str);
+		}
+		
+		function clearParams(){
+			$('.params-list').html("")
+		}
+	</script>
+</body>
+</html>
