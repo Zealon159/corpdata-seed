@@ -10,10 +10,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.corpdata.system.log.WebLog;
 import com.corpdata.system.org.entity.OrgDept;
-import com.corpdata.system.org.service.OrgDeptService;
+import com.corpdata.system.org.service.impl.OrgDeptServiceImpl;
 import com.corpdata.common.domain.DataGridRequestDTO;
 import com.corpdata.common.result.Result;
 import com.corpdata.common.utils.CorpdataUtil;
+import com.corpdata.core.base.BaseController;
 
 /**
  * 组织控制器类
@@ -22,10 +23,10 @@ import com.corpdata.common.utils.CorpdataUtil;
  */
 @Controller
 @RequestMapping("system/org/dept")
-public class OrgDeptController {
+public class OrgDeptController extends BaseController{
 	
 	@Autowired
-	private OrgDeptService orgDeptService;
+	private OrgDeptServiceImpl orgDeptService;
 	
 	@GetMapping("/add")
 	public String add(ModelMap map){

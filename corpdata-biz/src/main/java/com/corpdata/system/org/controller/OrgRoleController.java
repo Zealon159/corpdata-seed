@@ -8,10 +8,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.corpdata.system.org.entity.OrgRole;
-import com.corpdata.system.org.service.OrgRoleService;
+import com.corpdata.system.org.service.impl.OrgRoleServiceImpl;
 import com.corpdata.common.domain.DataGridRequestDTO;
 import com.corpdata.common.result.Result;
 import com.corpdata.common.utils.CorpdataUtil;
+import com.corpdata.core.base.BaseController;
 
 /**
  * 系统角色控制器
@@ -20,10 +21,10 @@ import com.corpdata.common.utils.CorpdataUtil;
  */
 @Controller
 @RequestMapping("system/org/role")
-public class OrgRoleController {
+public class OrgRoleController extends BaseController{
 	
 	@Autowired
-	private OrgRoleService orgRoleService;
+	private OrgRoleServiceImpl orgRoleService;
 	
 	@RequestMapping("/add")
 	public String add(ModelMap map){

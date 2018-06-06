@@ -2,7 +2,6 @@ package com.corpdata.core.base;
 
 import com.corpdata.common.domain.DataGridRequestDTO;
 import com.corpdata.common.result.Result;
-
 import java.util.List;
 
 /**

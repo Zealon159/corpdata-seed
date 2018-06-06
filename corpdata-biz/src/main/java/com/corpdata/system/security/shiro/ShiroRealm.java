@@ -23,7 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import com.corpdata.common.api.redis.RedisService;
 import com.corpdata.system.org.entity.OrgUser;
-import com.corpdata.system.org.service.UserService;
+import com.corpdata.system.org.service.impl.OrgUserServiceImpl;
 import com.corpdata.system.security.shiro.util.ShiroUserPwdUtil;
 
 public class ShiroRealm extends AuthorizingRealm {
@@ -32,7 +32,7 @@ public class ShiroRealm extends AuthorizingRealm {
 	
 	@Lazy
 	@Autowired
-	private UserService userService;
+	private OrgUserServiceImpl userService;
 	
 	@Lazy
 	@Autowired

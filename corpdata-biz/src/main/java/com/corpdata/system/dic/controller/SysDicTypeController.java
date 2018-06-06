@@ -8,16 +8,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.corpdata.system.dic.entity.SysDicType;
-import com.corpdata.system.dic.service.SysDicTypeService;
+import com.corpdata.system.dic.service.impl.SysDicTypeServiceImpl;
+import com.corpdata.common.domain.DataGridRequestDTO;
 import com.corpdata.common.result.Result;
 import com.corpdata.common.utils.CorpdataUtil;
+import com.corpdata.core.base.BaseController;
 
 @Controller
 @RequestMapping("system/data-dic-type")
-public class SysDicTypeController {
+public class SysDicTypeController extends BaseController{
 	
 	@Autowired
-	private SysDicTypeService sysDicTypeService;
+	private SysDicTypeServiceImpl sysDicTypeService;
 	
 
 	@RequestMapping("/add")
@@ -29,7 +31,7 @@ public class SysDicTypeController {
 	@ResponseBody
 	@RequestMapping("/save")
 	public Result save(SysDicType record){
-		return sysDicTypeService.insert(record);
+		return sysDicTypeService.save(record);
 	}
 
 	@RequestMapping("/edit")
@@ -47,15 +49,16 @@ public class SysDicTypeController {
 	@ResponseBody
 	@RequestMapping("/delete")
 	public Result delete(String id){
-		return sysDicTypeService.delete(id);
+		return sysDicTypeService.deleteById(id);
 	}
 	
 	@ResponseBody
 	@RequestMapping("/find/{pageNo}/{pageSize}")
 	public String findByPage(@PathVariable("pageNo") int pageNo,@PathVariable("pageSize") int pageSize){
-		
-		String jsonData = sysDicTypeService.findByPage(pageNo, pageSize);
-		return jsonData;	
+		DataGridRequestDTO dgRequest = new DataGridRequestDTO();
+		dgRequest.setLimit(pageSize);
+		dgRequest.setPage(pageNo);
+		return sysDicTypeService.findByPage(dgRequest);
 	}
 	
 	@ResponseBody

@@ -1,4 +1,4 @@
-package com.corpdata.system.org.service;
+package com.corpdata.system.org.service.impl;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -13,6 +13,7 @@ import com.corpdata.system.org.dao.OrgRoleMapper;
 import com.corpdata.system.org.dao.OrgUserMapper;
 import com.corpdata.system.org.entity.OrgDept;
 import com.corpdata.system.org.entity.OrgUser;
+import com.corpdata.system.org.service.OrgUserService;
 import com.corpdata.system.security.shiro.util.ShiroUserPwdUtil;
 import com.corpdata.system.security.shiro.util.UserUtil;
 import com.corpdata.common.api.redis.RedisService;
@@ -28,7 +29,7 @@ import com.corpdata.core.base.AbstractBaseService;
  * @date 2018年3月1日
  */
 @Service("userService")
-public class UserService extends AbstractBaseService<OrgUser> {
+public class OrgUserServiceImpl extends AbstractBaseService<OrgUser> implements OrgUserService{
 
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());  
 	
@@ -100,8 +101,9 @@ public class UserService extends AbstractBaseService<OrgUser> {
 		record.setUserPwd(newPwd);
 		return super.save(record);
 	}
-	
-	public Result delete(String id){
+
+	@Override
+	public Result deleteById(String id){
 		Result r = ResultUtil.fail();
 		if(id.equals("304a3837c36911e7886e4ccc6a41b42a")){
 			r = ResultUtil.fail("不能删除系统管理员哦！");

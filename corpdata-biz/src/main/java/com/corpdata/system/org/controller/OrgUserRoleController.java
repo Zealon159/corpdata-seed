@@ -5,8 +5,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.corpdata.common.result.Result;
+import com.corpdata.core.base.BaseController;
 import com.corpdata.system.org.entity.OrgUserRole;
-import com.corpdata.system.org.service.OrgUserRoleService;
+import com.corpdata.system.org.service.impl.OrgUserRoleServiceImpl;
 
 /**
  * 用户角色关联控制器
@@ -15,10 +16,10 @@ import com.corpdata.system.org.service.OrgUserRoleService;
  */
 @Controller
 @RequestMapping("system/org/userrole")
-public class OrgUserRoleController {
+public class OrgUserRoleController extends BaseController{
 
 	@Autowired
-	private OrgUserRoleService orgUserRoleService;
+	private OrgUserRoleServiceImpl orgUserRoleService;
 	
 	@ResponseBody
 	@RequestMapping("/add")

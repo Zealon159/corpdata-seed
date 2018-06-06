@@ -13,19 +13,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.corpdata.common.domain.DataGridRequestDTO;
 import com.corpdata.common.result.Result;
+import com.corpdata.core.base.BaseController;
 import com.corpdata.system.dic.entity.SysDataDic;
-import com.corpdata.system.dic.service.SysDataDicService;
-import com.corpdata.system.dic.service.SysDicTypeService;
+import com.corpdata.system.dic.service.impl.SysDataDicServiceImpl;
+import com.corpdata.system.dic.service.impl.SysDicTypeServiceImpl;
 
 @Controller
 @RequestMapping("system/data-dic")
-public class SysDataDicController {
+public class SysDataDicController extends BaseController{
 	
 	@Autowired
-	private SysDataDicService sysDataDicService;
+	private SysDataDicServiceImpl sysDataDicService;
 	
 	@Autowired
-	private SysDicTypeService sysDicTypeService;
+	private SysDicTypeServiceImpl sysDicTypeService;
 	
 	@RequestMapping("/add")
 	public String add(ModelMap map){

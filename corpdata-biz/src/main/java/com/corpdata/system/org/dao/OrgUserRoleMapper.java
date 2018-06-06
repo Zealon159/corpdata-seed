@@ -9,8 +9,6 @@ public interface OrgUserRoleMapper extends BaseMapper<OrgUserRole> {
 
     int insertSelective(OrgUserRole record);
 
-    OrgUserRole selectByPrimaryKey(String id);
-
     int updateByPrimaryKeySelective(OrgUserRole record);
 
 }

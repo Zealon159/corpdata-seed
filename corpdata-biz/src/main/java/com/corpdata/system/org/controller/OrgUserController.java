@@ -9,12 +9,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.corpdata.system.org.entity.OrgUser;
-import com.corpdata.system.org.service.UserService;
+import com.corpdata.system.org.service.impl.OrgUserServiceImpl;
 import com.corpdata.system.security.shiro.util.ShiroUserPwdUtil;
 import com.corpdata.system.security.shiro.util.UserUtil;
 import com.corpdata.common.domain.DataGridRequestDTO;
 import com.corpdata.common.result.Result;
 import com.corpdata.common.utils.CorpdataUtil;
+import com.corpdata.core.base.BaseController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -25,10 +26,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 @Controller
 @RequestMapping("system/org/user")
-public class OrgUserController {
+public class OrgUserController extends BaseController{
 
 	@Autowired
-	private UserService userService;
+	private OrgUserServiceImpl userService;
 	
 	@RequestMapping("/add")
 	public String add(ModelMap map){
@@ -58,7 +59,7 @@ public class OrgUserController {
 	@ResponseBody
 	@RequestMapping("/delete")
 	public Result delete(String id){
-		return userService.delete(id);
+		return userService.deleteById(id);
 	}
 
 	@RequestMapping("/list")

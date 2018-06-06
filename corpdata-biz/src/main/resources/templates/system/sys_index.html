@@ -54,7 +54,7 @@
 		      <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
 		      <ul class="layui-nav layui-nav-tree"   lay-filter="myNav">
 		        <li class="layui-nav-item layui-nav-itemed">
-		          <a href="javascript:;"><i class="layui-icon" style="font-size: 20px" data-icon=""></i><cite>系统管理</cite><span class="layui-nav-more"></span></a>
+		          <a href="javascript:;"><i class="layui-icon">&#xe716;</i><cite>系统管理</cite><span class="layui-nav-more"></span></a>
 		          <dl class="layui-nav-child">
 		            <dd>
 		            	<a href="/system/org/dept/list" target="centerFrame">
@@ -81,12 +81,6 @@
 		            	</a>
 		            </dd>
 		            <dd>
-		            	<a href="/system/org/role/list" target="centerFrame" data-url="/system/org/role/list">
-		            		<i class="layui-icon">&#xe665;</i>
-		            		<cite>系统监控</cite>
-		            	</a>
-		            </dd>
-		            <dd>
 		            	<a href="/system/org/role/list" target="centerFrame">
 		            		<i class="layui-icon">&#xe705;</i>
 		            		<cite>系统日志</cite>
@@ -98,24 +92,32 @@
 		            		<cite>数据字典</cite>
 		            	</a>
 		            </dd>
+		          </dl>
+		        </li>
+		        <li class="layui-nav-item">
+		          <a href="javascript:;"><i class="layui-icon" style="font-size:18px">&#xe631;</i> 系统工具</a>
+		          <dl class="layui-nav-child">
+		            <dd>
+		            	<a href="/druid/" target="centerFrame">
+		            		<i class="layui-icon">&#xe665;</i>
+		            		<cite>系统监控</cite>
+		            	</a>
+		            </dd>
 		            <dd>
 		            	<a href="/system/generator/list" target="centerFrame">
 		            		<i class="layui-icon">&#xe64e;</i>
 		            		<cite>代码生成</cite>
 		            	</a>
 		            </dd>
+		            <dd>
+		            	<a href="/system/post-tool" target="centerFrame">
+		            		<i class="layui-icon">&#xe609;</i>
+		            		<cite>Post工具</cite>
+		            	</a>
+		            </dd>
 		          </dl>
 		        </li>
-		        <li class="layui-nav-item">
-		          <a href="javascript:;">解决方案</a>
-		          <dl class="layui-nav-child">
-		            <dd><a href="javascript:;">列表一</a></dd>
-		            <dd><a href="javascript:;">列表二</a></dd>
-		            <dd><a href="">超链接</a></dd>
-		          </dl>
-		        </li>
-		        <li class="layui-nav-item"><a href="">云市场</a></li>
-		        <li class="layui-nav-item"><a href="">发布商品</a></li>
+		        
 		      </ul>
 		    </div>
 		  </div>

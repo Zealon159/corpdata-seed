@@ -15,13 +15,13 @@
   <sql id="Base_Column_List" >
     id, Type_Name, Type_code, Sort_Number, group_id, group_name, creater, created, modified
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
     from sys_dic_type
     where id = #{id,jdbcType=CHAR}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+  <delete id="deleteById" parameterType="java.lang.String" >
     delete from sys_dic_type
     where id = #{id,jdbcType=CHAR}
   </delete>
@@ -33,7 +33,7 @@
       #{sortNumber,jdbcType=INTEGER}, #{creater,jdbcType=VARCHAR}, #{created,jdbcType=TIMESTAMP}, 
       #{modified,jdbcType=TIMESTAMP})
   </insert>
-  <update id="updateByPrimaryKey" parameterType="com.corpdata.system.dic.entity.SysDicType" >
+  <update id="update" parameterType="com.corpdata.system.dic.entity.SysDicType" >
     update sys_dic_type
     set Type_Name = #{typeName,jdbcType=VARCHAR},
       Type_code = #{typeCode,jdbcType=VARCHAR},

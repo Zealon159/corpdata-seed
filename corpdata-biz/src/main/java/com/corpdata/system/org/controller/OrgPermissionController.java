@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.corpdata.system.org.service.OrgPermissionService;
+
+import com.corpdata.core.base.BaseController;
+import com.corpdata.system.org.service.impl.OrgPermissionServiceImpl;
 
 /**
  * 系统权限控制器类
@@ -13,10 +15,10 @@ import com.corpdata.system.org.service.OrgPermissionService;
  */
 @Controller
 @RequestMapping("system/org/permission")
-public class OrgPermissionController {
+public class OrgPermissionController extends BaseController{
 	
 	@Autowired
-	private OrgPermissionService orgPermissionService;
+	private OrgPermissionServiceImpl orgPermissionService;
 	
 	@ResponseBody
 	@RequestMapping("/gettreejson")

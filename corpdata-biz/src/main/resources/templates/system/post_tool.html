@@ -6,7 +6,7 @@
 <div th:replace="/common/common_grid_header"></div>
 </head>
 <body>
-	<div style="width:50%; float:left">
+	<div style="width:40%; float:left">
 		<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
 		  <ul class="layui-tab-title">
 		    <li class="layui-this">请求设置</li>
@@ -39,19 +39,20 @@
 		  	<div class="layui-form-item">
 		    	<div class="layui-input-block">
 		      		<button class="layui-btn layui-btn-normal" onclick="sendPostRequest()"><i class="layui-icon">&#xe609;</i>   Send</button>
+		      		<button class="layui-btn layui-btn-primary" onclick="clearResponse()"><i class="layui-icon">&#xe669;</i>   Clear</button>
 		    	</div>
 		  	</div>
 		  </div>
 		</div>  
 	</div>
-	<div style="width:50%; float:left">
+	<div style="width:60%; float:left">
 		<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
 		  <ul class="layui-tab-title">
 		    <li class="layui-this">响应结果</li>
 		  </ul>
 		  <div class="layui-tab-content">
-		  	<div id="div_response">
-		  		
+		  	<div>
+		  		<ul id="response"></ul>
 		  	</div>
 		  </div>
 		</div>  
@@ -80,9 +81,17 @@
 			
 			//请求
 			$.post(url,postData,function(data,status){
-		        //alert("Data: " + data + "nStatus: " + status);
-		        var rsHtml = "<h4>repsonse</h4>"+JSON.stringify(data);
-		        $("#div_response").html(rsHtml);
+				var res = data;
+		        if(data instanceof Object){
+		        	res = JSON.stringify(data);
+		        }
+		        var date = new Date();
+		        var rsHtml = "<li><b>"+date.toLocaleTimeString()+"： </b>"+res+"</li>";
+		        $("#response").append(rsHtml);
+		    }).error(function(data){
+		    	var date = new Date();
+		        var rsHtml = "<li><b>"+date.toLocaleTimeString()+"： </b>"+data.responseText+"</li>";
+		        $("#response").append(rsHtml);
 		    });
 			
 		}
@@ -101,6 +110,10 @@
 		
 		function clearParams(){
 			$('.params-list').html("")
+		}
+		
+		function clearResponse(){
+			$('#response').html("")
 		}
 	</script>
 </body>
