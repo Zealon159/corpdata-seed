@@ -8,6 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.alibaba.fastjson.JSON;
+import com.corpdata.common.enums.HttpCodeEnum;
 import com.corpdata.common.result.Result;
 import com.corpdata.core.exception.ServiceException;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -32,6 +33,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
     private final Logger logger = LoggerFactory.getLogger(WebMvcConfig.class);
+    
     @Value("${spring.profiles.active}")
     private String env;//当前激活的配置文件
 
@@ -42,18 +44,26 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
             public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception e) {
                 Result result = new Result();
                 if (e instanceof ServiceException) {//业务失败的异常，如“账号或密码错误”
-//                    result.setCode(ResultCode.FAIL).setMessage(e.getMessage());
+                	result.setCode(HttpCodeEnum.FAIL.getCode());
+                	result.setError(e.getMessage());
+                    result.setMessage(e.getMessage());
                     logger.info(e.getMessage());
                 } else if (e instanceof NoHandlerFoundException) {
-//                    result.setCode(ResultCode.NOT_FOUND).setMessage("接口 [" + request.getRequestURI() + "] 不存在");
+                	result.setCode(HttpCodeEnum.NOT_FOUND.getCode());
+                	result.setError("服务 [" + request.getRequestURI() + "] 不存在");
+                    result.setMessage("服务 [" + request.getRequestURI() + "] 不存在");
                 } else if (e instanceof ServletException) {
-//                    result.setCode(ResultCode.FAIL).setMessage(e.getMessage());
+                	result.setCode(HttpCodeEnum.FAIL.getCode());
+                	result.setError(e.getMessage());
+                    result.setMessage(e.getMessage());
                 } else {
-//                    result.setCode(ResultCode.INTERNAL_SERVER_ERROR).setMessage("接口 [" + request.getRequestURI() + "] 内部错误，请联系管理员");
+                	result.setCode(HttpCodeEnum.INTERNAL_SERVER_ERROR.getCode());
+                	result.setError("服务 [" + request.getRequestURI() + "] 内部错误，请联系管理员");
+                    result.setMessage("服务内部错误，请联系管理员");
                     String message;
                     if (handler instanceof HandlerMethod) {
                         HandlerMethod handlerMethod = (HandlerMethod) handler;
-                        message = String.format("接口 [%s] 出现异常，方法：%s.%s，异常摘要：%s",
+                        message = String.format("服务 [%s] 出现异常，方法：%s.%s，异常摘要：%s",
                                 request.getRequestURI(),
                                 handlerMethod.getBean().getClass().getName(),
                                 handlerMethod.getMethod().getName(),
@@ -66,7 +76,6 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 responseResult(response, result);
                 return new ModelAndView();
             }
-
         });
     }
 
@@ -80,7 +89,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         //接口签名认证拦截器，该签名认证比较简单，实际项目中可以使用Json Web Token或其他更好的方式替代。
-        if (!"dev".equals(env)) { //开发环境忽略签名认证
+        if (!"dev".equals(env) && !"pro".equals(env)) { //开发环境忽略签名认证
             registry.addInterceptor(new HandlerInterceptorAdapter() {
                 @Override
                 public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -93,7 +102,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                                 request.getRequestURI(), getIpAddress(request), JSON.toJSONString(request.getParameterMap()));
 
                         Result result = new Result();
-//                        result.setCode(ResultCode.UNAUTHORIZED).setMessage("签名认证失败");
+                        result.setCode(HttpCodeEnum.UNAUTHORIZED.getCode());
+                        result.setMessage("签名认证失败");
                         responseResult(response, result);
                         return false;
                     }
@@ -162,7 +172,6 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         if (ip != null && ip.indexOf(",") != -1) {
             ip = ip.substring(0, ip.indexOf(",")).trim();
         }
-
         return ip;
     }
 }

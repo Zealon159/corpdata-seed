@@ -84,6 +84,7 @@ public class OrgUserServiceImpl extends AbstractBaseService<OrgUser> implements 
 	/***
 	 * 根据用户id获取用户信息
 	 */
+	//@DynamicSwitchDataSource(dataSource = "ds_master")
 	public OrgUser getUserInfoByUserid(String userId){
 		OrgUser user = orgUserMapper.getUserInfoByUserid(userId);
 		return user;

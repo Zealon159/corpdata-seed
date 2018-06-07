@@ -1,6 +1,8 @@
 package com.corpdata.common.result;
 
-public class JsTreeState {
+import java.io.Serializable;
+
+public class JsTreeState implements Serializable {
 	private static final long serialVersionUID = 8872587664256359256L;
     private Boolean opened=false;
     private Boolean disabled=false;
