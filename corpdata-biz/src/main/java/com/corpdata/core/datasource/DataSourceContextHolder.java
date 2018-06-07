@@ -6,7 +6,7 @@ public class DataSourceContextHolder {
 
     /**
      * @desction: 提供给AOP去设置当前的线程的数据源的信息
-     * @param: [datasource]
+     * @param: DataSourceEnum
      * @return: void
      */
     public static void setTargetDataSource(DataSourceEnum targetDataSource) {
@@ -15,7 +15,7 @@ public class DataSourceContextHolder {
 
     /**
      * @desction: 提供给AbstractRoutingDataSource的实现类，通过key选择数据源
-     * @return: java.lang.String
+     * @return: DataSourceEnum
      */
     public static DataSourceEnum getTargetDataSource() {
         return contextHolder.get();

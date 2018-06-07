@@ -39,7 +39,6 @@ public class HandlerDataSourceAop {
             if(annotationClass == null) return;
         }
         //获取注解上的数据源的值的信息
-        //DataSourceEnum dataSourceKey = annotationClass.dataSource();
         if(annotationClass.dataSource() !=null){
             //给当前的执行SQL的操作设置特殊的数据源的信息
             DataSourceContextHolder.setTargetDataSource(annotationClass.dataSource());
