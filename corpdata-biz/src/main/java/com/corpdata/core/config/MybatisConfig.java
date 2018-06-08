@@ -50,16 +50,16 @@ public class MybatisConfig {
      * 其它数据源
      */
     @Bean
-    public DataSource dataSourceActiviti(){            
+    public DataSource dataSourceQuartz(){            
         DruidDataSource ds = new DruidDataSource();
-        ds.setDriverClassName(getConfig().getString("activiti.driverClassName"));
-        ds.setUrl(getConfig().getString("activiti.url"));
-        ds.setUsername(getConfig().getString("activiti.username"));
-        ds.setPassword(getConfig().getString("activiti.password"));
-        ds.setInitialSize(Integer.parseInt(getConfig().getString("activiti.initialSize")));
-        ds.setMinIdle(Integer.parseInt(getConfig().getString("activiti.minIdle")));
-        ds.setMaxActive(Integer.parseInt(getConfig().getString("activiti.maxActive")));
-        ds.setMaxWait(Long.parseLong(getConfig().getString("activiti.maxActive")));
+        ds.setDriverClassName(getConfig().getString("quartz.driverClassName"));
+        ds.setUrl(getConfig().getString("quartz.url"));
+        ds.setUsername(getConfig().getString("quartz.username"));
+        ds.setPassword(getConfig().getString("quartz.password"));
+        ds.setInitialSize(Integer.parseInt(getConfig().getString("quartz.initialSize")));
+        ds.setMinIdle(Integer.parseInt(getConfig().getString("quartz.minIdle")));
+        ds.setMaxActive(Integer.parseInt(getConfig().getString("quartz.maxActive")));
+        ds.setMaxWait(Long.parseLong(getConfig().getString("quartz.maxActive")));
         return ds;
     }
     
@@ -89,7 +89,7 @@ public class MybatisConfig {
     	//放入数据源
     	Map<Object,Object> targetDataSources = new HashMap<Object,Object>();
     	targetDataSources.put(DataSourceEnum.MASTER, dataSourceMaster());
-    	targetDataSources.put(DataSourceEnum.ACTIVITI, dataSourceActiviti());
+    	targetDataSources.put(DataSourceEnum.QUARTZ, dataSourceQuartz());
     	targetDataSources.put(DataSourceEnum.SQLSERVER, dataSourceSqlServer());
     	myRoutingDataSource.setTargetDataSources(targetDataSources);
     	//设置默认数据源

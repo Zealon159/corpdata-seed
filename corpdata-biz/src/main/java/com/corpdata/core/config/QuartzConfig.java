@@ -4,18 +4,32 @@ import java.io.IOException;
 import java.util.Properties;
 import org.quartz.Scheduler;
 import org.quartz.ee.servlet.QuartzInitializerListener;
+import org.quartz.spi.JobFactory;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
+import com.corpdata.system.scheduler.AutowiringSpringBeanJobFactory;
+
 @Configuration
 public class QuartzConfig {
 	
+	//注入springbean
+	@Bean
+    public JobFactory jobFactory(ApplicationContext applicationContext) {
+        AutowiringSpringBeanJobFactory jobFactory = new AutowiringSpringBeanJobFactory();
+        jobFactory.setApplicationContext(applicationContext);
+
+        return jobFactory;
+    }
+	
 	@Bean(name="SchedulerFactory")
-    public SchedulerFactoryBean schedulerFactoryBean() throws IOException {
+    public SchedulerFactoryBean schedulerFactoryBean(JobFactory jobFactory) throws IOException {
         SchedulerFactoryBean factory = new SchedulerFactoryBean();
+        factory.setJobFactory(jobFactory);
         factory.setQuartzProperties(quartzProperties());
         return factory;
     }
@@ -41,8 +55,8 @@ public class QuartzConfig {
      * 通过SchedulerFactoryBean获取Scheduler的实例
      */
     @Bean(name="Scheduler")
-    public Scheduler scheduler() throws IOException {
-        return schedulerFactoryBean().getScheduler();
+    public Scheduler scheduler(JobFactory jobFactory) throws IOException {
+        return schedulerFactoryBean(jobFactory).getScheduler();
     }
 
 }

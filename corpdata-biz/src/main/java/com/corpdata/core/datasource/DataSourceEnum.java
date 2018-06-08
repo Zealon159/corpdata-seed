@@ -6,11 +6,11 @@ public enum DataSourceEnum {
 	 */
 	MASTER("db_master"),
 	/**
-	 * Activiti数据源
+	 * Quartz数据源
 	 */
-	ACTIVITI("db_activiti"),
+	QUARTZ("db_quartz"),
 	/**
-	 * Activiti数据源
+	 * sqlserver数据源
 	 */
 	SQLSERVER("db_sqlserver");
 	

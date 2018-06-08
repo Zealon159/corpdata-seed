@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8" />
+		<title>任务管理</title>
+		<div th:replace="common/common_grid_header"></div>
+	</head>
+	<body>
+		<fieldset class="layui-elem-field">
+		    <div class="layui-field-box">
+		        <div class="layui-inline">
+		            <input id="searchStr" placeholder="关键字" class="layui-input layui-input-sm search_input">
+		        </div>
+		        <div class="layui-inline">
+		            <a class="layui-btn layui-btn-sm" id="btn-search" lay-filter="searchForm"><i class="layui-icon">&#xe615;</i>查询</a>
+		        </div>
+		        <div class="layui-inline">
+		            <a class="layui-btn layui-btn-sm layui-btn-normal" data-type="addUser" id="add-disc"> <i class="layui-icon">&#xe61f;</i>新增</a>
+		        </div>
+		    </div>
+		</fieldset>
+		
+		<div style="height: 100%">
+			<div class="layui-row"> 
+				<table class="layui-hide" id="LAY_table_role" lay-filter="role"></table> 
+			</div>
+		</div>
+		
+		<script type="text/html" id="toolBar">
+			<a class="layui-btn layui-btn-xs" lay-event="pause">暂停</a>
+  			<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="resume">继续</a>
+  			<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+		</script>
+		<script>
+			$(function() {
+				layui.use([ 'element', 'table', 'layer' ], function() {
+					var element = layui.element;
+				});
+				
+				//弹出框
+				$("#add-disc").on("click",function() {
+					layer.open({
+						title : [ '任务信息',
+								'font-size:18px;text-align:center;padding:0' ],
+						type : 2,
+						area : [ '600px', '316px' ],
+						shade : [ 0.8, '#393D49' ],
+						content : [ "/system/scheduler/add", 'no' ]
+					});
+				})
+			})
+		
+			layui.use('table', function(){
+				var table = layui.table;
+			  	
+				//方法级渲染
+				table.render({
+					id:'dg_role',
+				    elem: '#LAY_table_role',
+				    url: '/system/scheduler/listdata',
+				    method:'post',
+				    cols: [[
+				      {field:'jOB_NAME', align:'left', title: '任务名称'},
+				      {field:'jOB_GROUP', align:'left', title: '组',  sort: true},
+				      {field:'jOB_CLASS_NAME', align:'center', title: '实现类'},
+				      {field:'cRON_EXPRESSION', align:'center', title: '表达式'},
+				      {fixed: 'right', width:200, align:'center', toolbar: '#toolBar'}
+				    ]]
+				    ,page: true
+				    ,height: 450
+				});
+				
+				//监听工具条
+				table.on('tool(role)', function(obj){
+				    var data = obj.data;
+				    var jobClassName = data.jOB_CLASS_NAME;
+				    var jobGroupName = data.jOB_GROUP;
+				    if(obj.event == 'pause'){
+				    	layer.confirm('确定暂停任务吗？', function(index){
+				    		$.post("/system/scheduler/pause",
+				    			{jobClassName:jobClassName,jobGroupName:jobGroupName},function(res){
+					        	layer.close(index);
+					        	layer.msg(res.msg);
+				            },"json");
+				    	});
+				    }else if(obj.event == 'del'){
+				      	layer.confirm('真的删除数据吗？', function(index){
+				        	//发送删除请求
+				        	$.post("/system/org/role/delete",{id:data.id},function(res){
+				        		obj.del();
+					        	layer.close(index);
+					        	layer.msg(res.msg);
+				            },"json");
+				      	});
+				    } else if(obj.event == 'edit'){
+				    	layer.open({
+							title : [ '角色信息','font-size:18px;text-align:center;padding:0' ],
+							type : 2,
+							area : [ '600px', '316px' ],
+							shade : [ 0.8, '#393D49' ],
+							content : [ "/system/org/role/edit/"+data.id, 'no' ]
+						});
+				    }
+				});
+				
+				var active = {
+				    reload: function(){
+				      var searchStr = $('#searchStr');
+				      //执行重载
+				      table.reload('dg_role', {
+				        page: {
+				          curr: 1 //重新从第 1 页开始
+				        }
+				        ,where: {
+				        	params:{
+				        		searchStr: searchStr.val()
+				        	}
+				        }
+				      });
+				    }
+				};  
+				$('#btn-search').on('click', function(){
+				  	var type = $(this).data('type');
+				  	active[type] ? active[type].call(this) : '';
+				});
+				
+				$('#searchStr').keyup(function (event) {
+			        var e = event|| window.event;
+			        if (e.keyCode == "13") {
+			        	var type = "reload";
+						active[type] ? active[type].call(this) : '';
+			        }
+			    });
+			});
+		</script>
+	</body>
+</html>

@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSON;
 import com.corpdata.app.activiti.dao.ActUserMapper;
-import com.corpdata.core.datasource.DataSourceContextHolder;
 import com.corpdata.core.datasource.DataSourceEnum;
 import com.corpdata.core.datasource.aop.DynamicSwitchDataSource;
 
@@ -16,7 +15,6 @@ public class ActUserService {
 	@Autowired
 	private ActUserMapper actUserMapper;
 	
-	@DynamicSwitchDataSource(dataSource = DataSourceEnum.ACTIVITI)
 	public String getAll(){
 		List<Map<String,Object>> list = actUserMapper.getAll();
 		return JSON.toJSONString(list);

@@ -11,7 +11,7 @@ import org.quartz.JobExecutionException;
 
 public class JobB implements BaseJob {  
 
-    private static Logger _log = LoggerFactory.getLogger(JobB.class);  
+    private static Logger log = LoggerFactory.getLogger(JobB.class);  
 
     public JobB() {  
 
@@ -19,7 +19,7 @@ public class JobB implements BaseJob {
 
     public void execute(JobExecutionContext context)  
         throws JobExecutionException {  
-        _log.error("JobB 执行时间: " + new Date());  
+    	log.error("JobB 执行时间: " + new Date());  
 
     }  
 }
