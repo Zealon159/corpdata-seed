@@ -22,14 +22,14 @@
 		
 		<div style="height: 100%">
 			<div class="layui-row"> 
-				<table class="layui-hide" id="LAY_table_role" lay-filter="role"></table> 
+				<table class="layui-hide" id="LAY_datagrid" lay-filter="dg"></table> 
 			</div>
 		</div>
 		
 		<script type="text/html" id="toolBar">
 			<a class="layui-btn layui-btn-xs" lay-event="pause">暂停</a>
   			<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="resume">继续</a>
-  			<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+  			<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
 		</script>
 		<script>
 			$(function() {
@@ -55,15 +55,17 @@
 			  	
 				//方法级渲染
 				table.render({
-					id:'dg_role',
-				    elem: '#LAY_table_role',
+					id:'datagrid',
+				    elem: '#LAY_datagrid',
 				    url: '/system/scheduler/listdata',
 				    method:'post',
 				    cols: [[
-				      {field:'jOB_NAME', align:'left', title: '任务名称'},
-				      {field:'jOB_GROUP', align:'left', title: '组',  sort: true},
-				      {field:'jOB_CLASS_NAME', align:'center', title: '实现类'},
-				      {field:'cRON_EXPRESSION', align:'center', title: '表达式'},
+				      {field:'jobName', align:'left', title: '任务名称'},
+				      {field:'jobGroup', align:'left', title: '分组',  sort: true},
+				      {field:'jobClassName', align:'center', title: '实现类'},
+				      {field:'cronExpression', align:'center', title: '表达式'},
+				      {field:'triggerState', align:'center', title: '状态'},
+				      {field:'description', align:'center', title: '描述'},
 				      {fixed: 'right', width:200, align:'center', toolbar: '#toolBar'}
 				    ]]
 				    ,page: true
@@ -71,22 +73,31 @@
 				});
 				
 				//监听工具条
-				table.on('tool(role)', function(obj){
+				table.on('tool(dg)', function(obj){
 				    var data = obj.data;
-				    var jobClassName = data.jOB_CLASS_NAME;
-				    var jobGroupName = data.jOB_GROUP;
+				    var jobName = data.jobName;
+				    var jobGroupName = data.jobGroup;
+				    var formData = {jobName:jobName,jobGroupName:jobGroupName};
 				    if(obj.event == 'pause'){
 				    	layer.confirm('确定暂停任务吗？', function(index){
-				    		$.post("/system/scheduler/pause",
-				    			{jobClassName:jobClassName,jobGroupName:jobGroupName},function(res){
+				    		$.post("/system/scheduler/pause",formData,function(res){
+				    			table.reload('datagrid');
 					        	layer.close(index);
 					        	layer.msg(res.msg);
 				            },"json");
 				    	});
-				    }else if(obj.event == 'del'){
-				      	layer.confirm('真的删除数据吗？', function(index){
+				    }else if(obj.event == 'resume'){
+				    	layer.confirm('确定继续任务吗？', function(index){
+				    		$.post("/system/scheduler/resume",formData,function(res){
+				    			table.reload('datagrid');
+					        	layer.close(index);
+					        	layer.msg(res.msg);
+				            },"json");
+				    	});
+				    }else if(obj.event == 'delete'){
+				      	layer.confirm('确定删除任务吗？', function(index){
 				        	//发送删除请求
-				        	$.post("/system/org/role/delete",{id:data.id},function(res){
+				        	$.post("/system/scheduler/delete",formData,function(res){
 				        		obj.del();
 					        	layer.close(index);
 					        	layer.msg(res.msg);

@@ -1,4 +1,4 @@
-package com.corpdata.system.scheduler.job;
+package com.corpdata.system.scheduler.jobs;
 
 import java.util.Date;  
 import org.slf4j.Logger;  
@@ -13,13 +13,9 @@ public class JobB implements BaseJob {
 
     private static Logger log = LoggerFactory.getLogger(JobB.class);  
 
-    public JobB() {  
-
-    }  
-
     public void execute(JobExecutionContext context)  
         throws JobExecutionException {  
-    	log.error("JobB 执行时间: " + new Date());  
+    	log.info("JobB 执行时间: " + new Date());  
 
     }  
 }

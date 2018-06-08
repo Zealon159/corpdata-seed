@@ -1,5 +1,8 @@
 package com.corpdata.system.scheduler.service;
 
+import java.util.List;
+
+import com.corpdata.common.result.Result;
 
 public interface JobAndTriggerService {
 	/**
@@ -16,21 +19,21 @@ public interface JobAndTriggerService {
 	 * @param jobGroupName
 	 * @param cronExpression
 	 */
-	void addJob(String jobClassName, String jobGroupName, String cronExpression) throws Exception;
+	Result addJob(String jobName,String jobClassName, String jobGroupName, String cronExpression,String jobDescription) throws Exception;
 	
 	/**
 	 * 暂停任务
 	 * @param jobClassName
 	 * @param jobGroupName
 	 */
-	void jobPause(String jobClassName, String jobGroupName) throws Exception;
+	Result pause(String jobClassName, String jobGroupName) throws Exception;
 	
 	/**
 	 * 继续执行任务
 	 * @param jobClassName
 	 * @param jobGroupName
 	 */
-	void jobresume(String jobClassName, String jobGroupName) throws Exception;
+	Result resume(String jobClassName, String jobGroupName) throws Exception;
 	
 	/**
 	 * 重新部署任务
@@ -38,7 +41,7 @@ public interface JobAndTriggerService {
 	 * @param jobGroupName
 	 * @param cronExpression
 	 */
-	void jobreschedule(String jobClassName, String jobGroupName, String cronExpression) throws Exception;
+	Result reschedule(String jobClassName, String jobGroupName, String cronExpression) throws Exception;
 	
 	/**
 	 * 删除任务
@@ -46,5 +49,12 @@ public interface JobAndTriggerService {
 	 * @param jobGroupName
 	 * @throws Exception
 	 */
-	void jobdelete(String jobClassName, String jobGroupName) throws Exception;
+	Result delete(String jobClassName, String jobGroupName) throws Exception;
+	
+	/**
+	 * 获取包下所有类
+	 * @param packagePath
+	 * @return
+	 */
+	String getJobsClassList(String packagePath);
 }

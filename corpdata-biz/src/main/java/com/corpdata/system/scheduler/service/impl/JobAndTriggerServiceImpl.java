@@ -1,5 +1,7 @@
 package com.corpdata.system.scheduler.service.impl;
 
+import java.util.List;
+
 import org.quartz.CronScheduleBuilder;
 import org.quartz.CronTrigger;
 import org.quartz.JobBuilder;
@@ -14,7 +16,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+
+import com.alibaba.fastjson.JSON;
 import com.corpdata.common.api.pagehelper.PageConvertUtil;
+import com.corpdata.common.result.Result;
+import com.corpdata.common.result.util.ResultUtil;
+import com.corpdata.common.utils.PackageUtil;
 import com.corpdata.core.datasource.DataSourceEnum;
 import com.corpdata.core.datasource.aop.DynamicSwitchDataSource;
 import com.corpdata.system.scheduler.BaseJob;
@@ -43,39 +50,50 @@ public class JobAndTriggerServiceImpl implements JobAndTriggerService {
 		return PageConvertUtil.getGridJson(list);
 	}
 	
-	public void addJob(String jobClassName, String jobGroupName, String cronExpression) throws Exception{
-        // 启动调度器  
+	public Result addJob(String jobName,String jobClassName, String jobGroupName, String cronExpression
+			,String jobDescription) throws Exception{
+		
+		Result result = ResultUtil.success();
+		// 启动调度器  
 		scheduler.start(); 
 		
 		//构建job信息
-		JobDetail jobDetail = JobBuilder.newJob(getClass(jobClassName).getClass()).withIdentity(jobClassName, jobGroupName).build();
+		JobDetail jobDetail = JobBuilder.newJob(getClass(jobClassName).getClass())
+				.withDescription(jobDescription)
+				.withIdentity(jobName, jobGroupName).build();
 		
 		//表达式调度构建器(即任务执行的时间)
         CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpression);
 
         //按新的cronExpression表达式构建一个新的trigger
-        CronTrigger trigger = TriggerBuilder.newTrigger().withIdentity(jobClassName, jobGroupName).withSchedule(scheduleBuilder).build();
+        CronTrigger trigger = TriggerBuilder.newTrigger().withIdentity(jobName, jobGroupName)
+        		.withDescription(jobDescription)
+        		.withSchedule(scheduleBuilder).build();
         
         try {
         	scheduler.scheduleJob(jobDetail, trigger);
         } catch (SchedulerException e) {
-        	log.error("创建定时任务失败"+e);
-            throw new Exception("创建定时任务失败");
+        	result = ResultUtil.fail();
+        	log.error("创建定时任务失败:"+e);
+            throw new Exception("创建定时任务失败!");
         }
+        return result;
 	}
 	
-	public void jobPause(String jobClassName, String jobGroupName) throws Exception{	
-		scheduler.pauseJob(JobKey.jobKey(jobClassName, jobGroupName));
+	public Result pause(String jobName, String jobGroupName) throws Exception{	
+		scheduler.pauseJob(JobKey.jobKey(jobName, jobGroupName));
+		return ResultUtil.success();
 	}
 	
-	public void jobresume(String jobClassName, String jobGroupName) throws Exception {
-		scheduler.resumeJob(JobKey.jobKey(jobClassName, jobGroupName));
+	public Result resume(String jobName, String jobGroupName) throws Exception {
+		scheduler.resumeJob(JobKey.jobKey(jobName, jobGroupName));
+		return ResultUtil.success();
 	}
 	
-
-	public void jobreschedule(String jobClassName, String jobGroupName, String cronExpression) throws Exception {				
+	public Result reschedule(String jobName, String jobGroupName, String cronExpression) throws Exception {				
+		Result result = ResultUtil.success();
 		try {
-			TriggerKey triggerKey = TriggerKey.triggerKey(jobClassName, jobGroupName);
+			TriggerKey triggerKey = TriggerKey.triggerKey(jobName, jobGroupName);
 			// 表达式调度构建器
 			CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpression);
 
@@ -87,9 +105,11 @@ public class JobAndTriggerServiceImpl implements JobAndTriggerService {
 			// 按新的trigger重新设置job执行
 			scheduler.rescheduleJob(triggerKey, trigger);
 		} catch (SchedulerException e) {
-			System.out.println("更新定时任务失败"+e);
-			throw new Exception("更新定时任务失败");
+			result = ResultUtil.fail();
+			log.error("更新定时任务失败:"+e);
+			throw new Exception("更新定时任务失败!");
 		}
+		return result;
 	}
 	
 	/**
@@ -98,14 +118,35 @@ public class JobAndTriggerServiceImpl implements JobAndTriggerService {
 	 * @param jobGroupName
 	 * @throws Exception
 	 */
-	public void jobdelete(String jobClassName, String jobGroupName) throws Exception{		
-		scheduler.pauseTrigger(TriggerKey.triggerKey(jobClassName, jobGroupName));
-		scheduler.unscheduleJob(TriggerKey.triggerKey(jobClassName, jobGroupName));
-		scheduler.deleteJob(JobKey.jobKey(jobClassName, jobGroupName));				
+	public Result delete(String jobName, String jobGroupName) throws Exception{
+		Result result = ResultUtil.success();
+		try{
+			scheduler.pauseTrigger(TriggerKey.triggerKey(jobName, jobGroupName));
+			scheduler.unscheduleJob(TriggerKey.triggerKey(jobName, jobGroupName));
+			scheduler.deleteJob(JobKey.jobKey(jobName, jobGroupName));			
+		}catch(Exception e){
+			result = ResultUtil.fail();
+			System.out.println("删除定时任务失败"+e);
+			throw new Exception("更新定时任务失败");
+		}
+		return result;
 	}
 	
 	public static BaseJob getClass(String classname) throws Exception {
 		Class<?> class1 = Class.forName(classname);
 		return (BaseJob)class1.newInstance();
+	}
+	
+	public String getJobsClassList(String packagePath){
+		StringBuffer json = new StringBuffer();
+		List<String> classNames = PackageUtil.getClassName(packagePath, true);
+		json.append("[");
+		for(int i=0;i<classNames.size();i++){
+			if(i>0){json.append(",");}
+			String className = classNames.get(i);
+			json.append("{\"id\":\""+className+"\",\"text\":\""+className+"\"}");
+		}
+		json.append("]");
+		return json.toString();
 	}
 }

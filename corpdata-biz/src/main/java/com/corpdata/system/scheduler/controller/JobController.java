@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.corpdata.common.result.Result;
 import com.corpdata.system.scheduler.service.JobAndTriggerService;
 
 /**
- * 参考：
- * https://github.com/tjfy1992/SpringBootQuartz/tree/master/demo/src/main/java/com/example/demo
- * https://blog.csdn.net/u012907049/article/details/73801122
+ * 任务调度控制器
+ * 
  */
 @Controller
 @RequestMapping(value="system/scheduler")
@@ -30,42 +30,44 @@ public class JobController {
 	//新增任务
 	@ResponseBody
 	@PostMapping(value="/save")
-	public void save(@RequestParam(value="jobClassName")String jobClassName, 
+	public Result save(@RequestParam(value="jobName")String jobName, 
+			@RequestParam(value="jobClassName")String jobClassName, 
 			@RequestParam(value="jobGroupName")String jobGroupName, 
-			@RequestParam(value="cronExpression")String cronExpression) throws Exception {
+			@RequestParam(value="cronExpression")String cronExpression,
+			@RequestParam(value="jobDescription")String jobDescription) throws Exception {
 		
-		jobAndTriggerService.addJob(jobClassName, jobGroupName, cronExpression);
+		return jobAndTriggerService.addJob(jobName,jobClassName, jobGroupName, cronExpression,jobDescription);
 	}
 	
 	//暂停
 	@ResponseBody
 	@PostMapping(value="/pause")
-	public void pause(@RequestParam(value="jobClassName")String jobClassName, @RequestParam(value="jobGroupName")String jobGroupName) throws Exception{			
-		jobAndTriggerService.jobPause(jobClassName, jobGroupName);
+	public Result pause(@RequestParam(value="jobName")String jobName, @RequestParam(value="jobGroupName")String jobGroupName) throws Exception{			
+		return jobAndTriggerService.pause(jobName, jobGroupName);
 	}
 
 	//继续任务
 	@ResponseBody
 	@PostMapping(value="/resume")
-	public void resume(@RequestParam(value="jobClassName")String jobClassName, @RequestParam(value="jobGroupName")String jobGroupName) throws Exception
+	public Result resume(@RequestParam(value="jobName")String jobName, @RequestParam(value="jobGroupName")String jobGroupName) throws Exception
 	{			
-		jobAndTriggerService.jobresume(jobClassName, jobGroupName);
+		return jobAndTriggerService.resume(jobName, jobGroupName);
 	}
 	
 	//重新部署任务
 	@ResponseBody
 	@PostMapping(value="/reschedule")
-	public void reschedule(@RequestParam(value="jobClassName")String jobClassName, 
+	public Result reschedule(@RequestParam(value="jobName")String jobName, 
 			@RequestParam(value="jobGroupName")String jobGroupName,
 			@RequestParam(value="cronExpression")String cronExpression) throws Exception{			
-		jobAndTriggerService.jobreschedule(jobClassName, jobGroupName, cronExpression);
+		return jobAndTriggerService.reschedule(jobName, jobGroupName, cronExpression);
 	}
 	
 	//删除任务
 	@ResponseBody
 	@PostMapping(value="/delete")
-	public void delete(@RequestParam(value="jobClassName")String jobClassName, @RequestParam(value="jobGroupName")String jobGroupName) throws Exception {			
-		jobAndTriggerService.jobdelete(jobClassName, jobGroupName);
+	public Result delete(@RequestParam(value="jobName")String jobName, @RequestParam(value="jobGroupName")String jobGroupName) throws Exception {			
+		return jobAndTriggerService.delete(jobName, jobGroupName);
 	}
 	
 	//查询任务
@@ -79,6 +81,13 @@ public class JobController {
 	@PostMapping(value="/listdata")
 	public String queryjob(@RequestParam(value="page")Integer page, @RequestParam(value="limit")Integer limit) {			
 		return jobAndTriggerService.getJobAndTriggerDetails(page, limit);
+	}
+	
+	@ResponseBody
+	@PostMapping(value="/classjson")
+	public String getJobsClassList(){
+		String packagePath = "com.corpdata.system.scheduler.jobs";
+		return jobAndTriggerService.getJobsClassList(packagePath);
 	}
 	 
 }
