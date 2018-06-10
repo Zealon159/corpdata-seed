@@ -145,7 +145,7 @@ public class MybatisConfig {
      */
     public static org.apache.commons.configuration.Configuration getConfig() {
         try {
-            return new PropertiesConfiguration("datasources.properties");
+            return new PropertiesConfiguration("config/properties/datasources.properties");
         } catch (ConfigurationException e) {
             throw new BDException("获取配置文件失败，", e);
         }

@@ -13,7 +13,7 @@ public class JobA implements BaseJob {
 
     public void execute(JobExecutionContext context) throws JobExecutionException {  
 
-    	log.info("JobA 执行时间: " + new Date());  
+    	log.info("JobAAAAA 执行时间: " + new Date());  
 
     }  
 }

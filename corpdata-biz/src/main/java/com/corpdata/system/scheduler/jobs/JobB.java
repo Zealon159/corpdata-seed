@@ -15,6 +15,7 @@ public class JobB implements BaseJob {
 
     public void execute(JobExecutionContext context)  
         throws JobExecutionException {  
+    	System.out.println("JobB 执行时间: " + new Date());
     	log.info("JobB 执行时间: " + new Date());  
 
     }  

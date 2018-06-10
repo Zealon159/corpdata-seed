@@ -35,7 +35,10 @@ spring:
       keep-alive-seconds: 100
       max-pool-size: 20
       queue-capacity: 8
-
+      
+logging: 
+  config: classpath:config/logback-spring.xml
+  
 queueName: queue.mail
 topicName: topic.pub
   
