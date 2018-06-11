@@ -20,10 +20,8 @@ import org.apache.commons.lang.WordUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
-
 import com.corpdata.common.utils.BDException;
 import com.corpdata.common.utils.DateUtils;
-import com.corpdata.core.config.Constant;
 import com.corpdata.system.generate.domain.ColumnDO;
 import com.corpdata.system.generate.domain.TableDO;
 
@@ -161,7 +159,7 @@ public class GenUtils {
      * 表名转换成Java类名
      */
     public static String tableToJava(String tableName, String tablePrefix, String autoRemovePre) {
-        if (Constant.AUTO_REOMVE_PRE.equals(autoRemovePre)) {
+        if ("true".equals(autoRemovePre)) {
             tableName = tableName.substring(tableName.indexOf("_") + 1);
         }
         if (StringUtils.isNotBlank(tablePrefix)) {

@@ -1,4 +1,4 @@
-package com.corpdata.system.scheduler;
+package com.corpdata.common.api.quartz;
 
 import org.quartz.spi.TriggerFiredBundle;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;

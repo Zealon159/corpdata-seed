@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
-import com.corpdata.system.scheduler.AutowiringSpringBeanJobFactory;
+import com.corpdata.common.api.quartz.AutowiringSpringBeanJobFactory;
 
 @Configuration
 public class QuartzConfig {

@@ -11,10 +11,11 @@ import com.alibaba.fastjson.JSON;
 import com.corpdata.common.enums.HttpCodeEnum;
 import com.corpdata.common.result.Result;
 import com.corpdata.core.exception.ServiceException;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.corpdata.system.error.entity.SysHttpError;
+import com.corpdata.system.error.service.SysHttpErrorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.HandlerMethod;
@@ -22,9 +23,7 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 /**
  * Spring MVC 配置
@@ -37,6 +36,9 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     @Value("${spring.profiles.active}")
     private String env;//当前激活的配置文件
 
+    @Autowired
+    private SysHttpErrorService sysHttpErrorService;
+     
     //统一异常处理
     @Override
     public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> exceptionResolvers) {
@@ -61,6 +63,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 	result.setError("服务 [" + request.getRequestURI() + "] 内部错误，请联系管理员");
                     result.setMessage("服务内部错误，请联系管理员");
                     String message;
+                    String errorMethod = "";
+                    String errorServiceUrl="";
                     if (handler instanceof HandlerMethod) {
                         HandlerMethod handlerMethod = (HandlerMethod) handler;
                         message = String.format("服务 [%s] 出现异常，方法：%s.%s，异常摘要：%s",
@@ -68,10 +72,20 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                                 handlerMethod.getBean().getClass().getName(),
                                 handlerMethod.getMethod().getName(),
                                 e.getMessage());
+                        errorMethod = handlerMethod.getBean().getClass().getName()+"."+handlerMethod.getMethod().getName();
+                        errorServiceUrl=request.getRequestURI();
                     } else {
                         message = e.getMessage();
                     }
                     logger.error(message, e);
+                    
+                    //存储异常到数据库
+                    SysHttpError record = new SysHttpError();
+                    record.setErrorMessage(message);
+                    record.setErrorServiceUrl(errorServiceUrl);
+                    record.setErrorServiceMethod(errorMethod);
+                    record.setIpAddress(getIpAddress(request));
+                    sysHttpErrorService.save(record);
                 }
                 responseResult(response, result);
                 return new ModelAndView();
@@ -122,35 +136,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
             logger.error(ex.getMessage());
         }
     }
-
-    /**
-     * 一个简单的签名认证，规则：
-     * 1. 将请求参数按ascii码排序
-     * 2. 拼接为a=value&b=value...这样的字符串（不包含sign）
-     * 3. 混合密钥（secret）进行md5获得签名，与请求的签名进行比较
-     */
-    private boolean validateSign(HttpServletRequest request) {
-        String requestSign = request.getParameter("sign");//获得请求签名，如sign=19e907700db7ad91318424a97c54ed57
-        if (StringUtils.isEmpty(requestSign)) {
-            return false;
-        }
-        List<String> keys = new ArrayList<String>(request.getParameterMap().keySet());
-        keys.remove("sign");//排除sign参数
-        Collections.sort(keys);//排序
-
-        StringBuilder sb = new StringBuilder();
-        for (String key : keys) {
-            sb.append(key).append("=").append(request.getParameter(key)).append("&");//拼接字符串
-        }
-        String linkString = sb.toString();
-        linkString = StringUtils.substring(linkString, 0, linkString.length() - 1);//去除最后一个'&'
-
-        String secret = "Potato";//密钥，自己修改
-        String sign = DigestUtils.md5Hex(linkString + secret);//混合密钥md5
-
-        return StringUtils.equals(sign, requestSign);//比较
-    }
-
+ 
     private String getIpAddress(HttpServletRequest request) {
         String ip = request.getHeader("x-forwarded-for");
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
