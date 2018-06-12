@@ -206,6 +206,13 @@
 		  	<version>2.4</version>
 		  	<classifier>jdk15</classifier>
 		</dependency>
+		
+		<!-- easypoi(excel读写)
+		<dependency>
+		    <groupId>cn.afterturn</groupId>
+		    <artifactId>easypoi-spring-boot-starter</artifactId>
+		    <version>3.2.0</version>
+		</dependency> -->
 	</dependencies>
 
 	<build>

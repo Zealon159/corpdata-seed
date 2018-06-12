@@ -4,7 +4,7 @@ package com.corpdata.core.constant;
  * 项目常量
  */
 public final class ProjectConstant {
-	public static final String DB_TYPE = "sqlserver"; //主数据库类型(mysql / sqlserver)
+	public static final String DB_TYPE = "mysql"; //主数据库类型(mysql / sqlserver)
     public static final String BASE_PACKAGE = "com.corpdata";//生成代码所在的基础包名称，可根据自己公司的项目修改（注意：这个配置修改之后需要手工修改src目录项目默认的包路径，使其保持一致，不然会找不到类）
     public static final String MODEL_PACKAGE = BASE_PACKAGE + ".model";//生成的Model所在包
     public static final String MAPPER_PACKAGE = BASE_PACKAGE + ".**.dao";//生成的Mapper所在包

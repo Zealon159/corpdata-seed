@@ -7,7 +7,7 @@ import com.corpdata.common.domain.DataGridRequestDTO;
 public interface GeneratorService {
 
 	//生成基础代码
-	byte[] generatorCode(String[] tableNames,String packageName,String packageName2,String subject);
+	byte[] generatorCode(String[] tableNames,String packageName,String packageName2,String subject,String dbType,String dbEnum);
 	
 	String findByPage(DataGridRequestDTO dgRequest);
 	

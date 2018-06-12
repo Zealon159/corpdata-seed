@@ -10,10 +10,14 @@
 			});
 			
 			function gen(){
+				var subject=$("#subject").val();
 				var tables=$("#tables").text();
+				var dbType = $("#dbType").val();
+				var dbEnum = $("#dbEnum").val();
 				var packageName = $("#packageName1").val()+$("#packageName2").val();
 				var packageName2 = $("#packageName2").val();
-				var url = "/system/generator/genCode?tables="+tables+"&packageName="+packageName+"&packageName2="+packageName2;
+				var url = "/system/generator/genCode?tables="+tables+"&packageName="+packageName+"&packageName2="
+						+packageName2+"&dbType="+dbType+"&dbEnum="+dbEnum+"&subject="+subject;
 				window.open(url);
 			}
 		</script>
@@ -26,6 +30,13 @@
 					<td width="15%">您已选择</td>
 					<td width="85%">
 						<span id="tables" th:text="${tables}"></span>
+					</td>
+				</tr>
+				<tr>
+					<td><br><br></td>
+					<td>表说明</td>
+					<td>
+						<input name="subject" id="subject" class="easyui-textbox"  />
 					</td>
 				</tr>
 				<tr>
@@ -55,5 +66,7 @@
 				</tr>
 			</table>
 		</form>
+		<input type="hidden" id="dbType" name="dbType" th:value="${dbType}" />
+		<input type="hidden" id="dbEnum" name="dbEnum" th:value="${dbEnum}" />
 	</body>
 </html>

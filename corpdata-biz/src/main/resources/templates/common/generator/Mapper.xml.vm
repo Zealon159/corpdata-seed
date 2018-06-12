@@ -12,7 +12,7 @@
 </resultMap>
 
   	<sql id="Base_Column_List" >
-    	#foreach($column in $columns)`$column.columnName`#if($velocityCount != $columns.size()),#end#end
+    	#foreach($column in $columns)$column.columnName #if($velocityCount != $columns.size()),#end#end
   	</sql>
   	
   	<insert id="insert" parameterType="${package}.entity.${className}"#if($pk.extra == 'auto_increment') useGeneratedKeys="true" keyProperty="$pk.attrname"#end>
@@ -20,7 +20,7 @@
 		(
 #foreach($column in $columns)
 #if($column.columnName != $pk.columnName || $pk.extra != 'auto_increment')
-			`$column.columnName`#if($velocityCount != $columns.size()), #end
+			$column.columnName #if($velocityCount != $columns.size()), #end
 
 #end			
 #end
@@ -41,7 +41,7 @@
 		<set>
 #foreach($column in $columns)
 #if($column.columnName != $pk.columnName && $column.columnName!='creater' && $column.columnName!='created')
-			<if test="$column.attrname != null">`$column.columnName` = #{$column.attrname}#if($velocityCount != $columns.size()), #end</if>
+			<if test="$column.attrname != null">$column.columnName= #{$column.attrname}#if($velocityCount != $columns.size()), #end</if>
 #end
 #end
 		</set>
@@ -74,7 +74,7 @@
 	</select>
 	
 	<select id="existsWithKeyName" resultType="int" parameterType="String">
-		select 1 from ${tableName} where 1=1 limit 0,1
+		select 1 from ${tableName} where 1=1 
 	</select>
 	
 </mapper>

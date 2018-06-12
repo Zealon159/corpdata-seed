@@ -22,10 +22,10 @@ public class GeneratorController{
 
 	//生成代码
 	@RequestMapping("/genCode")
-	public void batchCode(HttpServletRequest request, HttpServletResponse response, String tables,String packageName,String packageName2,String subject) throws IOException {
+	public void batchCode(HttpServletRequest request, HttpServletResponse response, String tables,String packageName,String packageName2,String subject,String dbType,String dbEnum) throws IOException {
 		String[] tableNames = new String[] {};
 		tableNames = tables.split(",");
-		byte[] data = generatorService.generatorCode(tableNames,packageName,packageName2,subject);
+		byte[] data = generatorService.generatorCode(tableNames,packageName,packageName2,subject,dbType,dbEnum);
 		response.reset();
 		response.setHeader("Content-Disposition", "attachment; filename=\"codes.zip\"");
 		response.addHeader("Content-Length", "" + data.length);
@@ -47,8 +47,10 @@ public class GeneratorController{
 	
 	//生成选项
 	@GetMapping(value = "/option")
-	public String tableGenerate(String tables,ModelMap map){
+	public String tableGenerate(String tables,String dbType,String dbEnum,ModelMap map){
 		map.addAttribute("tables", tables);
+		map.addAttribute("dbType", dbType);
+		map.addAttribute("dbEnum", dbEnum);
 		return "system/generate/option";
 	}
 }

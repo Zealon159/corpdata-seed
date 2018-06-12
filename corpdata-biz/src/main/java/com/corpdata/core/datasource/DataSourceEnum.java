@@ -4,15 +4,15 @@ public enum DataSourceEnum {
 	/**
 	 * 默认数据源
 	 */
-	MASTER("db_master"),
+	MASTER("sqlserver"),
 	/**
 	 * Quartz数据源
 	 */
-	QUARTZ("db_quartz"),
+	QUARTZ("mysql"),
 	/**
 	 * sqlserver数据源
 	 */
-	SQLSERVER("db_sqlserver");
+	SQLSERVER("mysql");
 	
     private String datasource;
 

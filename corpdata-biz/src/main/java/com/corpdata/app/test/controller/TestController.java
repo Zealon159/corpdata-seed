@@ -12,6 +12,7 @@ import com.corpdata.app.test.entity.Test;
 import com.corpdata.app.test.service.TestService;
 import com.corpdata.common.domain.DataGridRequestDTO;
 import com.corpdata.common.result.Result;
+import com.corpdata.core.datasource.DataSourceEnum;
 import com.corpdata.system.log.WebLog;
 
 @Controller
@@ -59,6 +60,7 @@ public class TestController {
     
 	@GetMapping("/list")
     public String list() {
+		
         return "/app/test/list";
     }
 	

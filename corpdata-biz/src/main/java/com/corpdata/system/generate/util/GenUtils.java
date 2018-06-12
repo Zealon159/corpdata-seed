@@ -55,13 +55,18 @@ public class GenUtils {
      * 生成代码
      */
     public static void generatorCode(Map<String, Object> table,
-                                     List<Map<String, Object>> columns, ZipOutputStream zip,String packageName,String packageName2) {
+                                     List<Map<String, Object>> columns, ZipOutputStream zip,String packageName,String packageName2,String subject) {
         //配置信息
         Configuration config = getConfig();
         //表信息
         TableDO tableDO = new TableDO();
         tableDO.setTableName(table.get("tableName").toString());
-        tableDO.setComments(table.get("tableComment").toString());
+        if(table.get("tableComment")!=null){
+        	tableDO.setComments(table.get("tableComment").toString());
+        }else{
+        	tableDO.setComments(subject);
+        }
+        
         //表名转换成Java类名
         String className = tableToJava(tableDO.getTableName(), config.getString("tablePrefix"), config.getString("autoRemovePre"));
         tableDO.setClassName(className);
@@ -73,9 +78,9 @@ public class GenUtils {
             ColumnDO columnDO = new ColumnDO();
             columnDO.setColumnName(column.get("columnName").toString());
             columnDO.setDataType(column.get("dataType").toString());
-            columnDO.setComments(column.get("columnComment").toString());
-            columnDO.setExtra(column.get("extra").toString());
-
+            if(column.get("extra")!=null){
+            	columnDO.setExtra(column.get("extra").toString());
+            }
             //列名转换成Java属性名
             String attrName = columnToJava(columnDO.getColumnName());
             columnDO.setAttrName(attrName);
@@ -85,8 +90,8 @@ public class GenUtils {
             String attrType = config.getString(columnDO.getDataType(), "unknowType");
             columnDO.setAttrType(attrType);
 
-            //是否主键
-            if ("PRI".equalsIgnoreCase(column.get("columnKey").toString()) && tableDO.getPk() == null) {
+            //id列为主键
+            if (column.get("columnName").equals("id")) {
                 tableDO.setPk(columnDO);
             }
 

@@ -20,8 +20,10 @@ public interface SqlServerGeneratorMapper {
 	@Select("select name tableName,crdate createTime from sysobjects where xtype='u' and name = #{tableName}")
 	Map<String, Object> get(@Param("tableName") String tableName);
 
-	@Select("select a.name tableName,b.name columnName,c.name dataType,c.length dataTypeLength from sysobjects a,syscolumns b,systypes c where a.id=b.id"
-			+"and a.name=#{tableName} and a.xtype='U' and b.xtype=c.xtype")
+	@Select("SELECT  c.TABLE_NAME tableName,  c.COLUMN_NAME columnName,  c.DATA_TYPE dataType,  "+
+			" c.CHARACTER_MAXIMUM_LENGTH dataTypeLength,  (SELECT name FROM syscolumns WHERE id=Object_Id(#{tableName}) and colid IN"+
+			"(SELECT keyno from sysindexkeys WHERE id=Object_Id(#{tableName})) ) primaryKey FROM [INFORMATION_SCHEMA].[COLUMNS] c "+
+			"WHERE TABLE_NAME = #{tableName} ")
 	List<Map<String, Object>> listColumns(@Param("tableName") String tableName);
 	
 }

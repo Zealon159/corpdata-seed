@@ -4,6 +4,11 @@
 		<meta charset="UTF-8" />
 		<title>数据表</title>
 		<div th:replace="/common/common_grid_header"></div>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				initSelect("dbType","/datasource/select","");
+			});
+		</script>
 	</head>
 	<body>
 		<fieldset class="layui-elem-field">
@@ -12,7 +17,10 @@
 		            <input id="keyword" placeholder="关键字" class="layui-input layui-input-sm search_input">
 		        </div>
 		        <div class="layui-inline">
-		            <a class="layui-btn layui-btn-sm" id="btn-search" lay-filter="searchForm">
+		            <select id="dbType" name="dbType" class="form-control selectpicker">
+		        </div>
+		        <div class="layui-inline">
+		            <a class="layui-btn layui-btn-sm" id="btn-search" onclick="doSearch()" >
 		            	<i class="layui-icon">&#xe615;</i>查询
 		            </a>
 		        </div>
@@ -38,7 +46,7 @@
 				table.render({
 					id:'dg_dept',
 				    elem: '#datagrid',
-				    url: '/system/generator/listdata',
+				    
 				    method:'post',
 				    cols: [[
 				      	{checkbox: true, fixed: true},
@@ -55,8 +63,10 @@
 				//监听工具条
 				table.on('tool(tables)', function(obj){
 				    var data = obj.data;
+				    var dbType = $("#dbType").val();
+				    var dbEnum = $('#dbType').find("option:selected").text();
 				    if(obj.event == 'gen'){
-				    	var url = "/system/generator/option?tables="+data.tableName;
+				    	var url = "/system/generator/option?tables="+data.tableName+"&dbType="+dbType+"&dbEnum="+dbEnum;
 				    	//iframe层
 				    	layer.open({
 				    	    type: 2,
@@ -72,6 +82,8 @@
 			
 			//批量生成
 			function genCodes(){
+				var dbEnum = $('#dbType').find("option:selected").text();
+				var dbType = $("#dbType").val();
 				var table = layui.table;
 				var checkStatus = table.checkStatus('dg_dept');
 				var data = checkStatus.data;
@@ -83,7 +95,7 @@
 		            	if(i>0){tables+=",";}
 		            	tables+=r.tableName;
 				    });
-			    	var url = "/system/generator/option?tables="+tables;
+			    	var url = "/system/generator/option?tables="+tables+"&dbType="+dbType+"&dbEnum="+dbEnum;
 			    	layer.open({
 			    	    type: 2,
 			    	  	title: '生成选项',
@@ -93,6 +105,33 @@
 			    	  	content: url //iframe的url
 			    	});
 				}
+			}
+			
+			//查询
+			$("#keyword").keyup(function (event) {
+		        var e = event|| window.event;
+		        if (e.keyCode == "13") {
+		        	doSearch();
+		        }
+		    });
+			
+			function doSearch(){
+				var dbType = $('#dbType').val();
+				var dbEnum = $('#dbType').find("option:selected").text();
+				var keyword = $('#keyword').val();
+	        	layui.table.reload('dg_dept', {
+	        		url: '/system/generator/listdata',
+			        page: {
+			          curr: 1 //重新从第 1 页开始
+			        }
+			        ,where: {
+			        	params:{
+			        		keyword: keyword,
+			        		dbType:dbType,
+			        		dbEnum:dbEnum
+			        	}
+			        }
+			    });
 			}
 		</script>
 	</body>
