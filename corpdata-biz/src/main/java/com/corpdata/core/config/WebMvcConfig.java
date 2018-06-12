@@ -85,7 +85,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                     record.setErrorServiceUrl(errorServiceUrl);
                     record.setErrorServiceMethod(errorMethod);
                     record.setIpAddress(getIpAddress(request));
-                    sysHttpErrorService.save(record);
+                    //sysHttpErrorService.save(record);
                 }
                 responseResult(response, result);
                 return new ModelAndView();

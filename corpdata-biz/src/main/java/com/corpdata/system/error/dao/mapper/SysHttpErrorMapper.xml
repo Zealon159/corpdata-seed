@@ -12,18 +12,18 @@
     </resultMap>
 
   	<sql id="Base_Column_List" >
-    	`id`,`creater`,`created`,`error_service_url`,`error_service_method`,`error_message`,`ip_address`  	</sql>
+    	'id','creater','created','error_service_url','error_service_method','error_message','ip_address'  	</sql>
   	
   	<insert id="insert" parameterType="com.corpdata.system.error.entity.SysHttpError">
 		insert into sys_http_error
 		(
-			`id`, 
-			`creater`, 
-			`created`, 
-			`error_service_url`, 
-			`error_service_method`, 
-			`error_message`, 
-			`ip_address`
+			'id', 
+			'creater', 
+			'created', 
+			'error_service_url', 
+			'error_service_method', 
+			'error_message', 
+			'ip_address'
 		)
 		values
 		(
@@ -40,10 +40,10 @@
 	<update id="update" parameterType="com.corpdata.system.error.entity.SysHttpError">
 		update sys_http_error 
 		<set>
-			<if test="errorServiceUrl != null">`error_service_url` = #{errorServiceUrl}, </if>
-			<if test="errorServiceMethod != null">`error_service_method` = #{errorServiceMethod}, </if>
-			<if test="errorMessage != null">`error_message` = #{errorMessage}, </if>
-			<if test="ipAddress != null">`ip_address` = #{ipAddress}</if>
+			<if test="errorServiceUrl != null">'error_service_url' = #{errorServiceUrl}, </if>
+			<if test="errorServiceMethod != null">'error_service_method' = #{errorServiceMethod}, </if>
+			<if test="errorMessage != null">'error_message' = #{errorMessage}, </if>
+			<if test="ipAddress != null">'ip_address' = #{ipAddress}</if>
 		</set>
 		where id = #{id}
 	</update>

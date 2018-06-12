@@ -22,10 +22,10 @@ public class GeneratorController{
 
 	//生成代码
 	@RequestMapping("/genCode")
-	public void batchCode(HttpServletRequest request, HttpServletResponse response, String tables,String packageName,String packageName2) throws IOException {
+	public void batchCode(HttpServletRequest request, HttpServletResponse response, String tables,String packageName,String packageName2,String subject) throws IOException {
 		String[] tableNames = new String[] {};
-		tableNames = tables.split(",");//JSON.parseArray(tables).toArray(tableNames);
-		byte[] data = generatorService.generatorCode(tableNames,packageName,packageName2);
+		tableNames = tables.split(",");
+		byte[] data = generatorService.generatorCode(tableNames,packageName,packageName2,subject);
 		response.reset();
 		response.setHeader("Content-Disposition", "attachment; filename=\"codes.zip\"");
 		response.addHeader("Content-Length", "" + data.length);
