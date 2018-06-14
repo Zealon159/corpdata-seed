@@ -8,7 +8,7 @@ public enum DataSourceEnum {
 	/**
 	 * 默认数据源
 	 */
-	MASTER("sqlserver"),
+	MASTER("mysql"),
 	/**
 	 * Quartz数据源
 	 */
@@ -16,7 +16,7 @@ public enum DataSourceEnum {
 	/**
 	 * 其它数据源
 	 */
-	SQLSERVER("mysql");
+	SQLSERVER("sqlserver");
 	
     private String datasource;
 
