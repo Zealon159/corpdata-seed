@@ -207,6 +207,13 @@
 		  	<classifier>jdk15</classifier>
 		</dependency>
 		
+		<!-- okhttp -->
+		<dependency>
+		  	<groupId>com.squareup.okhttp3</groupId>
+		  	<artifactId>okhttp</artifactId>
+		  	<version>3.9.1</version>
+		</dependency>
+		
 		<!-- easypoi(excel读写)
 		<dependency>
 		    <groupId>cn.afterturn</groupId>

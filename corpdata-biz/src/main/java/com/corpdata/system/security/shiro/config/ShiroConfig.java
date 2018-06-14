@@ -60,7 +60,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/logout", "logout");
         filterChainDefinitionMap.put("/weixin/**", "anon");
         filterChainDefinitionMap.put("/**", "authc");
-        //filterChainDefinitionMap.put("/**", "anon");
+        filterChainDefinitionMap.put("/**", "anon");
         // 登录页面
         shiroFilterFactoryBean.setLoginUrl("/login");
         // 登录成功后要跳转的链接
