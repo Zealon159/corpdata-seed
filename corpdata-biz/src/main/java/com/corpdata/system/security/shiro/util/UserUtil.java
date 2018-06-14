@@ -27,7 +27,10 @@ public class UserUtil {
 		String userId = "";
 		Subject subject = SecurityUtils.getSubject();
 		if(subject!=null){
-			userId = ((OrgUser)subject.getPrincipal()).getUserid();
+			OrgUser user = (OrgUser)subject.getPrincipal();
+			if(user!=null) {
+				userId = ((OrgUser) subject.getPrincipal()).getUserid();
+			}
 		}
 		return userId;
 	}
@@ -40,7 +43,10 @@ public class UserUtil {
 		String userName = "";
 		Subject subject = SecurityUtils.getSubject();
 		if(subject!=null){
-			userName = ((OrgUser)subject.getPrincipal()).getUserName();
+			OrgUser user = (OrgUser)subject.getPrincipal();
+			if(user!=null) {
+				userName = ((OrgUser) subject.getPrincipal()).getUserName();
+			}
 		}
 		return userName;
 	}
