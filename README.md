@@ -1,1 +1,1 @@
-# corpdata_seed
+# 快速开发种子项目 for springboot 2.x
