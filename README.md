@@ -1,1 +1,1 @@
-# corpdata_seed for springboot 2.x
+# corpdata_seed
