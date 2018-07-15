@@ -59,13 +59,12 @@
 				    elem: '#LAY_table_role',
 				    url: '/system/org/role/listdata',
 				    method:'post',
-				    cols: [[
-				      //{checkbox: true, fixed: true},
+				    cols: [
 				      {field:'roleName', align:'left', title: '角色名称'}
 				      ,{field:'roleDesc', align:'left', title: '角色描述',  sort: true}
 				      ,{field:'sortNumber', align:'center', title: '排序'}
 				      ,{fixed: 'right', width:200, align:'center', toolbar: '#toolBar'}
-				    ]]
+				    ]
 				    ,page: true
 				    ,height: 450
 				});

@@ -38,7 +38,10 @@ public class LoginController {
 	@ResponseBody
 	@RequestMapping("/doLogin")
 	public Map<String,Object> doLogin(HttpServletRequest request,HttpServletResponse response,String userId,String pwd,String remenber) throws UnsupportedEncodingException{
-		String url = WebUtils.getSavedRequest(request).getRequestUrl();
+		String url = "/";
+		if(WebUtils.getSavedRequest(request)!=null){
+			url = WebUtils.getSavedRequest(request).getRequestUrl();
+		}
 		Map<String,Object> map = loginService.doLogin(userId, pwd);
 		if((Boolean)map.get("success")==true){
 			if(url.equals("/") || url.equals("/favicon.ico")){

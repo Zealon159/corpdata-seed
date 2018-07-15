@@ -2,7 +2,6 @@ package com.corpdata.system.log;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.log4j.Logger;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
@@ -10,22 +9,21 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.corpdata.system.log.entity.WebLogger;
-import com.corpdata.system.log.service.WebLogService;
 import com.corpdata.system.log.util.WebLoggerUtils;
 import com.corpdata.system.security.shiro.util.UserUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Aspect
 @Component
 public class WebLogAspect {
-
-	private Logger logger = Logger.getLogger(getClass());
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	ThreadLocal<WebLogger> loggerEntityThreadLocal = new ThreadLocal<WebLogger>();
 	
