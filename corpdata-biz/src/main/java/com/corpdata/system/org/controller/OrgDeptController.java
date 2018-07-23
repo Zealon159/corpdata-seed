@@ -1,5 +1,6 @@
 package com.corpdata.system.org.controller;
 
+import com.corpdata.system.org.service.OrgDeptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -7,10 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.corpdata.system.log.WebLog;
 import com.corpdata.system.org.entity.OrgDept;
-import com.corpdata.system.org.service.impl.OrgDeptServiceImpl;
 import com.corpdata.common.domain.DataGridRequestDTO;
 import com.corpdata.common.result.Result;
 import com.corpdata.common.utils.CorpdataUtil;
@@ -26,7 +25,7 @@ import com.corpdata.core.base.BaseController;
 public class OrgDeptController extends BaseController{
 	
 	@Autowired
-	private OrgDeptServiceImpl orgDeptService;
+	private OrgDeptService orgDeptService;
 	
 	@GetMapping("/add")
 	public String add(ModelMap map){

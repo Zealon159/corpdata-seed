@@ -2,9 +2,10 @@ package com.corpdata.system.org.service;
 
 import java.util.Set;
 import com.corpdata.common.result.Result;
+import com.corpdata.core.base.BaseService;
 import com.corpdata.system.org.entity.OrgUser;
 
-public interface OrgUserService {
+public interface OrgUserService extends BaseService<OrgUser> {
 	/**
 	 * 获取当前用户所有角色
 	 */

@@ -1,6 +1,8 @@
 package com.corpdata.system.org.controller;
 
 import java.util.List;
+
+import com.corpdata.system.org.service.OrgRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -8,7 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.corpdata.system.org.entity.OrgRole;
-import com.corpdata.system.org.service.impl.OrgRoleServiceImpl;
 import com.corpdata.common.domain.DataGridRequestDTO;
 import com.corpdata.common.result.Result;
 import com.corpdata.common.utils.CorpdataUtil;
@@ -24,7 +25,7 @@ import com.corpdata.core.base.BaseController;
 public class OrgRoleController extends BaseController{
 	
 	@Autowired
-	private OrgRoleServiceImpl orgRoleService;
+	private OrgRoleService orgRoleService;
 	
 	@RequestMapping("/add")
 	public String add(ModelMap map){

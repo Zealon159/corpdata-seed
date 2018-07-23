@@ -1,6 +1,10 @@
 package com.corpdata.system.org.service;
 
-public interface OrgDeptService {
+import com.corpdata.common.result.Result;
+import com.corpdata.core.base.BaseService;
+import com.corpdata.system.org.entity.OrgDept;
+
+public interface OrgDeptService extends BaseService<OrgDept> {
 	
 	/**
 	 * 获取下拉json数据
@@ -13,4 +17,6 @@ public interface OrgDeptService {
 	 * @return
 	 */
 	String calculateFolderid(String parentFolderid);
+
+	Result update(OrgDept record, String oldParentFolderid);
 }

@@ -1,12 +1,11 @@
 package com.corpdata.system.org.controller;
 
+import com.corpdata.system.org.service.OrgPermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.corpdata.core.base.BaseController;
-import com.corpdata.system.org.service.impl.OrgPermissionServiceImpl;
 
 /**
  * 系统权限控制器类
@@ -18,7 +17,7 @@ import com.corpdata.system.org.service.impl.OrgPermissionServiceImpl;
 public class OrgPermissionController extends BaseController{
 	
 	@Autowired
-	private OrgPermissionServiceImpl orgPermissionService;
+	private OrgPermissionService orgPermissionService;
 	
 	@ResponseBody
 	@RequestMapping("/gettreejson")

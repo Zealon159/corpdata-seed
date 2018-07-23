@@ -26,7 +26,8 @@ public class OrgDeptServiceImpl extends AbstractBaseService<OrgDept> implements 
 		record.setFolderid(folderid);
 		return super.save(record);
 	}
-	
+
+	@Override
 	public Result update(OrgDept record,String oldParentFolderid) {
 		//上级组织发生了变动，需要重新计算层级ID
 		if(!oldParentFolderid.equals(record.getParentfolderid())){

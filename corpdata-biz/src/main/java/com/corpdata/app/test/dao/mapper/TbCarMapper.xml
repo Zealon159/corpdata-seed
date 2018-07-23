@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.corpdata.app.test.dao.TbCarMapper">
+	<resultMap id="BaseResultMap" type="com.corpdata.app.test.entity.TbCar">
+        <id column="car_Name" jdbcType="CHAR" property="carName" />
+        <result column="car_Price" property="carPrice" />
+        <result column="car_Number" property="carNumber" />
+    </resultMap>
+
+  	<sql id="Base_Column_List" >
+    	car_Name ,car_Price ,car_Number   	</sql>
+  	
+  	<insert id="insert" parameterType="com.corpdata.app.test.entity.TbCar">
+		insert into tb_car
+		(
+			car_Name , 
+			car_Price , 
+			car_Number 
+		)
+		values
+		(
+			#{carName}, 
+			#{carPrice}, 
+			#{carNumber}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.corpdata.app.test.entity.TbCar">
+		update tb_car 
+		<set>
+			<if test="carPrice != null">car_Price= #{carPrice}, </if>
+			<if test="carNumber != null">car_Number= #{carNumber}</if>
+		</set>
+		where car_Name = #{carName}
+	</update>
+	
+	<delete id="deleteById" parameterType="java.lang.String">
+		delete from tb_car where car_Name = #{id}
+	</delete>
+	
+	<delete id="deleteByIds">
+		delete from tb_car where car_Name in 
+		<foreach item="carName" collection="array" open="(" separator="," close=")">
+			#{carName}
+		</foreach>
+	</delete>
+	
+	<select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" /> 
+		from tb_car where car_Name = #{id}
+	</select>
+	
+ 	<select id="selectCount" resultType="int">
+		select count(*) from tb_car where 1=1
+	</select>
+
+	<select id="selectAll" parameterType="map" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />  from tb_car
+        where 1=1 
+	</select>
+	
+	<select id="existsWithKeyName" resultType="int" parameterType="String">
+		select 1 from tb_car where 1=1 
+	</select>
+	
+</mapper>

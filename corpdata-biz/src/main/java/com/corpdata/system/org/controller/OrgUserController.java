@@ -2,6 +2,8 @@ package com.corpdata.system.org.controller;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import com.corpdata.system.org.service.OrgUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -9,7 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.corpdata.system.org.entity.OrgUser;
-import com.corpdata.system.org.service.impl.OrgUserServiceImpl;
 import com.corpdata.system.security.shiro.util.ShiroUserPwdUtil;
 import com.corpdata.system.security.shiro.util.UserUtil;
 import com.corpdata.common.domain.DataGridRequestDTO;
@@ -29,7 +30,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class OrgUserController extends BaseController{
 
 	@Autowired
-	private OrgUserServiceImpl userService;
+	private OrgUserService userService;
 	
 	@RequestMapping("/add")
 	public String add(ModelMap map){

@@ -95,6 +95,7 @@ public class MybatisConfig {
     	//设置默认数据源
     	myRoutingDataSource.setDefaultTargetDataSource(dataSourceMaster());
     	myRoutingDataSource.afterPropertiesSet();
+
     	return myRoutingDataSource;
     }
     

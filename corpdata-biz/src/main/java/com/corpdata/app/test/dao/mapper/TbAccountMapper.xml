@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.corpdata.app.test.dao.TbAccountMapper">
+	<resultMap id="BaseResultMap" type="com.corpdata.app.test.entity.TbAccount">
+        <id column="id" jdbcType="CHAR" property="id" />
+        <result column="account" property="account" />
+    </resultMap>
+
+  	<sql id="Base_Column_List" >
+    	uid ,account   	</sql>
+  	
+  	<insert id="insert" parameterType="com.corpdata.app.test.entity.TbAccount">
+		insert into tb_account
+		(
+			uid , 
+			account 
+		)
+		values
+		(
+			#{uid}, 
+			#{account}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.corpdata.app.test.entity.TbAccount">
+		update tb_account 
+		<set>
+			<if test="account != null">account= #{account}</if>
+		</set>
+		where uid = #{uid}
+	</update>
+	
+	<delete id="deleteById" parameterType="java.lang.String">
+		delete from tb_account where uid = #{id}
+	</delete>
+	
+	<delete id="deleteByIds">
+		delete from tb_account where uid in 
+		<foreach item="uid" collection="array" open="(" separator="," close=")">
+			#{uid}
+		</foreach>
+	</delete>
+	
+	<select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" /> 
+		from tb_account where uid = #{id}
+	</select>
+	
+ 	<select id="selectCount" resultType="int">
+		select count(*) from tb_account where 1=1
+	</select>
+
+	<select id="selectAll" parameterType="map" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />  from tb_account
+        where 1=1 
+	</select>
+	
+	<select id="existsWithKeyName" resultType="int" parameterType="String">
+		select 1 from tb_account where 1=1 
+	</select>
+	
+</mapper>

@@ -13,7 +13,7 @@ import com.corpdata.system.dic.dao.SysDataDicMapper;
 import com.corpdata.system.dic.entity.SysDataDic;
 import com.corpdata.system.dic.service.SysDataDicService;
 
-@Service("sysDataDicService")
+@Service
 public class SysDataDicServiceImpl extends AbstractBaseService<SysDataDic> implements SysDataDicService{
 	
 	@Autowired

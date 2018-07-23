@@ -2,9 +2,11 @@ package com.corpdata.system.org.service;
 
 import java.util.List;
 
+import com.corpdata.core.base.BaseService;
+import com.corpdata.system.org.entity.OrgPermission;
 import com.corpdata.system.org.entity.OrgRolePermission;
 
-public interface OrgPermissionService {
+public interface OrgPermissionService extends BaseService<OrgPermission> {
 	/**
 	 * 获取权限树JSON
 	 * @return

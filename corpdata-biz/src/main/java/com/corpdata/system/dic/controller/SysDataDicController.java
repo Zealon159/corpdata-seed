@@ -2,31 +2,28 @@ package com.corpdata.system.dic.controller;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
+import com.corpdata.system.dic.service.SysDataDicService;
+import com.corpdata.system.dic.service.SysDicTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.corpdata.common.domain.DataGridRequestDTO;
 import com.corpdata.common.result.Result;
 import com.corpdata.core.base.BaseController;
 import com.corpdata.system.dic.entity.SysDataDic;
-import com.corpdata.system.dic.service.impl.SysDataDicServiceImpl;
-import com.corpdata.system.dic.service.impl.SysDicTypeServiceImpl;
 
 @Controller
 @RequestMapping("system/data-dic")
 public class SysDataDicController extends BaseController{
 	
 	@Autowired
-	private SysDataDicServiceImpl sysDataDicService;
+	private SysDataDicService sysDataDicService;
 	
 	@Autowired
-	private SysDicTypeServiceImpl sysDicTypeService;
+	private SysDicTypeService sysDicTypeService;
 	
 	@RequestMapping("/add")
 	public String add(ModelMap map){
