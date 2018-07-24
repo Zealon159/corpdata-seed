@@ -3,6 +3,8 @@ package com.corpdata.app.test.service.impl;
 import com.corpdata.app.test.entity.TbCar;
 import com.corpdata.app.test.exception.NotSufficientFundsException;
 import com.corpdata.app.test.service.TbCarService;
+import com.corpdata.core.datasource.DataSourceEnum;
+import com.corpdata.core.datasource.aop.DynamicSwitchDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,8 +29,9 @@ public class TbAccountServiceImpl extends AbstractBaseService<TbAccount> impleme
     @Autowired
     private TbAccountService tbAccountService;
 
-    @Transactional(rollbackFor = RuntimeException.class)
+    @Transactional
     @Override
+    @DynamicSwitchDataSource(dataSource = DataSourceEnum.MASTER)
     public void buyCar(String uid,String carName,int number) {
         TbCar car = tbCarService.findById(carName);
         TbAccount account = tbAccountService.findById(uid);

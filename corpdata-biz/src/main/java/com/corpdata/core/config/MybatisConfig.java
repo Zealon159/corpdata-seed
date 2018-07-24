@@ -10,11 +10,14 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
 import tk.mybatis.spring.mapper.MapperScannerConfigurer;
 import javax.sql.DataSource;
 import static com.corpdata.core.constant.ProjectConstant.*;
@@ -32,7 +35,8 @@ public class MybatisConfig {
      * 配置默认数据源
      */
     @Primary
-    @Bean
+    @Bean("dataSourceMaster")
+    @Qualifier("dataSourceMaster")
     public DataSource dataSourceMaster(){
         DruidDataSource ds = new DruidDataSource();
         ds.setDriverClassName(getConfig().getString("master.driverClassName"));
@@ -83,6 +87,7 @@ public class MybatisConfig {
     /**
      * 装配所有数据源
      */
+    @Bean(name = "dataSourceConfig")
     public RoutingDataSource dataSourceConfig(){
     	//动态数据源
     	RoutingDataSource myRoutingDataSource = new RoutingDataSource();
@@ -95,15 +100,21 @@ public class MybatisConfig {
     	//设置默认数据源
     	myRoutingDataSource.setDefaultTargetDataSource(dataSourceMaster());
     	myRoutingDataSource.afterPropertiesSet();
-
     	return myRoutingDataSource;
     }
-    
+
+    //事务
     @Bean
-    public SqlSessionFactory sqlSessionFactoryBean(DataSource dataSource) throws Exception {
+    @Primary
+    public PlatformTransactionManager masterTransactionManager(RoutingDataSource dataSourceConfig) {
+        return new DataSourceTransactionManager(dataSourceConfig);
+    }
+
+    @Bean
+    public SqlSessionFactory sqlSessionFactoryBean(RoutingDataSource dataSourceConfig) throws Exception {
         SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
         //factory.setDataSource(dataSource);  //单数据源方式
-        factory.setDataSource(dataSourceConfig());
+        factory.setDataSource(dataSourceConfig);
         factory.setTypeAliasesPackage(MODEL_PACKAGE);
 
         //配置分页插件，详情请查阅官方文档
@@ -153,5 +164,6 @@ public class MybatisConfig {
             throw new BDException("获取配置文件失败，", e);
         }
     }
+
 }
 

@@ -17,7 +17,7 @@ import java.lang.reflect.Method;
 
 @Aspect
 @Component
-@Order(-1)
+@Order(1)
 public class HandlerDataSourceAop {
 	
 	protected Logger logger = LoggerFactory.getLogger(getClass());

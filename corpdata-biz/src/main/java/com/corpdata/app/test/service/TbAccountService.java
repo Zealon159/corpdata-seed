@@ -1,7 +1,6 @@
 package com.corpdata.app.test.service;
 
 import com.corpdata.app.test.entity.TbAccount;
-import com.corpdata.app.test.exception.NotSufficientFundsException;
 import com.corpdata.core.base.BaseService;
 
 /**
@@ -12,5 +11,5 @@ import com.corpdata.core.base.BaseService;
  * 
  */
 public interface TbAccountService extends BaseService<TbAccount>{
-	void buyCar(String uid,String carName,int number) throws NotSufficientFundsException;
+	void buyCar(String uid,String carName,int number);
 }

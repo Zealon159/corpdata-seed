@@ -13,5 +13,4 @@ public class RoutingDataSource extends AbstractRoutingDataSource{
 		// TODO Auto-generated method stub
 		return DataSourceContextHolder.getTargetDataSource();
 	}
-
 }
