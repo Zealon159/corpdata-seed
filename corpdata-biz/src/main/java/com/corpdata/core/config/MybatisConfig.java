@@ -10,12 +10,12 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
-import tk.mybatis.spring.mapper.MapperScannerConfigurer;
 import javax.sql.DataSource;
 import static com.corpdata.core.constant.ProjectConstant.*;
 import java.util.HashMap;
@@ -26,6 +26,7 @@ import java.util.Properties;
  * Mybatis & DataSource & Mapper & PageHelper 配置
  */
 @Configuration
+@MapperScan("com.corpdata.**.dao")
 public class MybatisConfig {
     
 	/**
@@ -83,6 +84,7 @@ public class MybatisConfig {
     /**
      * 装配所有数据源
      */
+    @Bean
     public RoutingDataSource dataSourceConfig(){
     	//动态数据源
     	RoutingDataSource myRoutingDataSource = new RoutingDataSource();
@@ -99,10 +101,9 @@ public class MybatisConfig {
     }
     
     @Bean
-    public SqlSessionFactory sqlSessionFactoryBean(DataSource dataSource) throws Exception {
+    public SqlSessionFactory sqlSessionFactoryBean(RoutingDataSource dataSourceConfig) throws Exception {
         SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
-        //factory.setDataSource(dataSource);  //单数据源方式
-        factory.setDataSource(dataSourceConfig());
+        factory.setDataSource(dataSourceConfig);
         factory.setTypeAliasesPackage(MODEL_PACKAGE);
 
         //配置分页插件，详情请查阅官方文档
@@ -122,24 +123,6 @@ public class MybatisConfig {
         ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         factory.setMapperLocations(resolver.getResources("classpath:com/corpdata/**/mapper/*.xml"));
         return factory.getObject();
-    }
-
-    //注入 BaseMapper
-    @Bean
-    public MapperScannerConfigurer mapperScannerConfigurer() {
-        MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
-        mapperScannerConfigurer.setSqlSessionFactoryBeanName("sqlSessionFactoryBean");
-        //设置
-        mapperScannerConfigurer.setBasePackage(MAPPER_PACKAGE);
-
-        //配置通用Mapper，详情请查阅官方文档
-        Properties properties = new Properties();
-        properties.setProperty("mappers", MAPPER_INTERFACE_REFERENCE);
-        properties.setProperty("notEmpty", "false");//insert、update是否判断字符串类型!='' 即 test="str != null"表达式内是否追加 and str != ''
-        properties.setProperty("IDENTITY", "MYSQL");
-        mapperScannerConfigurer.setProperties(properties);
-
-        return mapperScannerConfigurer;
     }
 
     /**
