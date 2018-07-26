@@ -10,15 +10,16 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
-import tk.mybatis.spring.mapper.MapperScannerConfigurer;
 import javax.sql.DataSource;
 import static com.corpdata.core.constant.ProjectConstant.*;
 import java.util.HashMap;
@@ -29,6 +30,7 @@ import java.util.Properties;
  * Mybatis & DataSource & Mapper & PageHelper 配置
  */
 @Configuration
+@MapperScan(basePackages = "com.corpdata.**.dao")
 public class MybatisConfig {
     
 	/**
@@ -38,6 +40,7 @@ public class MybatisConfig {
     @Bean("dataSourceMaster")
     @Qualifier("dataSourceMaster")
     public DataSource dataSourceMaster(){
+        System.out.println("-------dataSourceMaster-------");
         DruidDataSource ds = new DruidDataSource();
         ds.setDriverClassName(getConfig().getString("master.driverClassName"));
         ds.setUrl(getConfig().getString("master.url"));
@@ -88,14 +91,14 @@ public class MybatisConfig {
      * 装配所有数据源
      */
     @Bean(name = "dataSourceConfig")
-    public RoutingDataSource dataSourceConfig(){
+    public RoutingDataSource dataSourceConfig(DataSource dataSourceMaster,DataSource dataSourceQuartz,DataSource dataSourceSqlServer){
     	//动态数据源
     	RoutingDataSource myRoutingDataSource = new RoutingDataSource();
     	//放入数据源
     	Map<Object,Object> targetDataSources = new HashMap<Object,Object>();
-    	targetDataSources.put(DataSourceEnum.MASTER, dataSourceMaster());
-    	targetDataSources.put(DataSourceEnum.QUARTZ, dataSourceQuartz());
-    	targetDataSources.put(DataSourceEnum.SQLSERVER, dataSourceSqlServer());
+    	targetDataSources.put(DataSourceEnum.MASTER, dataSourceMaster);
+    	targetDataSources.put(DataSourceEnum.QUARTZ, dataSourceQuartz);
+    	targetDataSources.put(DataSourceEnum.SQLSERVER, dataSourceSqlServer);
     	myRoutingDataSource.setTargetDataSources(targetDataSources);
     	//设置默认数据源
     	myRoutingDataSource.setDefaultTargetDataSource(dataSourceMaster());
@@ -105,7 +108,6 @@ public class MybatisConfig {
 
     //事务
     @Bean
-    @Primary
     public PlatformTransactionManager masterTransactionManager(RoutingDataSource dataSourceConfig) {
         return new DataSourceTransactionManager(dataSourceConfig);
     }
@@ -113,7 +115,6 @@ public class MybatisConfig {
     @Bean
     public SqlSessionFactory sqlSessionFactoryBean(RoutingDataSource dataSourceConfig) throws Exception {
         SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
-        //factory.setDataSource(dataSource);  //单数据源方式
         factory.setDataSource(dataSourceConfig);
         factory.setTypeAliasesPackage(MODEL_PACKAGE);
 
@@ -134,24 +135,6 @@ public class MybatisConfig {
         ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         factory.setMapperLocations(resolver.getResources("classpath:com/corpdata/**/mapper/*.xml"));
         return factory.getObject();
-    }
-
-    //注入 BaseMapper
-    @Bean
-    public MapperScannerConfigurer mapperScannerConfigurer() {
-        MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
-        mapperScannerConfigurer.setSqlSessionFactoryBeanName("sqlSessionFactoryBean");
-        //设置
-        mapperScannerConfigurer.setBasePackage(MAPPER_PACKAGE);
-
-        //配置通用Mapper，详情请查阅官方文档
-        Properties properties = new Properties();
-        properties.setProperty("mappers", MAPPER_INTERFACE_REFERENCE);
-        properties.setProperty("notEmpty", "false");//insert、update是否判断字符串类型!='' 即 test="str != null"表达式内是否追加 and str != ''
-        properties.setProperty("IDENTITY", "MYSQL");
-        mapperScannerConfigurer.setProperties(properties);
-
-        return mapperScannerConfigurer;
     }
 
     /**
