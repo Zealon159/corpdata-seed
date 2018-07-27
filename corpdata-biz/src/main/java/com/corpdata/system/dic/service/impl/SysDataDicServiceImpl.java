@@ -81,8 +81,9 @@ public class SysDataDicServiceImpl extends AbstractBaseService<SysDataDic> imple
 	 * @desc: 根据类型，获取下拉json数据
 	 * @return
 	 */
-	@Cacheable(value="data_dic_json",cacheManager = "redisCacheManagerString",key="#p0")
+	@Cacheable(cacheNames="data_dic_json",cacheManager = "cacheManager" , key="#p0")
 	public String findByComboxByCode(String code){
+		System.out.println("select db ..");
 		String json = CorpdataUtil.getComboxJson(sysDataDicMapper.selectAllByComboxByCode(code));
 		return json;
 	}

@@ -1,5 +1,6 @@
 package com.corpdata.app.test.controller;
 
+import com.corpdata.common.api.redis.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -21,6 +22,9 @@ public class TestController {
 	
 	@Autowired
 	private TestService testService;
+
+	@Autowired
+	private RedisService redisService;
 	
 	@GetMapping("/add")
     public String add() {
@@ -68,6 +72,26 @@ public class TestController {
 	@PostMapping("/listdata")
     public String listData(DataGridRequestDTO dgRequest) {
 		return testService.findByPage(dgRequest);
+    }
+
+    @ResponseBody
+    @RequestMapping("/set")
+    public Object set(String key,String value){
+        redisService.set(key,value);
+        return "ok";
+    }
+
+    @ResponseBody
+    @RequestMapping("/get")
+    public Object get(String key){
+        return redisService.get(key);
+    }
+
+    @ResponseBody
+    @RequestMapping("/del")
+    public Object del(String key){
+        redisService.delete(key);
+        return "ok";
     }
 
 }
