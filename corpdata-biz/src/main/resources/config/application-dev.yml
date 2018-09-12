@@ -44,5 +44,9 @@ logging:
 queueName: queue.mail
 topicName: topic.pub
   
-
+# 数据库属性文件路径配置
+properties:
+  path:
+    datasources: config/properties/datasources.properties
+    quartz: config/properties/quartz.properties
     

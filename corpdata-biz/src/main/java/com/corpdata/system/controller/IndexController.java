@@ -11,6 +11,11 @@ public class IndexController {
 	public String index(){
 		return "system/sys_index";
 	}
+
+	@RequestMapping("/index")
+	public String index1(){
+		return "system/index1";
+	}
 	
 	@RequestMapping("post-tool")
 	public String postTool(){

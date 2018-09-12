@@ -66,11 +66,13 @@
 					id:'dg_user',
 				    elem: '#LAY_table_user',
 				    url: '/system/org/user/find/',
-				    cols: [[
-				      {field:'userid', align:'left', title: '登录名'}
-				      ,{field:'userName', align:'left', title: '中文名'}
-				      ,{templet:'#choose', align:'center', title: '操作'}
-				    ]]
+				    cols: [
+				        [
+						  {field:'userid', align:'left', title: '登录名'}
+						  ,{field:'userName', align:'left', title: '中文名'}
+						  ,{templet:'#choose', align:'center', title: '操作'}
+				    	]
+					]
 				    ,page: true
 				    ,height: "full-45"
 				    ,where: {

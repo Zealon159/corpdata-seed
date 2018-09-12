@@ -54,13 +54,15 @@
 					id:'dg_user',
 				    elem: '#LAY_table_user',
 				    url: '/system/org/user/find/',
-				    cols: [[
-				      {checkbox: true, fixed: true}
-				      ,{field:'userid', align:'left', title: '登录名'}
-				      ,{field:'userName', align:'left', title: '中文名',  sort: true}
-				      ,{field:'deptName', align:'left', title: '部门',  templet: '#deptTpl' }
-				      ,{field:'sortNumber', align:'center', title: '排序'}
-				    ]]
+				    cols: [
+				        [
+						  {checkbox: true, fixed: true}
+						  ,{field:'userid', align:'left', title: '登录名'}
+						  ,{field:'userName', align:'left', title: '中文名',  sort: true}
+						  ,{field:'deptName', align:'left', title: '部门',  templet: '#deptTpl' }
+						  ,{field:'sortNumber', align:'center', title: '排序'}
+				    	]
+					]
 				    ,page: true
 				    ,height: 300
 				});

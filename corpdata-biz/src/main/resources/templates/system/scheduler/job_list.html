@@ -60,13 +60,15 @@
 				    url: '/system/scheduler/listdata',
 				    method:'post',
 				    cols: [
-				      {field:'jobName', align:'left', title: '任务名称'},
-				      {field:'jobGroup', align:'left', title: '分组',  sort: true},
-				      {field:'jobClassName', align:'center', title: '实现类'},
-				      {field:'cronExpression', align:'center', title: '表达式'},
-				      {field:'triggerState', align:'center', title: '状态'},
-				      {field:'description', align:'center', title: '描述'},
-				      {fixed: 'right', width:200, align:'center', toolbar: '#toolBar'}
+				        [
+						  {field:'jobName', align:'left', title: '任务名称'},
+						  {field:'jobGroup', align:'left', title: '分组',  sort: true},
+						  {field:'jobClassName', align:'center', title: '实现类'},
+						  {field:'cronExpression', align:'center', title: '表达式'},
+						  {field:'triggerState', align:'center', title: '状态'},
+						  {field:'description', align:'center', title: '描述'},
+						  {fixed: 'right', width:200, align:'center', toolbar: '#toolBar'}
+                        ]
 				    ]
 				    ,page: true
 				    ,height: 450

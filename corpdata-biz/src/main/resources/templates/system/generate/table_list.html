@@ -17,7 +17,7 @@
 		            <input id="keyword" placeholder="关键字" class="layui-input layui-input-sm search_input">
 		        </div>
 		        <div class="layui-inline">
-		            <select id="dbType" name="dbType" class="form-control selectpicker">
+					<select id="dbType" name="dbType" class="form-control selectpicker"></select>
 		        </div>
 		        <div class="layui-inline">
 		            <a class="layui-btn layui-btn-sm" id="btn-search" onclick="doSearch()" >
@@ -49,12 +49,14 @@
 				    
 				    method:'post',
 				    cols: [
-				      	{checkbox: true, fixed: true},
-			            {field:'tableName',title:'表名称',sort: true},
-			            {field:'tableComment',title:'说明'},
-						{field:'engine',title:'engine',width:100},
-						{field:'createTime',title:'createTime',width:200},
-						{fixed: 'right',title:'操作', width:178, align:'center', toolbar: '#toolBar'}
+				        [
+							{checkbox: true, fixed: true},
+							{field:'tableName',title:'表名称',sort: true},
+							{field:'tableComment',title:'说明'},
+							{field:'engine',title:'engine',width:100},
+							{field:'createTime',title:'createTime',width:200},
+							{fixed: 'right',title:'操作', width:178, align:'center', toolbar: '#toolBar'}
+						]
 				    ]
 				    ,page: true
 				    ,height: 500

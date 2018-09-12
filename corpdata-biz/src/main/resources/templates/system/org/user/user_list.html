@@ -41,11 +41,13 @@
 				    elem: '#LAY_table_user',
 				    url: '/system/org/user/listdata',
 				    cols: [
-				      //{checkbox: true, fixed: true},
-				      {field:'userid', align:'left', title: '登录名'}
-				      ,{field:'userName', align:'left', title: '中文名',  sort: true}
-				      ,{field:'sortNumber', align:'center', title: '排序'}
-				      ,{fixed: 'right', width:200, align:'center', toolbar: '#toolBar'}
+				        [
+						  //{checkbox: true, fixed: true},
+						  {field:'userid', align:'left', title: '登录名'}
+						  ,{field:'userName', align:'left', title: '中文名',  sort: true}
+						  ,{field:'sortNumber', align:'center', title: '排序'}
+						  ,{fixed: 'right', width:200, align:'center', toolbar: '#toolBar'}
+                        ]
 				    ]
 				    ,page: true
 				    ,height: 500

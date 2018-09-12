@@ -73,12 +73,14 @@
 				    url: '/system/data-dic/listdata/'+dictype+'/',
 				    method:'post',
 				    cols: [
-				     	{checkbox: true, fixed: true}
-				      	,{field:'dicName', align:'left', title: '字典名称'}
-				      	,{field:'typeName', align:'left', title: '类型',  sort: true}
-				      	,{field:'dicType', align:'left', title: '类型code',  sort: true}
-				      	,{field:'sortNumber', align:'center', title: '排序',sort: true}
-				      	,{fixed: 'right', width:178, align:'center', toolbar: '#barDemo'}
+				        [
+							{checkbox: true, fixed: true}
+							,{field:'dicName', align:'left', title: '字典名称'}
+							,{field:'typeName', align:'left', title: '类型',  sort: true}
+							,{field:'dicType', align:'left', title: '类型code',  sort: true}
+							,{field:'sortNumber', align:'center', title: '排序',sort: true}
+							,{fixed: 'right', width:178, align:'center', toolbar: '#barDemo'}
+                        ]
 				    ]
 				    ,id: 'testReload'
 				    ,page: true

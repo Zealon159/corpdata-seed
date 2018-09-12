@@ -11,6 +11,7 @@ import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -28,7 +29,10 @@ import java.util.Properties;
 @Configuration
 @MapperScan("com.corpdata.**.dao")
 public class MybatisConfig {
-    
+
+    @Value("${properties.path.datasources}")
+    private String dsPropertiesPath;
+
 	/**
      * 配置默认数据源
      */
@@ -36,14 +40,16 @@ public class MybatisConfig {
     @Bean
     public DataSource dataSourceMaster(){
         DruidDataSource ds = new DruidDataSource();
-        ds.setDriverClassName(getConfig().getString("master.driverClassName"));
-        ds.setUrl(getConfig().getString("master.url"));
-        ds.setUsername(getConfig().getString("master.username"));
-        ds.setPassword(getConfig().getString("master.password"));
-        ds.setInitialSize(Integer.parseInt(getConfig().getString("master.initialSize")));
-        ds.setMinIdle(Integer.parseInt(getConfig().getString("master.minIdle")));
-        ds.setMaxActive(Integer.parseInt(getConfig().getString("master.maxActive")));
-        ds.setMaxWait(Long.parseLong(getConfig().getString("master.maxActive")));
+        org.apache.commons.configuration.Configuration config = getConfig();
+
+        ds.setDriverClassName(config.getString("master.driverClassName"));
+        ds.setUrl(config.getString("master.url"));
+        ds.setUsername(config.getString("master.username"));
+        ds.setPassword(config.getString("master.password"));
+        ds.setInitialSize(Integer.parseInt(config.getString("master.initialSize")));
+        ds.setMinIdle(Integer.parseInt(config.getString("master.minIdle")));
+        ds.setMaxActive(Integer.parseInt(config.getString("master.maxActive")));
+        ds.setMaxWait(Long.parseLong(config.getString("master.maxActive")));
         return ds;
     }
 
@@ -53,14 +59,16 @@ public class MybatisConfig {
     @Bean
     public DataSource dataSourceQuartz(){            
         DruidDataSource ds = new DruidDataSource();
-        ds.setDriverClassName(getConfig().getString("quartz.driverClassName"));
-        ds.setUrl(getConfig().getString("quartz.url"));
-        ds.setUsername(getConfig().getString("quartz.username"));
-        ds.setPassword(getConfig().getString("quartz.password"));
-        ds.setInitialSize(Integer.parseInt(getConfig().getString("quartz.initialSize")));
-        ds.setMinIdle(Integer.parseInt(getConfig().getString("quartz.minIdle")));
-        ds.setMaxActive(Integer.parseInt(getConfig().getString("quartz.maxActive")));
-        ds.setMaxWait(Long.parseLong(getConfig().getString("quartz.maxActive")));
+        org.apache.commons.configuration.Configuration config = getConfig();
+
+        ds.setDriverClassName(config.getString("quartz.driverClassName"));
+        ds.setUrl(config.getString("quartz.url"));
+        ds.setUsername(config.getString("quartz.username"));
+        ds.setPassword(config.getString("quartz.password"));
+        ds.setInitialSize(Integer.parseInt(config.getString("quartz.initialSize")));
+        ds.setMinIdle(Integer.parseInt(config.getString("quartz.minIdle")));
+        ds.setMaxActive(Integer.parseInt(config.getString("quartz.maxActive")));
+        ds.setMaxWait(Long.parseLong(config.getString("quartz.maxActive")));
         return ds;
     }
     
@@ -70,14 +78,16 @@ public class MybatisConfig {
     @Bean
     public DataSource dataSourceSqlServer(){            
         DruidDataSource ds = new DruidDataSource();
-        ds.setDriverClassName(getConfig().getString("sqlserver.driverClassName"));
-        ds.setUrl(getConfig().getString("sqlserver.url"));
-        ds.setUsername(getConfig().getString("sqlserver.username"));
-        ds.setPassword(getConfig().getString("sqlserver.password"));
-        ds.setInitialSize(Integer.parseInt(getConfig().getString("sqlserver.initialSize")));
-        ds.setMinIdle(Integer.parseInt(getConfig().getString("sqlserver.minIdle")));
-        ds.setMaxActive(Integer.parseInt(getConfig().getString("sqlserver.maxActive")));
-        ds.setMaxWait(Long.parseLong(getConfig().getString("sqlserver.maxActive")));
+        org.apache.commons.configuration.Configuration config = getConfig();
+
+        ds.setDriverClassName(config.getString("sqlserver.driverClassName"));
+        ds.setUrl(config.getString("sqlserver.url"));
+        ds.setUsername(config.getString("sqlserver.username"));
+        ds.setPassword(config.getString("sqlserver.password"));
+        ds.setInitialSize(Integer.parseInt(config.getString("sqlserver.initialSize")));
+        ds.setMinIdle(Integer.parseInt(config.getString("sqlserver.minIdle")));
+        ds.setMaxActive(Integer.parseInt(config.getString("sqlserver.maxActive")));
+        ds.setMaxWait(Long.parseLong(config.getString("sqlserver.maxActive")));
         return ds;
     }
     
@@ -128,9 +138,9 @@ public class MybatisConfig {
     /**
      * 获取数据库链接配置信息
      */
-    public static org.apache.commons.configuration.Configuration getConfig() {
+    public org.apache.commons.configuration.Configuration getConfig() {
         try {
-            return new PropertiesConfiguration("config/properties/datasources.properties");
+            return new PropertiesConfiguration(dsPropertiesPath);
         } catch (ConfigurationException e) {
             throw new BDException("获取配置文件失败，", e);
         }
