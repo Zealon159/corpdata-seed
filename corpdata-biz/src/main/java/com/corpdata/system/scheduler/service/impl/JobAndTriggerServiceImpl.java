@@ -1,7 +1,6 @@
 package com.corpdata.system.scheduler.service.impl;
 
 import java.util.List;
-
 import org.quartz.CronScheduleBuilder;
 import org.quartz.CronTrigger;
 import org.quartz.JobBuilder;
@@ -16,8 +15,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-
-import com.alibaba.fastjson.JSON;
 import com.corpdata.common.api.pagehelper.PageConvertUtil;
 import com.corpdata.common.result.Result;
 import com.corpdata.common.result.util.ResultUtil;
@@ -31,6 +28,7 @@ import com.corpdata.system.scheduler.service.JobAndTriggerService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 
+@DynamicSwitchDataSource(dataSource = DataSourceEnum.QUARTZ)
 @Service
 public class JobAndTriggerServiceImpl implements JobAndTriggerService {
 	
@@ -43,7 +41,7 @@ public class JobAndTriggerServiceImpl implements JobAndTriggerService {
 	@Qualifier("Scheduler")  //加入Qulifier注解，通过名称注入bean
 	private Scheduler scheduler;
 	
-	@DynamicSwitchDataSource(dataSource = DataSourceEnum.QUARTZ)
+
 	public String getJobAndTriggerDetails(int page, int limit) {
 		PageHelper.startPage(page, limit);
 		Page<JobAndTrigger> list = jobAndTriggerMapper.getJobAndTriggerDetails();

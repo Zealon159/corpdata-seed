@@ -26,18 +26,30 @@ public class HandlerDataSourceAop {
 	 * @within在类上设置
 	 * @annotation在方法上进行设置
 	 */
-    @Pointcut("@within(com.corpdata.core.datasource.aop.DynamicSwitchDataSource)||@annotation(com.corpdata.core.datasource.aop.DynamicSwitchDataSource)")
+    @Pointcut("@annotation(com.corpdata.core.datasource.aop.DynamicSwitchDataSource)||@within(com.corpdata.core.datasource.aop.DynamicSwitchDataSource)")
     public void pointcut() {}
 
     @Before("pointcut()")
     public void doBefore(JoinPoint joinPoint)
     {
+        MethodSignature signature = (MethodSignature)joinPoint.getSignature(); //方法签名
         Method method = ((MethodSignature)joinPoint.getSignature()).getMethod();
-        DynamicSwitchDataSource annotationClass = method.getAnnotation(DynamicSwitchDataSource.class);//获取方法上的注解
+
+        //获取方法上的数据源标识注解
+        DynamicSwitchDataSource annotationClass = null;
+        try {
+            method = joinPoint.getTarget().getClass().getDeclaredMethod(signature.getName(),method.getParameterTypes());
+            annotationClass = method.getAnnotation(DynamicSwitchDataSource.class);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+
+        //如果方法上获取null值，再尝试获取类上面的注解
         if(annotationClass == null){
-            annotationClass = joinPoint.getTarget().getClass().getAnnotation(DynamicSwitchDataSource.class);//获取类上面的注解
+            annotationClass = joinPoint.getTarget().getClass().getAnnotation(DynamicSwitchDataSource.class);
             if(annotationClass == null) return;
         }
+
         //获取注解上的数据源的值的信息
         if(annotationClass.dataSource() !=null){
             //给当前的执行SQL的操作设置特殊的数据源的信息
