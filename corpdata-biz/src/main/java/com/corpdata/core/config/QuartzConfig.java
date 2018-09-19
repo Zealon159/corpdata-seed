@@ -5,6 +5,7 @@ import java.util.Properties;
 import org.quartz.Scheduler;
 import org.quartz.ee.servlet.QuartzInitializerListener;
 import org.quartz.spi.JobFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -16,7 +17,10 @@ import com.corpdata.common.api.quartz.AutowiringSpringBeanJobFactory;
 
 @Configuration
 public class QuartzConfig {
-	
+
+    @Value("${properties.path.quartz}")
+    private String dsPropertiesPath;
+
 	//注入springbean
 	@Bean
     public JobFactory jobFactory(ApplicationContext applicationContext) {
@@ -37,7 +41,7 @@ public class QuartzConfig {
     @Bean
     public Properties quartzProperties() throws IOException {
         PropertiesFactoryBean propertiesFactoryBean = new PropertiesFactoryBean();
-        propertiesFactoryBean.setLocation(new ClassPathResource("/config/properties/quartz.properties"));
+        propertiesFactoryBean.setLocation(new ClassPathResource(dsPropertiesPath));
         //在quartz.properties中的属性被读取并注入后再初始化对象
         propertiesFactoryBean.afterPropertiesSet();
         return propertiesFactoryBean.getObject();

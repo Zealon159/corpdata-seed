@@ -80,17 +80,17 @@ public class ShiroRealm extends AuthorizingRealm {
 		OrgUser user = (OrgUser) principals.getPrimaryPrincipal();
 		SimpleAuthorizationInfo authorizationInfo = null;
 		//用户权限尝试缓存读取
-		String key = "authorizationCache:"+user.getUserid();
-		authorizationInfo = (SimpleAuthorizationInfo)redisService.getObject(key);
+		//String key = "authorizationCache:"+user.getUserid();
+		//authorizationInfo = (SimpleAuthorizationInfo)redisService.getObject(key);
 		//没有缓存，查询数据库获取权限
-		if(authorizationInfo==null){
+		//if(authorizationInfo==null){
 			authorizationInfo = new SimpleAuthorizationInfo();
 			// 角色
 			authorizationInfo.setRoles(userService.getRolesByUser(user.getUserid()));
 			// 权限
 			Set<String> permissions = userService.getPermissionsByUser(user.getUserid());
 			authorizationInfo.setStringPermissions(permissions);
-		}
+		//}
 		return authorizationInfo;
 	}
 
