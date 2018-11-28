@@ -29,6 +29,21 @@ function showMessage(obj,message) {
  * 初始化combox
  * @param id:控件id
  * @param url:数据源地址
+ */
+function initSelect(id,dataUrl) {
+    $("#"+id).combobox({
+        url:dataUrl,
+        valueField:"id",
+        textField:"text",
+        required:true,
+        missingMessage:"请选择!"
+    })
+}
+
+/**
+ * 初始化combox
+ * @param id:控件id
+ * @param url:数据源地址
  * @param value:初始化默认值
  */
 function initSelect(id,dataUrl,value) {
@@ -37,6 +52,9 @@ function initSelect(id,dataUrl,value) {
         valueField:"id",
         textField:"text",
         required:true,
-        missingMessage:"请选择!"
+        missingMessage:"请选择!",
+        onLoadSuccess:function(data){
+            $(this).combobox("select", value);
+        }
     })
 }

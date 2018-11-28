@@ -50,7 +50,8 @@ public class SysMenuServiceImpl extends AbstractBaseService<SysMenu> implements 
 
     /**
      * 递归查询所有菜单
-     * @param pid
+     * @param pid:上级id
+     * @param mode:是否递归查询全部子数据（ mode=0 时查询全部）
      * @return
      */
     public String getMenusByParentId(long pid,int mode){

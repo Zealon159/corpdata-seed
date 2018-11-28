@@ -10,7 +10,7 @@
 			});
 		</script>
 	</head>
-	<body>
+	<body style="padding:10px">
 		<div style="padding-bottom: 10px">
 			<input id="keyword" placeholder="关键字" class="easyui-validatebox textbox w-default-100"> &nbsp;
 			选择数据库：<input name="dbType" id="dbType" class="easyui-combotree" />  &nbsp;
@@ -29,13 +29,17 @@
                 method:'post',
                 idField:'id',
                 striped:true,
+                pagination:true,
                 fitColumns:true,
                 allowCellWrap:true,
                 nowrap:false,
                 animate:true,
+                pageSize:25,
+                pageList:[10,25,50,100,200],
                 columns:[
                     [
-						{checkbox: true, fixed: true},
+                        {field:'id',hidden:true},
+                        {field:'cb',checkbox:true},
 						{field:'tableName',title:'表名称',width:120,sort: true},
 						{field:'tableComment',title:'说明',width:100},
 						{field:'engine',title:'engine',width:100},
@@ -64,15 +68,17 @@
         });
 
         function doSearch(){
-            var dbType = $('#dbType').val();
-            var dbEnum = $('#dbType').find("option:selected").text();
+            var dbEnum = $('#dbType').combobox("getText");
+            var dbType = $("#dbType").combobox("getValue");
             var keyword = $('#keyword').val();
             $("#searchTable").datagrid({
 				url:"/system/generator/listdata",
 				queryParams:{
-                    keyword: keyword,
-                    dbType:dbType,
-                    dbEnum:dbEnum
+                    params: {
+                        keyword: keyword,
+                        dbType: dbType,
+                        dbEnum: dbEnum
+                    }
 				}
 			});
         }
@@ -83,20 +89,15 @@
             var dbType = $("#dbType").val();
             var url = "/system/generator/option?tables="+v+"&dbType="+dbType+"&dbEnum="+dbEnum;
             //iframe层
-            layer.open({
-                type: 2,
-                title: '生成选项',
-                shadeClose: true,
-                shade: 0.5,
-                area: ['620px', '360px'],
-                content: url //iframe的url
-            });
+            $('#win').window({ width:620,height:415,modal:true,title:'生成选项'});
+            $('#win').html("<iframe height='370px' width='100%' src='"+url+"' frameborder='0'></iframe>");
+
         }
 
         //批量生成
         function genCodes(){
-            var dbEnum = $('#dbType').find("option:selected").text();
-            var dbType = $("#dbType").val();
+            var dbEnum = $('#dbType').combobox("getText");
+            var dbType = $("#dbType").combobox("getValue");
             var table = layui.table;
             var checkStatus = table.checkStatus('dg_dept');
             var data = checkStatus.data;
@@ -109,14 +110,8 @@
                     tables+=r.tableName;
                 });
                 var url = "/system/generator/option?tables="+tables+"&dbType="+dbType+"&dbEnum="+dbEnum;
-                layer.open({
-                    type: 2,
-                    title: '生成选项',
-                    shadeClose: true,
-                    shade: 0.5,
-                    area: ['620px', '360px'],
-                    content: url //iframe的url
-                });
+                $('#win').window({ width:620,height:415,modal:true,title:'生成选项'});
+                $('#win').html("<iframe height='370px' width='100%' src='"+url+"' frameborder='0'></iframe>");
             }
         }
 	</script>
