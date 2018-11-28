@@ -1,0 +1,37 @@
+package ${package}.entity;
+
+import com.corpdata.core.base.BaseEntity;
+#if(${hasBigDecimal})
+import java.math.BigDecimal;
+#end
+#if(${hasDatetime})
+import java.util.Date;
+#end
+
+/**
+ * ${comments}
+ * 
+ * @author ${author}
+ * @date ${datetime}
+ * 
+ */
+public class ${className} extends BaseEntity {
+	private static final long serialVersionUID = 1L;
+#foreach ($column in $columns)
+#if($column.attrname!='id' && $column.attrname!='created' && $column.attrname!='creater' && $column.attrname!='modified' && $column.attrname!='modifier')
+	private $column.attrType $column.attrname;
+#end
+#end
+
+#foreach ($column in $columns)
+#if($column.attrname!='id' && $column.attrname!='created' && $column.attrname!='creater' && $column.attrname!='modified' && $column.attrname!='modifier')
+	public void set${column.attrName}($column.attrType $column.attrname) {
+		this.$column.attrname = $column.attrname;
+	}
+
+	public $column.attrType get${column.attrName}() {
+		return $column.attrname;
+	}
+#end
+#end
+}

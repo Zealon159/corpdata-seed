@@ -1,0 +1,15 @@
+package ${package}.dao;
+
+import ${package}.entity.${className};
+import com.corpdata.core.base.BaseMapper;
+
+/**
+ * ${comments} 持久层接口
+ * @author ${author}
+ * @email ${email}
+ * @date ${datetime}
+ * 
+ */
+public interface ${className}Mapper extends BaseMapper<${className}>{
+
+}

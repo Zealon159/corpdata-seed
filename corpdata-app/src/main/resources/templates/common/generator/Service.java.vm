@@ -1,0 +1,15 @@
+package ${package}.service;
+
+import ${package}.entity.${className};
+import com.corpdata.core.base.BaseService;
+
+/**
+ * ${comments}
+ * @author ${author}
+ * @email ${email}
+ * @date ${datetime}
+ * 
+ */
+public interface ${className}Service extends BaseService<${className}>{
+	
+}

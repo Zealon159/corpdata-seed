@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8" />
+		<title>数据表</title>
+		<div th:replace="/common/system_grid_header" ></div>
+		<script type="text/javascript">
+			$(document).ready(function() {
+                initSelect("dbType","/datasource/select","");
+			});
+		</script>
+	</head>
+	<body>
+		<div style="padding-bottom: 10px">
+			<input id="keyword" placeholder="关键字" class="easyui-validatebox textbox w-default-100"> &nbsp;
+			选择数据库：<input name="dbType" id="dbType" class="easyui-combotree" />  &nbsp;
+
+			<button onclick="doSearch()" class="easyui-linkbutton l-btn l-btn-small primary" type="button"> 查询 </button> &nbsp;
+
+			<button onclick="genCodes()" class="easyui-linkbutton l-btn l-btn-small success" type="button"> 批量生成 </button>
+		</div>
+		<table id="searchTable" style="width:100%;"></table>
+		<div id="win"></div>
+	</body>
+	<script type="text/javascript" >
+        $(function () {
+            //初始化表头
+            $("#searchTable").datagrid({
+                method:'post',
+                idField:'id',
+                striped:true,
+                fitColumns:true,
+                allowCellWrap:true,
+                nowrap:false,
+                animate:true,
+                columns:[
+                    [
+						{checkbox: true, fixed: true},
+						{field:'tableName',title:'表名称',width:120,sort: true},
+						{field:'tableComment',title:'说明',width:100},
+						{field:'engine',title:'engine',width:100},
+						{field:'createTime',title:'createTime',width:100},
+						{field: 'right',title:'操作', width:128, align:'center',halign:'center',formatter:fmtOption}
+            		]
+				]
+            });
+
+            $("#btnAdd").bind("onClick",function () {
+                openPage();
+            })
+        })
+
+		// 操作
+        function fmtOption(v,r) {
+            return "<a href=\"#\" onclick=genCode(\""+r.id+"\") class=\"easyui-linkbutton l-btn info icon-add\" plain=\"true\">生成</a>";
+        }
+
+        //查询
+        $("#keyword").keyup(function (event) {
+            var e = event|| window.event;
+            if (e.keyCode == "13") {
+                doSearch();
+            }
+        });
+
+        function doSearch(){
+            var dbType = $('#dbType').val();
+            var dbEnum = $('#dbType').find("option:selected").text();
+            var keyword = $('#keyword').val();
+            $("#searchTable").datagrid({
+				url:"/system/generator/listdata",
+				queryParams:{
+                    keyword: keyword,
+                    dbType:dbType,
+                    dbEnum:dbEnum
+				}
+			});
+        }
+
+        // 生成
+		function genCode(v) {
+            var dbEnum = $('#dbType').find("option:selected").text();
+            var dbType = $("#dbType").val();
+            var url = "/system/generator/option?tables="+v+"&dbType="+dbType+"&dbEnum="+dbEnum;
+            //iframe层
+            layer.open({
+                type: 2,
+                title: '生成选项',
+                shadeClose: true,
+                shade: 0.5,
+                area: ['620px', '360px'],
+                content: url //iframe的url
+            });
+        }
+
+        //批量生成
+        function genCodes(){
+            var dbEnum = $('#dbType').find("option:selected").text();
+            var dbType = $("#dbType").val();
+            var table = layui.table;
+            var checkStatus = table.checkStatus('dg_dept');
+            var data = checkStatus.data;
+            if(data.length==0){
+                layer.alert("至少选择一个数据表!");
+            }else{
+                var tables="";
+                $.each(data, function (i, r) {
+                    if(i>0){tables+=",";}
+                    tables+=r.tableName;
+                });
+                var url = "/system/generator/option?tables="+tables+"&dbType="+dbType+"&dbEnum="+dbEnum;
+                layer.open({
+                    type: 2,
+                    title: '生成选项',
+                    shadeClose: true,
+                    shade: 0.5,
+                    area: ['620px', '360px'],
+                    content: url //iframe的url
+                });
+            }
+        }
+	</script>
+</html>

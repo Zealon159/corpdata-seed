@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>button</title>
+    <div th:replace="/common/system_grid_header" ></div>
+</head>
+<body>
+    <div style="padding: 10px">
+        <a onclick="f()" href="#" class="easyui-linkbutton l-btn primary icon-add" plain="true"> Message </a>
+        <a href="#" class="easyui-linkbutton l-btn info " plain="true"> Button </a>
+        <a href="#" class="easyui-linkbutton l-btn success " plain="true"> Button </a>
+        <a href="#" class="easyui-linkbutton l-btn warning " plain="true"> Button </a>
+        <a href="#" class="easyui-linkbutton l-btn error " plain="true"> Button </a>
+
+        <i class="fa fa-address-book" >111</i>
+    </div>
+    <script type="text/javascript">
+        function f() {
+            showMessage(this.window,"消息提示！");
+            /*window.parent.$.messager.show({
+                msg:'操作成功！',
+                showType:'fade',
+                timeout:2000,
+                width:265,
+                height:40,
+                scroll:false,
+                style:{
+                    right:'',
+                    top:document.body.scrollTop+document.documentElement.scrollTop,
+                    bottom:'',
+                    scroll:false
+                }
+            });*/
+        }
+    </script>
+</body>
+</html>

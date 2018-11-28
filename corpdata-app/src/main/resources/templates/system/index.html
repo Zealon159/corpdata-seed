@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>系统管理</title>
+        <link rel="stylesheet" type="text/css" href="/js/easyui/themes/super/css/font-awesome.min.css" />
+        <link rel="stylesheet" href="/js/easyui/themes/super/superBlack.css" id="themeCss">
+        <script type="text/javascript" src="/js/jquery-2.1.1.min.js"></script>
+        <script type="text/javascript" src="/js/easyui/jquery.easyui.min.js"></script>
+        <script src="/js/easyui/locale/easyui-lang-zh_CN.js" type="text/javascript" charset="utf-8"></script>
+        <script type="text/javascript" charset="utf-8" src="/js/easyui/themes/super/super.js"></script>
+        <script type="text/javascript" charset="utf-8" src="/js/system/index.js"></script>
+        <script type="text/javascript">
+            $(function(){
+                //初始化js代码
+                InitLeftMenu();
+
+            });
+
+            function extAll(){
+                $('#tree').tree('expandAll');
+            }
+
+            function openurl(node){
+                if($('#tree').tree('isLeaf',node)==true){
+                    var url=node.ItemUrl;
+                    var text=node.text;
+                    var spos=text.lastIndexOf("(");
+                    if(spos!=-1){
+                        text=text.substring(0,spos);
+                    }
+
+                    if(node.OpenType=="New"){
+                        OpenUrl(url);
+                    }else if(node.OpenType=="top"){
+                        top.location.href=url;
+                    }else{
+                        $('#centerFrame').attr("src",url);
+                    }
+                }else{
+                    $('#tree').tree('toggle',node.target);
+                }
+            }
+
+            //初始化左侧
+            function InitLeftMenu() {
+                $("#nav").accordion({animate:false});//为id为nav的div增加手风琴效果，并去除动态滑动效果
+                jQuery.ajax({
+                    type:"post",
+                    async:false,
+                    url:"/system/menu/jsondata",
+                    dataType: "json",
+                    data:{treeid:"menu"},
+                    success:function(data) {
+                        jsonStr = window["eval"]("(" + data.Status + ")");
+                        $.each(data.menus,function(i,n){
+                            var menulist ='';
+                            menulist +='<ul>';
+                            $.each(n.menus, function(j, o) {
+                                menulist += '<li><a ref="'+o.menuid+'" href="#" rel="' + o.url + '" ><span class="icon '+o.icon+'" > </span> ' + o.menuname + '</a></li> ';
+                            })
+                            menulist += '</ul>';
+
+                            $('#nav').accordion('add', {
+                                title: n.menuname,
+                                content: menulist,
+                                iconCls: 'icon ' + n.icon
+                            });
+                        });
+                    }
+                });
+
+
+                $('.easyui-accordion li a').click(function(){//当单击菜单某个选项时，在右边出现对用的内容
+
+                    var tabTitle = $(this).text();//获取超链里span中的内容作为新打开tab的标题
+
+                    var url = $(this).attr("rel");
+                    var menuid = $(this).attr("ref");//获取超链接属性中ref中的内容
+
+                    //addTab(tabTitle,url,icon);//增加tab
+                    $('.easyui-accordion li ').removeClass("selected");
+                    $(this).addClass("selected");
+
+                    //更换链接及文字
+                    var content = '<iframe scrolling="auto" frameborder="0"  src="'+url+'" style="width:100%;height:100%"></iframe>';
+                    if ($('#tt').tabs('exists', tabTitle)){
+                        $('#tt').tabs('select', tabTitle);
+                    } else {
+                        $('#tt').tabs('add',{
+                            title:tabTitle,
+                            content:content,
+                            closable:true
+                        });
+                    }
+
+                }).hover(function(){
+                    $(this).parent().addClass("hover");
+                },function(){
+                    $(this).parent().removeClass("hover");
+                });
+
+                //选中第一个
+                $('#nav').accordion('select', 0);
+            }
+        </script>
+    </head>
+    <body id="main" class="easyui-layout">
+        <div data-options="region:'north',border:false" class="super-north">
+            <!--顶部-->
+            <div class="super-navigation">
+                <!--系统名称-->
+                <div class="super-navigation-title">系统管理</div>
+                <!--自定义导航-->
+                <div class="super-navigation-main">
+                    <div class="super-setting-left">
+                        <ul>
+                            <li><i class="fa fa-commenting-o"></i>消息</li>
+                            <li><i class="fa fa-envelope-o"></i>邮件</li>
+                            <li><i class="fa fa-bell-o"></i>通知</li>
+                        </ul>
+                    </div>
+                    <div class="super-setting-right">
+                        <ul>
+                            <li>
+                                <div class="super-setting-icon">
+                                    <i class="fa fa-gears"></i>
+                                </div>
+                                <div id="mm" class="easyui-menu">
+                                    <div>个人中心</div>
+                                    <div id="themeSetting">主题</div>
+                                    <div class="menu-sep"></div>
+                                    <div id="logout">退出</div>
+                                </div>
+                            </li>
+                            <li class="user">
+                                <span class="user-icon"><img src="/images/favicon.jpg"/></span>管理员
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div data-options="region:'west',title:'菜单导航',border:false" class="super-west">
+            <!--左侧导航-->
+            <div id="nav" class="easyui-accordion" data-options="border:false,fit:true,selected:true">
+            </div>
+        </div>
+        <div data-options="region:'center'" style="padding-top: 2px;">
+            <!--主要内容-->
+            <div id="tt" class="easyui-tabs" data-options="border:false,fit:true">
+                <div title="首页" data-options="iconCls:'fa fa-home'">
+                    <div style="padding: 20px;">
+                        放点什么好呢......
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--主题设置弹窗-->
+        <div id="win">
+            <div class="themeItem">
+                <ul>
+                    <li>
+                        <div class="superGreen" style="background: #1abc9c;">green</div>
+                    </li>
+                    <li class="themeActive">
+                        <div class="superBlue" style="background: #3498db;">blue</div>
+                    </li>
+                    <li>
+                        <div class="superGray" style="background: #95a5a6;">gray</div>
+                    </li>
+                    <li>
+                        <div class="superAmethyst" style="background: #9b59b6;">amethyst</div>
+                    </li>
+                    <li>
+                        <div class="superBlack" style="background: #34495e;">black</div>
+                    </li>
+                    <li>
+                        <div class="superYellow" style="background: #e67e22;">yellow</div>
+                    </li>
+                    <li>
+                        <div class="superEmerald" style="background: #2ecc71;">emerald</div>
+                    </li>
+                    <li>
+                        <div class="superRed" style="background: #e74c3c;">red</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>菜单管理</title>
+    <div th:replace="/common/system_form_header" ></div>
+    <style type="text/css">
+        .el-card {
+            border: 1px solid #ebeef5;
+            background-color: #fff;
+            color: #303133;
+            -webkit-transition: .3s;
+            transition: .3s;
+            padding: 20px;
+        }
+        .el-card.is-always-shadow,.el-card.is-hover-shadow:focus,.el-card.is-hover-shadow:hover{
+            -webkit-box-shadow:0 2px 12px 0 rgba(0,0,0,.1);
+        }
+        .form-table{
+            width: 100%;
+        }
+
+        .form-table tr{
+            height: 45px;
+            line-height: 45px;
+        }
+
+        .form-table tr td:nth-child(odd){
+            text-align: right;
+            font-size:14px;
+            padding-right: 10px;
+        }
+
+        .form-table-button{
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body style="padding: 10px">
+<div class="el-card is-always-shadow">
+    <table class="form-table">
+        <tr>
+            <td width="15%">菜单名称</td>
+            <td width="35%">
+                <input data-options="required:true,missingMessage:'请填写主题！'" class="easyui-validatebox textbox w-big" name="Subject" id="Subject" /></td>
+            <td width="15%">访问地址</td>
+            <td><input data-options="required:true,missingMessage:'请填写主题！'" class="easyui-validatebox textbox w-big" name="Subject" id="Subject" /></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input data-options="required:true,missingMessage:'请填写主题！'" class="easyui-validatebox textbox w-middle" name="Subject" id="Subject" /></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+    <div class="form-table-button">
+        <button class="easyui-linkbutton l-btn primary" type="submit"> 保存 </button>
+        <a href="#" class="easyui-linkbutton l-btn default" plain="true"> 取消 </a>
+    </div>
+</div>
+
+</body>
+</html>

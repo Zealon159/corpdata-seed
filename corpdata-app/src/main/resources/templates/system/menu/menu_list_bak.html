@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>菜单管理</title>
+    <div th:replace="/common/system_grid_header" ></div>
+
+</head>
+<body style="padding:10px">
+    <div style="padding-bottom: 10px">
+        <a href="#" class="easyui-linkbutton l-btn primary icon-add" plain="true">新增</a>
+        <a href="#" class="easyui-linkbutton l-btn info " plain="true">新增</a>
+        <a href="#" class="easyui-linkbutton l-btn success " plain="true">新增</a>
+        <a href="#" class="easyui-linkbutton l-btn warning " plain="true">新增</a>
+        <a href="#" class="easyui-linkbutton l-btn error " plain="true">新增</a>
+
+    </div>
+    <table id="searchTable" style="width:100%;"></table>
+</body>
+    <script type="text/javascript" >
+        $(function () {
+            //初始化表头
+            $("#searchTable").datagrid({
+                method:'post',
+                url:"/system/menu/listdata",
+                singleSelect:true,
+                pageSize:20,
+                height:520,
+                pageList:[20,50,100],
+                striped:true,
+                fitColumns:true,
+                allowCellWrap:true,
+                nowrap:false,
+                remoteSort: true,
+                pagination:true,
+                columns:[
+                  [
+                    {field:'XH',title:'序号',width:30,align:'center',halign:'center'},
+                    {field:'menuName',title:'菜单名称',width:100,halign:'center'},
+
+                    {field:'formatOper',width:100,title:'操作',formatter:fmtOption,align:'center',halign:'center'},
+                    {field:'id',width:1,hidden:true}
+                  ]
+                ],
+                onLoadSuccess: function (data) {
+
+                }
+            });
+        })
+
+        function fmtOption(v,r) {
+            return "";
+        }
+    </script>
+</html>

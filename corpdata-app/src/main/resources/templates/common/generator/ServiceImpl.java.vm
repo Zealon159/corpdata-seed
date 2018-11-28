@@ -1,0 +1,22 @@
+package ${package}.service.impl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import com.corpdata.core.base.AbstractBaseService;
+import ${package}.dao.${className}Mapper;
+import ${package}.entity.${className};
+import ${package}.service.${className}Service;
+
+/**
+ * ${comments}
+ * 
+ * @author ${author}
+ * @email ${email}
+ * @date ${datetime}
+ */
+@Service
+@Transactional
+public class ${className}ServiceImpl extends AbstractBaseService<${className}> implements ${className}Service {
+	
+}

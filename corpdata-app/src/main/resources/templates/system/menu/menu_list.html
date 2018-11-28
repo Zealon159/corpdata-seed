@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>菜单管理</title>
+    <div th:replace="/common/system_grid_header" ></div>
+
+</head>
+<body style="padding:10px">
+    <div style="padding-bottom: 10px">
+        <a href="#" onclick="openPage()" id="btnAdd" class="easyui-linkbutton l-btn primary" > 新增菜单 </a>
+
+    </div>
+    <table id="searchTable" style="width:100%;"></table>
+    <div id="win"></div>
+</body>
+    <script type="text/javascript" >
+        $(function () {
+            //初始化表头
+            $("#searchTable").treegrid({
+                method:'post',
+                url:"/system/menu/listdata",
+                idField:'id',
+                treeField:'menuName',
+                striped:true,
+                fitColumns:true,
+                allowCellWrap:true,
+                nowrap:false,
+                animate:true,
+                columns:[
+                  [
+                    {field:'menuName',title:'菜单名称',width:100,halign:'center'},
+                    {field:'sortNumber',title:'同级排序',width:70,align:'center',halign:'center'},
+                    {field:'formatOper',width:100,title:'操作',formatter:fmtOption,align:'center',halign:'center'},
+                    {field:'id',width:1,hidden:true}
+                  ]
+                ],
+                queryParams:{
+                    id:"root"
+                }
+            });
+
+            $("#btnAdd").bind("onClick",function () {
+                openPage();
+            })
+        })
+
+        function fmtOption(v,r) {
+            var btnEdit = "<a href=\"#\" onclick=toEdit(\""+r.id+"\") class=\"easyui-linkbutton l-btn info icon-add\" plain=\"true\">编辑</a>";
+            var btnDel  = "<a href=\"#\" onclick=toDelete(\""+r.id+"\") class=\"easyui-linkbutton l-btn warning icon-add\" plain=\"true\">删除</a>";
+            return btnEdit+"  "+btnDel;
+        }
+
+        function toDelete(id) {
+            $.messager.confirm('提示','确定要删除吗？',function(r){
+                if (r){
+                    $.post('/system/menu/delete',{id:id},function(res){
+                        $('#searchTable').treegrid('reload');
+                        showMessage(window.parent,res.msg);
+                    },"json");
+                }
+            });
+        }
+
+        function openPage(){
+            $('#win').window({ width:620,height:415,modal:true,title:'新增菜单'});
+            $('#win').html("<iframe height='370px' width='100%' frameborder='0' src='/system/menu/add'></iframe>");
+        }
+    </script>
+</html>
