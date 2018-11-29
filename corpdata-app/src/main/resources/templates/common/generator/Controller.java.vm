@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import ${package}.entity.${className};
 import ${package}.service.${className}Service;
-import com.corpdata.common.domain.DataGridRequestDTO;
-import com.corpdata.common.result.Result;
-import com.corpdata.system.log.WebLog;
-import com.corpdata.core.base.BaseController;
+import com.cpda.common.domain.DataGridRequestDTO;
+import com.cpda.common.result.Result;
+import com.cpda.system.log.WebLog;
+import com.cpda.core.base.BaseController;
 
 /**
  * ${comments}
