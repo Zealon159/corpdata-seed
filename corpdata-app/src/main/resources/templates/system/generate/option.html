@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<title>生成基础代码</title>
-		<div th:replace="/common/common_form_header"></div>
+		<div th:replace="/common/system_form_header" ></div>
 		<script type="text/javascript">
 			$(function(){
 				
@@ -43,7 +43,6 @@
 					<td><br><br></td>
 					<td>包名说明</td>
 					<td>
-						
 						如：system.org
 					</td>
 				</tr>
@@ -51,7 +50,7 @@
 					<td><br><br></td>
 					<td>输入包名</td>
 					<td>
-						<input size=9 name="packageName1" id="packageName1" value="com.corpdata." class="easyui-textbox"  />
+						<input size=12 name="packageName1" id="packageName1" value="com.cpda." class="easyui-textbox"  />
 						<input name="packageName2" id="packageName2" class="easyui-textbox"  />
 					</td>
 				</tr>
@@ -59,9 +58,7 @@
 					<td><br><br><br></td>
 					<td></td>
 					<td>
-						<a onclick="gen()"  class="layui-btn layui-btn-sm" id="btn-gen">
-		            		<i class="layui-icon">&#xe605;</i>确认 &nbsp;
-		            	</a>
+						<button onclick="gen()" class="easyui-linkbutton l-btn l-btn-small primary" type="button"> 确认 </button>
 					</td>
 				</tr>
 			</table>

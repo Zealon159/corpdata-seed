@@ -38,7 +38,6 @@
                 pageList:[10,25,50,100,200],
                 columns:[
                     [
-                        {field:'id',hidden:true},
                         {field:'cb',checkbox:true},
 						{field:'tableName',title:'表名称',width:120,sort: true},
 						{field:'tableComment',title:'说明',width:100},
@@ -56,7 +55,7 @@
 
 		// 操作
         function fmtOption(v,r) {
-            return "<a href=\"#\" onclick=genCode(\""+r.id+"\") class=\"easyui-linkbutton l-btn info icon-add\" plain=\"true\">生成</a>";
+            return "<a href=\"#\" onclick=genCode(\""+r.tableName+"\") class=\"easyui-linkbutton l-btn info icon-add\" plain=\"true\">生成</a>";
         }
 
         //查询
@@ -71,6 +70,10 @@
             var dbEnum = $('#dbType').combobox("getText");
             var dbType = $("#dbType").combobox("getValue");
             var keyword = $('#keyword').val();
+            if (dbEnum==""){
+                $.messager.alert('提示','请选择数据库再进行查询！');
+                return false;
+			}
             $("#searchTable").datagrid({
 				url:"/system/generator/listdata",
 				queryParams:{
@@ -85,8 +88,8 @@
 
         // 生成
 		function genCode(v) {
-            var dbEnum = $('#dbType').find("option:selected").text();
-            var dbType = $("#dbType").val();
+            var dbEnum = $('#dbType').combobox("getText");
+            var dbType = $("#dbType").combobox("getValue");
             var url = "/system/generator/option?tables="+v+"&dbType="+dbType+"&dbEnum="+dbEnum;
             //iframe层
             $('#win').window({ width:620,height:415,modal:true,title:'生成选项'});
