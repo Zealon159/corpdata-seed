@@ -19,7 +19,7 @@ public class DatasourceController {
 			if(i>0){sb.append(",");}
 			String text = ds.toString();
 			String id = ds.getDataSource();
-			sb.append("{\"text\":\""+text+"\",\"id\":\""+id+"\"}");
+			sb.append("{\"text\":\""+text+"\",\"id\":\""+id+"-"+text+"\"}");
 			i++;
 		}
 		sb.append("]");

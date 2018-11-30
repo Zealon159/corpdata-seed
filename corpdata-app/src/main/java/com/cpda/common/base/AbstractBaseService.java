@@ -71,7 +71,7 @@ public abstract class AbstractBaseService<T> implements BaseService<T> {
     }
 
     public String findByPage(DataGridRequestDTO dgRequest) {
-		PageHelper.startPage(dgRequest.getPage(), dgRequest.getLimit());
+		PageHelper.startPage(dgRequest.getPage(), dgRequest.getRows());
 		Page<T> list = (Page<T>) mapper.selectAll(dgRequest.getParams());
 		return PageConvertUtil.getGridJson(list);
 	}

@@ -9,11 +9,13 @@ public enum DataSourceEnum {
 	 * 默认数据源
 	 */
 	MASTER("mysql"),
-
+	BPM("mysql"),
 	/**
 	 * 其它数据源
 	 */
 	SQLSERVER("sqlserver");
+
+
 	
     private String datasource;
 

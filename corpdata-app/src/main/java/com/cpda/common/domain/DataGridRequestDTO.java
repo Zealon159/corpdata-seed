@@ -13,7 +13,7 @@ public class DataGridRequestDTO implements Serializable {
 	//当前页数
 	private int page;
 	//每页显示数
-	private int limit;
+	private int rows;
 	//查询条件
 	private Map<String,Object> params;
 	
@@ -23,11 +23,11 @@ public class DataGridRequestDTO implements Serializable {
 	public void setPage(int page) {
 		this.page = page;
 	}
-	public int getLimit() {
-		return limit;
+	public int getRows() {
+		return rows;
 	}
-	public void setLimit(int limit) {
-		this.limit = limit;
+	public void setRows(int rows) {
+		this.rows = rows;
 	}
 	public Map<String, Object> getParams() {
 		return params;

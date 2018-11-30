@@ -40,17 +40,17 @@ public class GeneratorServiceImpl implements GeneratorService {
 
 				//查询表信息
 				Map<String, Object> table = null;
-				if(dbType.equals("mysql")){
+				if(dbType.contains("mysql")){
 					table=generatorMapper.get(tableName);
-				}else if(dbType.equals("sqlserver")){
+				}else if(dbType.contains("sqlserver")){
 					table=sqlServerGeneratorMapper.get(tableName);
 				}
 
 				//查询列信息
 				List<Map<String, Object>> columns = null;
-				if(dbType.equals("mysql")){
+				if(dbType.contains("mysql")){
 					columns=generatorMapper.listColumns(tableName);
-				}else if(dbType.equals("sqlserver")){
+				}else if(dbType.contains("sqlserver")){
 					columns=sqlServerGeneratorMapper.listColumns(tableName);
 				}
 
@@ -79,17 +79,17 @@ public class GeneratorServiceImpl implements GeneratorService {
 			dbType = dgRequest.getParams().get("dbType").toString();
 			keyword = dgRequest.getParams().get("keyword").toString();
 			dbEnum = dgRequest.getParams().get("dbEnum").toString();
+
 		}
 		
 		//切换至当前数据源
 		DataSourceContextHolder.setTargetDataSource(getCurrentByDatasource(dbEnum)); 
 		try{
-			PageHelper.startPage(dgRequest.getPage(), dgRequest.getLimit());
+			PageHelper.startPage(dgRequest.getPage(), dgRequest.getRows());
 
-
-			if(dbType.equals("mysql")){
+			if(dbType.contains("mysql")){
 				list = generatorMapper.list();
-			}else if(dbType.equals("sqlserver")){
+			}else if(dbType.contains("sqlserver")){
 				list = sqlServerGeneratorMapper.list();
 			}
 		}finally {

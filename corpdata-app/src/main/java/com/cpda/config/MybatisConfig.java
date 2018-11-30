@@ -64,6 +64,7 @@ public class MybatisConfig {
         Map<Object,Object> targetDataSources = new HashMap<Object,Object>();
         targetDataSources.put(DataSourceEnum.MASTER, dataSourceMaster());
         targetDataSources.put(DataSourceEnum.SQLSERVER, dataSourceSqlServer());
+        targetDataSources.put(DataSourceEnum.BPM,dataSourceBPM());
         myRoutingDataSource.setTargetDataSources(targetDataSources);
         //设置默认数据源
         myRoutingDataSource.setDefaultTargetDataSource(dataSourceMaster());
@@ -86,6 +87,20 @@ public class MybatisConfig {
         ds.setMinIdle(Integer.parseInt(getConfig().getString("master.minIdle")));
         ds.setMaxActive(Integer.parseInt(getConfig().getString("master.maxActive")));
         ds.setMaxWait(Long.parseLong(getConfig().getString("master.maxActive")));
+        return ds;
+    }
+
+    @Bean
+    public DataSource dataSourceBPM(){
+        DruidDataSource ds = new DruidDataSource();
+        ds.setDriverClassName(getConfig().getString("bpm.driverClassName"));
+        ds.setUrl(getConfig().getString("bpm.url"));
+        ds.setUsername(getConfig().getString("bpm.username"));
+        ds.setPassword(getConfig().getString("bpm.password"));
+        ds.setInitialSize(Integer.parseInt(getConfig().getString("bpm.initialSize")));
+        ds.setMinIdle(Integer.parseInt(getConfig().getString("bpm.minIdle")));
+        ds.setMaxActive(Integer.parseInt(getConfig().getString("bpm.maxActive")));
+        ds.setMaxWait(Long.parseLong(getConfig().getString("bpm.maxActive")));
         return ds;
     }
 

@@ -35,7 +35,7 @@ public class SysMenuServiceImpl extends AbstractBaseService<SysMenu> implements 
 
         //增加返回模式，如果是数组，则直接返回List的Json字符串数组
         if(params!=null && params.get("returnMode")!=null && params.get("returnMode").equals("array")){
-            PageHelper.startPage(dgRequest.getPage(), dgRequest.getLimit());
+            PageHelper.startPage(dgRequest.getPage(), dgRequest.getRows());
             Page<SysMenu> list = (Page<SysMenu>) mapper.selectAll(dgRequest.getParams());
             return JSON.toJSONStringWithDateFormat(list,"yyyy-MM-dd");
         }else {
