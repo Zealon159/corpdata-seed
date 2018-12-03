@@ -54,7 +54,7 @@ public class HandlerDataSourceAop {
             //给当前的执行SQL的操作设置特殊的数据源的信息
             DataSourceContextHolder.setTargetDataSource(annotationClass.dataSource());
         }
-        logger.info("切换数据源,className:"+joinPoint.getTarget().getClass().getName()+"  "+annotationClass.dataSource());
+        //logger.info("切换数据源,className:"+joinPoint.getTarget().getClass().getName()+"  "+annotationClass.dataSource());
     }
 
     @After("pointcut()")

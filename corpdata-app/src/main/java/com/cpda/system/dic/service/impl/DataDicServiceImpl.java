@@ -42,7 +42,7 @@ public class DataDicServiceImpl extends AbstractBaseService<SysDataDic> implemen
         return result;
     }
 
-    public Result delete(String id, String dicType) {
+    public Result delete(Long id, String dicType) {
         if (sysDataDicMapper.deleteById(id) > 0) {
             //删除缓存
             //redisService.delete("data_dic_json:"+dicType);
@@ -57,9 +57,9 @@ public class DataDicServiceImpl extends AbstractBaseService<SysDataDic> implemen
      * @return
      * @desc: 根据id查找字典名称
      */
-    public String getDataDicText(String id) {
+    public String getDataDicText(Long id) {
         String text = "";
-        if (CommonUtil.isNotBlank(id)) {
+        if (id>0) {
             SysDataDic sysDataDic = sysDataDicMapper.selectById(id);
             if (sysDataDic != null) {
                 text = sysDataDic.getDicName();

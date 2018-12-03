@@ -49,7 +49,7 @@ public class DataDicController extends BaseController {
 	}
 
 	@RequestMapping("/edit/{id}")
-	public String edit(ModelMap map, @PathVariable("id") String id){
+	public String edit(ModelMap map, @PathVariable("id") Long id){
 		map.put("sysDataDic", dataDicService.findById(id));
 		return "system/dic/dic_edit";
 	}
@@ -62,7 +62,7 @@ public class DataDicController extends BaseController {
 	
 	@ResponseBody
 	@RequestMapping("/delete")
-	public Result delete(String id,String dicType){
+	public Result delete(Long id,String dicType){
 		return dataDicService.delete(id,dicType);
 	}
 	
@@ -88,7 +88,7 @@ public class DataDicController extends BaseController {
 	
 	@ResponseBody
 	@RequestMapping("/getDataDicText/{id}")
-	public String getDataDicText(@PathVariable("id") String id){
+	public String getDataDicText(@PathVariable("id") Long id){
 		return dataDicService.getDataDicText(id);
 	}
 }

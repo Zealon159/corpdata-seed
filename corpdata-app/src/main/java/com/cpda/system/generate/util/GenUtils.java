@@ -126,6 +126,14 @@ public class GenUtils {
         map.put("hasBigDecimal", hasDecimal);
         boolean hasDatetime = hasType(tableDO.getColumns(),"datetime");
         map.put("hasDatetime", hasDatetime);
+        if(!hasDatetime){
+            hasDatetime = hasType(tableDO.getColumns(),"date");
+            map.put("hasDatetime", hasDatetime);
+        }
+        if(!hasDatetime){
+            hasDatetime = hasType(tableDO.getColumns(),"timestamp");
+            map.put("hasDatetime", hasDatetime);
+        }
         VelocityContext context = new VelocityContext(map);
 
         //获取模板列表

@@ -39,7 +39,7 @@ public class MenuController extends BaseController {
 
     //编辑页面
     @RequestMapping("/edit/{id}")
-    public String edit(@PathVariable("id") String id, ModelMap map){
+    public String edit(@PathVariable("id") Long id, ModelMap map){
         map.put("record", menuService.findById(id));
         return "system/menu/menu_edit";
     }
@@ -54,14 +54,14 @@ public class MenuController extends BaseController {
     //删除
     @ResponseBody
     @PostMapping("/delete")
-    public Result delete(String id){
+    public Result delete(Long id){
         return menuService.deleteById(id);
     }
 
     //批量删除
     @ResponseBody
     @PostMapping("/deletes")
-    public Result deletes(@RequestParam("ids[]") String[] ids){
+    public Result deletes(@RequestParam("ids[]") Long[] ids){
         return menuService.deleteByIds(ids);
     }
 

@@ -7,14 +7,14 @@ import java.util.List;
 
 public interface DataDicService extends BaseService<SysDataDic> {
 
-    Result delete(String id, String dicType);
+    Result delete(Long id, String dicType);
 
     /**
      * @param id
      * @return
      * @desc: 根据id查找字典名称
      */
-    String getDataDicText(String id);
+    String getDataDicText(Long id);
 
     /**
      * @return

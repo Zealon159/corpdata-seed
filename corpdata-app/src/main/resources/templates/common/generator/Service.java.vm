@@ -1,7 +1,7 @@
 package ${package}.service;
 
 import ${package}.entity.${className};
-import com.cpda.core.base.BaseService;
+import com.cpda.common.base.BaseService;
 
 /**
  * ${comments}

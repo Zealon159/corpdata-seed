@@ -2,7 +2,7 @@ package ${package}.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.cpda.core.base.AbstractBaseService;
+import com.cpda.common.base.AbstractBaseService;
 import ${package}.dao.${className}Mapper;
 import ${package}.entity.${className};
 import ${package}.service.${className}Service;

@@ -49,7 +49,7 @@ public abstract class AbstractBaseService<T> implements BaseService<T> {
     	}
     }
     
-    public Result deleteById(String id) {
+    public Result deleteById(Long id) {
     	if(mapper.deleteById(id)>0){
     		return ResultUtil.success();
     	}else{
@@ -57,16 +57,16 @@ public abstract class AbstractBaseService<T> implements BaseService<T> {
     	}
     }
 
-    public Result deleteByIds(String[] ids) {
-        mapper.deleteByIds(ids.toString()); //todo
+    public Result deleteByIds(Long[] ids) {
+        mapper.deleteByIds(ids); //todo
         return ResultUtil.success();
     }
     
-    public T findById(String id) {
+    public T findById(Long id) {
 		return mapper.selectById(id);
 	}
     
-    public List<T> findByIds(String ids) {
+    public List<T> findByIds(Long ids) {
         return mapper.selectByIds(ids);
     }
 

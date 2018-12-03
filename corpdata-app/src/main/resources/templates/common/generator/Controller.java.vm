@@ -13,8 +13,7 @@ import ${package}.entity.${className};
 import ${package}.service.${className}Service;
 import com.cpda.common.domain.DataGridRequestDTO;
 import com.cpda.common.result.Result;
-import com.cpda.system.log.WebLog;
-import com.cpda.core.base.BaseController;
+import com.cpda.common.base.BaseController;
 
 /**
  * ${comments}
@@ -38,7 +37,6 @@ public class ${className}Controller extends BaseController{
 	}
 	
 	//保存数据
-	@WebLog()
 	@ResponseBody
 	@RequestMapping("/save")
 	public Result save(${className} record){
@@ -53,7 +51,6 @@ public class ${className}Controller extends BaseController{
 	}
 	
 	//更新数据
-	@WebLog()
 	@ResponseBody
 	@RequestMapping("/update")
 	public Result update(${className} record){
@@ -61,7 +58,6 @@ public class ${className}Controller extends BaseController{
 	}
 	
 	//删除
-	@WebLog()
 	@ResponseBody
 	@PostMapping("/delete")
 	public Result delete(${pk.attrType} ${pk.attrname}){
@@ -69,7 +65,6 @@ public class ${className}Controller extends BaseController{
 	}
 	
 	//批量删除
-	@WebLog()
 	@ResponseBody
 	@PostMapping("/deletes")
 	public Result deletes(@RequestParam("ids[]") ${pk.attrType}[] ${pk.attrname}s){
@@ -78,7 +73,7 @@ public class ${className}Controller extends BaseController{
 	
 	//详情页面
 	@GetMapping("/details/{id}")
-	public String details(ModelMap map,@PathVariable("id") String id){
+	public String details(ModelMap map,@PathVariable("id") Long id){
 		map.put("record", ${classname}Service.findById(id));
 	    return "${pathName}/${classname}_details";
 	}

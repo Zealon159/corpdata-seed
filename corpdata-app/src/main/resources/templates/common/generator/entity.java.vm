@@ -1,6 +1,6 @@
 package ${package}.entity;
 
-import com.cpda.core.base.BaseEntity;
+import com.cpda.common.base.BaseEntity;
 #if(${hasBigDecimal})
 import java.math.BigDecimal;
 #end

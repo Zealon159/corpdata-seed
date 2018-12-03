@@ -48,7 +48,7 @@
 		where ${pk.columnName} = #{${pk.attrname}}
 	</update>
 	
-	<delete id="deleteById" parameterType="java.lang.String">
+	<delete id="deleteById" parameterType="java.lang.Long">
 		delete from ${tableName} where ${pk.columnName} = #{id}
 	</delete>
 	
@@ -59,7 +59,7 @@
 		</foreach>
 	</delete>
 	
-	<select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
+	<select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
 		select <include refid="Base_Column_List" /> 
 		from ${tableName} where ${pk.columnName} = #{id}
 	</select>
