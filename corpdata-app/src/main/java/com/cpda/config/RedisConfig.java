@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
+import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
@@ -17,6 +18,8 @@ import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.*;
+
+import java.lang.reflect.Method;
 import java.time.Duration;
 
 /**
@@ -35,9 +38,7 @@ public class RedisConfig extends CachingConfigurerSupport {
 
 		RedisTemplate<String, Object> template = new RedisTemplate<>();
 
-		RedisSerializer<String> redisSerializer = new StringRedisSerializer();
-
-		Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);
+		RedisSerializer<String> redisSerializer = new StringRedisSerializer(); //key序列化
 
 		ObjectMapper om = new ObjectMapper();
 
@@ -45,7 +46,9 @@ public class RedisConfig extends CachingConfigurerSupport {
 
 		om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
 
-		jackson2JsonRedisSerializer.setObjectMapper(om);
+		GenericJackson2JsonRedisSerializer  jackson2JsonRedisSerializer = new GenericJackson2JsonRedisSerializer (om);
+
+		//jackson2JsonRedisSerializer.setObjectMapper(om);
 
 		template.setConnectionFactory(factory);
 		//key序列化方式
@@ -54,7 +57,7 @@ public class RedisConfig extends CachingConfigurerSupport {
 		template.setValueSerializer(jackson2JsonRedisSerializer);
 		//value hashmap序列化
 		template.setHashValueSerializer(jackson2JsonRedisSerializer);
-
+		template.setDefaultSerializer(jackson2JsonRedisSerializer);
 		return template;
 	}
 
@@ -80,5 +83,25 @@ public class RedisConfig extends CachingConfigurerSupport {
 				.cacheDefaults(config)
 				.build();
 		return cacheManager;
+	}
+
+	@Bean
+	@Override
+	public KeyGenerator keyGenerator() {
+		return new KeyGenerator() {
+			@Override
+			public Object generate(Object o, Method method, Object... objects) {
+				// This will generate a unique key of the class name, the method
+				// name,
+				// and all method parameters appended.
+				StringBuilder sb = new StringBuilder();
+				sb.append(o.getClass().getName());
+				sb.append(method.getName());
+				for (Object obj : objects) {
+					sb.append(obj.toString());
+				}
+				return sb.toString();
+			}
+		};
 	}
 }

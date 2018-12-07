@@ -24,10 +24,15 @@ public class RedisService {
 	 * 存储key
 	 */
 	public boolean set(final String key, final Object value) {
+
 		boolean result = redisTemplate.execute(new RedisCallback<Boolean>() {
             public Boolean doInRedis(RedisConnection connection) throws DataAccessException {
             	RedisSerializer<String> serializer = redisTemplate.getStringSerializer();
-                connection.set(serializer.serialize(key), SerializeUtils.serialize(value));
+				System.out.println(value.toString().getBytes());
+				System.out.println(value.toString().getBytes());
+                connection.set(serializer.serialize(key), value.toString().getBytes());
+
+
                 return true;
             }
 	    });
@@ -57,7 +62,8 @@ public class RedisService {
             public String doInRedis(RedisConnection connection) throws DataAccessException {
             	RedisSerializer<String> serializer = redisTemplate.getStringSerializer();
                 byte[] value =  connection.get(serializer.serialize(key));
-                return serializer.deserialize(value);
+                String rs = serializer.deserialize(value);
+                return rs;
             }
 	    });
 		return result;
