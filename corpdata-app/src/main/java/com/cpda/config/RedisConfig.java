@@ -17,9 +17,11 @@ import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.*;
 
 import java.lang.reflect.Method;
+import java.net.UnknownHostException;
 import java.time.Duration;
 
 /**
@@ -54,10 +56,20 @@ public class RedisConfig extends CachingConfigurerSupport {
 		//key序列化方式
 		template.setKeySerializer(redisSerializer);
 		//value序列化
-		template.setValueSerializer(jackson2JsonRedisSerializer);
+		//template.setValueSerializer(jackson2JsonRedisSerializer);
 		//value hashmap序列化
 		template.setHashValueSerializer(jackson2JsonRedisSerializer);
 		template.setDefaultSerializer(jackson2JsonRedisSerializer);
+		return template;
+	}
+
+	@Bean
+	public StringRedisTemplate stringRedisTemplate(RedisConnectionFactory redisConnectionFactory)
+			throws UnknownHostException {
+		StringRedisTemplate template = new StringRedisTemplate();
+		template.setConnectionFactory(redisConnectionFactory);
+		template.setKeySerializer(new StringRedisSerializer());
+		template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
 		return template;
 	}
 
@@ -74,7 +86,8 @@ public class RedisConfig extends CachingConfigurerSupport {
 
 		// 配置序列化（解决乱码的问题）,过期时间30秒
 		RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
-				.entryTtl(Duration.ofSeconds(30))
+
+				.entryTtl(Duration.ofMinutes(30))
 				.serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(redisSerializer))
 				.serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(jackson2JsonRedisSerializer))
 				.disableCachingNullValues();

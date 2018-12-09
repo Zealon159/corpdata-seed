@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cpda.system.org.dao.OrgUserMapper">
+  <resultMap id="BaseResultMap" type="com.cpda.system.org.entity.OrgUser">
+    <id column="id" jdbcType="Long" property="id" />
+    <result column="Userid" property="userid" />
+    <result column="User_Pwd" property="userPwd" />
+    <result column="User_Name" property="userName" />
+    <result column="User_sex" property="userSex" />
+    <result column="Phone_number" property="phoneNumber" />
+    <result column="Email_address" property="emailAddress" />
+    <result column="wechat" property="wechat" />
+    <result column="Enabled_state" property="enabledState" />
+    <result column="Sort_number" property="sortNumber" />
+    <result column="creater" property="creater" />
+    <result column="created" property="created" />
+    <result column="modified" property="modified" />
+    <result column="modifier" property="modifier" />
+    <association property="orgDept" javaType="com.corpdata.system.org.entity.OrgDept">
+    	<id column="d_id" jdbcType="CHAR" property="id" />
+    	<result column="d_folderName" jdbcType="VARCHAR" property="foldername" />
+    </association>
+    
+  </resultMap>
+  
+  <insert id="insert" parameterType="com.cpda.system.org.entity.OrgUser">
+    insert into org_user (Userid, User_Pwd,
+      User_Name, User_sex, Phone_number, Email_address, wechat,
+      Enabled_state, Sort_number, creater,
+      created, modified,modifier)
+    values (#{userid,jdbcType=VARCHAR}, #{userPwd,jdbcType=VARCHAR},
+      #{userName,jdbcType=VARCHAR}, #{userSex,jdbcType=VARCHAR}, #{phoneNumber,jdbcType=VARCHAR}, #{emailAddress,jdbcType=VARCHAR}, #{wechat,jdbcType=VARCHAR}, 
+      #{enabledState,jdbcType=BIT}, #{sortNumber,jdbcType=INTEGER}, #{creater,jdbcType=VARCHAR},
+      #{created,jdbcType=TIMESTAMP}, #{modified,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR})
+  </insert>
+  
+  <update id="update" parameterType="com.cpda.system.org.entity.OrgUser">
+    update org_user set 
+    <if test="userPwd!=null">
+      User_Pwd = #{userPwd,jdbcType=VARCHAR},
+    </if>
+    <if test="userName!=null">
+      User_Name = #{userName,jdbcType=VARCHAR},
+    </if>
+    <if test="userSex!=null">
+      User_sex = #{userSex},
+    </if>
+    <if test="wechat!=null">
+      wechat = #{wechat},
+    </if>
+    <if test="phoneNumber!=null">
+      Phone_number = #{phoneNumber,jdbcType=VARCHAR},
+    </if>
+    <if test="emailAddress!=null">
+      Email_address = #{emailAddress,jdbcType=VARCHAR},
+    </if>
+    <if test="enabledState!=null">
+      Enabled_state = #{enabledState,jdbcType=BIT},
+    </if>
+    <if test="sortNumber!=null">
+      Sort_number = #{sortNumber,jdbcType=INTEGER},
+    </if>
+      modified = #{modified,jdbcType=TIMESTAMP},
+      modifier = #{modifier}
+    where id = #{id}
+  </update>
+  
+  <delete id="deleteById" parameterType="java.lang.Long">
+    delete from org_user
+    where id = #{id}
+  </delete>
+  
+  <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select u.id, u.Userid, u.User_Pwd, u.User_Name, u.User_sex, u.wechat, u.Phone_number, u.Email_address, u.Enabled_state,
+    u.Sort_number, u.fk_door,u.creater, u.created, u.modified,u.modifier,d.id d_id,d.folderName d_folderName,
+    s.id sysid,File_Path,File_Type
+    from org_user u
+    left join org_dept d on(u.fk_dept=d.id)
+    where u.id = #{id}
+  </select>
+  
+  <select id="selectByUserId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select * from org_user where userId = #{userId,jdbcType=CHAR}
+  </select>
+  
+  <select id="selectAll" parameterType="map" resultMap="BaseResultMap">
+    select u.id, u.Userid, u.User_Pwd, u.User_Name, u.User_sex, u.wechat, u.Phone_number, u.Email_address, u.Enabled_state,
+    u.Sort_number, u.creater, u.created, u.modified, u.modifier,d.id d_id,d.folderName d_folderName,
+    from org_user u
+    left join org_dept d on(u.fk_dept=d.id)
+    where 1=1
+    <if test="keyword!=null">
+    	and (u.userid like '%${keyword}%' or u.User_Name like '%${keyword}%')
+    </if>
+    <if test="deptId!=null and deptId != ''">
+    	and u.Userid in (select FK_user from org_user_dept where FK_dept = '${deptId}' )        
+    </if>
+  </select>
+  <select id="selectAllByCombox" resultType="map">
+    select id, User_Name text from org_user order by Userid
+  </select>
+
+</mapper>

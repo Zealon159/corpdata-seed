@@ -10,7 +10,7 @@ import com.cpda.common.utils.SerializeUtils;
 public class Test {
     public static void main(String[] args){
         String name = "哈哈哈";
-        byte[] sName = SerializeUtils.serialize(name);
+        byte[] sName = SerializeUtils.serialize("aaaa");
         System.out.println(sName);
     }
 }

@@ -6,8 +6,12 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -19,7 +23,18 @@ public class RedisService {
 
 	@Autowired
 	private RedisTemplate<String, ?> redisTemplate;
-	
+
+	@Autowired
+	private StringRedisTemplate stringRedisTemplate;
+
+	public void setHash(String key,String hashKey,Object value){
+		redisTemplate.opsForHash().put(key,hashKey,value);
+	}
+
+	public Map<String,Object> getHash(String key,String hashKey){
+		return (HashMap)redisTemplate.opsForHash().get(key,hashKey);
+	}
+
 	/**
 	 * 存储key
 	 */
@@ -30,13 +45,19 @@ public class RedisService {
             	RedisSerializer<String> serializer = redisTemplate.getStringSerializer();
 				System.out.println(value.toString().getBytes());
 				System.out.println(value.toString().getBytes());
-                connection.set(serializer.serialize(key), value.toString().getBytes());
-
-
-                return true;
+				return connection.set(serializer.serialize(key), SerializeUtils.serialize(value));
             }
 	    });
 		return result;
+	}
+
+	public void setV(final String key, final String value){
+		System.out.println(key+","+value);
+		stringRedisTemplate.opsForValue().set(key,value);
+	}
+
+	public Object getV(String key){
+		return stringRedisTemplate.opsForValue().get(key);
 	}
 
 	/**

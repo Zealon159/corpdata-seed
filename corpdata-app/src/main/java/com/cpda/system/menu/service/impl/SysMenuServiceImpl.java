@@ -9,6 +9,7 @@ import com.cpda.system.menu.service.SysMenuService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
@@ -29,8 +30,9 @@ public class SysMenuServiceImpl extends AbstractBaseService<SysMenu> implements 
     private SysMenuMapper menuMapper;
 
     @Override
+    @Cacheable(value="menu")
     public String findByPage(DataGridRequestDTO dgRequest) {
-
+        System.out.println("do service.");
         Map<String,Object> params = dgRequest.getParams();
 
         //增加返回模式，如果是数组，则直接返回List的Json字符串数组

@@ -1,5 +1,6 @@
 package com.cpda.system.cache.controller;
 
+import com.cpda.common.api.RedisService;
 import com.cpda.system.cache.service.CacheService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,9 +19,12 @@ public class CacheController {
     @Autowired
     private CacheService cacheService;
 
+    @Autowired
+    private RedisService redisService;
+
     @PostMapping("/setkey")
     @ResponseBody
-    public String setKey(String key,Object value){
+    public String setKey(String key,String value){
         cacheService.setKey(key,value);
         return "ok";
     }
@@ -29,6 +33,20 @@ public class CacheController {
     @ResponseBody
     public Object getKey(String key){
         Object value = cacheService.getKey(key);
+        return value;
+    }
+
+    @PostMapping("/sethash")
+    @ResponseBody
+    public String setHash(String key,String hashKey,String value){
+        redisService.setHash(key,hashKey,value);
+        return "ok";
+    }
+
+    @PostMapping("/gethash")
+    @ResponseBody
+    public Object getHash(String key,String hashKey){
+        Object value = redisService.getHash(key,hashKey);
         return value;
     }
 }

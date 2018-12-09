@@ -15,11 +15,11 @@ public class CacheService {
     private RedisService redisService;
 
     public Object getKey(String key){
-        return redisService.get(key);
+        return redisService.getV(key);
     }
 
-    public void setKey(String key,Object value){
-        redisService.set(key,value);
+    public void setKey(String key,String value){
+        redisService.setV(key,value);
     }
 
     public Object getObject(String key){
