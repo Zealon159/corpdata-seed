@@ -15,6 +15,6 @@ public interface BaseService<T> {
     Result update(T model);//更新
     T findById(Long id);//通过ID查找
     //List<T> findByIds(String ids);//通过多个ID查找//eg：ids -> “1,2,3,4”
-    String findByPage(DataGridRequestDTO dgRequest);//分页查询结果(返回分页JsonData)
+    String findByPage(int page,int rows);//分页查询结果(返回分页JsonData)
     
 }

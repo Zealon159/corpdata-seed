@@ -77,7 +77,7 @@ public class DataDicController extends BaseController {
 			params.put("dictype", dictype);
 			dgRequest.setParams(params);
 		}
-		return dataDicService.findByPage(dgRequest);
+		return dataDicService.findByPage(dgRequest.getPage(),dgRequest.getRows());
 	}
 	
 	@ResponseBody

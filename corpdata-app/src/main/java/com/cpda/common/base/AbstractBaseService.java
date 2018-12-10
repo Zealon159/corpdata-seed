@@ -1,9 +1,9 @@
 package com.cpda.common.base;
 
-import com.cpda.common.domain.DataGridRequestDTO;
 import com.cpda.common.result.Result;
 import com.cpda.common.result.util.ResultUtil;
 import com.cpda.common.utils.PageConvertUtil;
+import com.cpda.system.security.shiro.util.UserUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +23,8 @@ public abstract class AbstractBaseService<T> implements BaseService<T> {
     	BaseEntity r = (BaseEntity)record;
     	r.setCreated(date);
     	r.setModified(date);
-    	//r.setCreater(UserUtil.getCurrentUserid());
-    	//r.setModifier(UserUtil.getCurrentUserid());
+    	r.setCreater(UserUtil.getCurrentUserid());
+    	r.setModifier(UserUtil.getCurrentUserid());
         if(mapper.insert(record)>0){
         	return ResultUtil.success();
     	}else{
@@ -41,7 +41,7 @@ public abstract class AbstractBaseService<T> implements BaseService<T> {
     	Date date = new Date();
     	BaseEntity r = (BaseEntity)record;
     	r.setModified(date);
-    	//r.setModifier(UserUtil.getCurrentUserid());
+    	r.setModifier(UserUtil.getCurrentUserid());
         if(mapper.update(record)>0){
         	return ResultUtil.success();
     	}else{
@@ -70,9 +70,9 @@ public abstract class AbstractBaseService<T> implements BaseService<T> {
         return mapper.selectByIds(ids);
     }
 
-    public String findByPage(DataGridRequestDTO dgRequest) {
-		PageHelper.startPage(dgRequest.getPage(), dgRequest.getRows());
-		Page<T> list = (Page<T>) mapper.selectAll(dgRequest.getParams());
+    public String findByPage(int page,int rows) {
+		PageHelper.startPage(page, rows);
+		Page<T> list = (Page<T>) mapper.selectAll();
 		return PageConvertUtil.getGridJson(list);
 	}
 }

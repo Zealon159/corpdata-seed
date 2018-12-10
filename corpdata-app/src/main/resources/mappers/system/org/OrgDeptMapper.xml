@@ -2,10 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cpda.system.org.dao.OrgDeptMapper" >
   <resultMap id="BaseResultMap" type="com.cpda.system.org.entity.OrgDept" >
-    <id column="id" property="id" jdbcType="Long" />
+    <id column="id" property="id" />
     <result column="folderName" property="foldername" jdbcType="VARCHAR" />
     <result column="folderid" property="folderid" jdbcType="VARCHAR" />
-    <result column="ParentFolderid" property="parentfolderid" jdbcType="VARCHAR" />
+    <result column="ParentFolderid" property="parentfolderid" jdbcType="INTEGER"  />
     <result column="Sort_number" property="sortNumber" jdbcType="INTEGER" />
     <result column="creater" property="creater" jdbcType="VARCHAR" />
     <result column="created" property="created" jdbcType="TIMESTAMP" />
@@ -21,7 +21,7 @@
       ParentFolderid, Sort_number, creater, 
       created, modified)
     values (#{foldername,jdbcType=VARCHAR}, #{folderid,jdbcType=VARCHAR},
-      #{parentfolderid,jdbcType=VARCHAR}, #{sortNumber,jdbcType=INTEGER}, #{creater,jdbcType=VARCHAR}, 
+      #{parentfolderid}, #{sortNumber,jdbcType=INTEGER}, #{creater,jdbcType=VARCHAR},
       #{created,jdbcType=TIMESTAMP}, #{modified,jdbcType=TIMESTAMP})
   </insert>
   
@@ -31,7 +31,7 @@
     <if test="folderid!=null">
     	folderid = #{folderid,jdbcType=VARCHAR},
     </if>
-      ParentFolderid = #{parentfolderid,jdbcType=VARCHAR},
+      ParentFolderid = #{parentfolderid},
       Sort_number = #{sortNumber,jdbcType=INTEGER},
       modified = #{modified,jdbcType=TIMESTAMP}
     where id = #{id}
@@ -62,9 +62,9 @@
   </select>
   
   <!-- 按父分类查询最后一条子分类记录 编号（folderid） -->
-  <select id="selectLastFolderidByParent" resultType="String" parameterType="java.lang.String" >
+  <select id="selectLastFolderidByParent" resultType="String" parameterType="java.lang.Long" >
     select folderid from org_dept  
-    where parentFolderid = #{parentFolderid,jdbcType=CHAR} 
+    where parentFolderid = #{parentFolderid}
     order by folderid desc limit 0,1
   </select>
 </mapper>

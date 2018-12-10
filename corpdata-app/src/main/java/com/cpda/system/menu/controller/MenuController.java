@@ -77,15 +77,16 @@ public class MenuController extends BaseController {
     public String findByPage(String id){
         DataGridRequestDTO dgRequest = new DataGridRequestDTO();
         Map<String,Object> params = new HashMap<String,Object>();
+        String returnMode = "";
         if(CommonUtil.isBlank(id)){
             id = "root";
         }
         if(!id.equals("root")){
-            params.put("returnMode","array");
+            returnMode = "array";
         }
         params.put("parentId",id);
         dgRequest.setParams(params);
-        return menuService.findByPage(dgRequest);
+        return menuService.findByPage(dgRequest.getPage(),dgRequest.getRows(),returnMode);
     }
 
     //下拉列表数据源
@@ -97,7 +98,7 @@ public class MenuController extends BaseController {
         params.put("returnMode","array");
         params.put("parentId","root");
         dgRequest.setParams(params);
-        return menuService.findByPage(dgRequest);
+        return menuService.findByPage(dgRequest.getPage(),dgRequest.getRows());
     }
 
     //菜单组件数据源

@@ -15,7 +15,7 @@ public class OrgDept extends BaseEntity {
 
     private String folderid;
 
-    private String parentfolderid;
+    private Long parentfolderid;
 
     private Integer sortNumber;
 
@@ -43,12 +43,12 @@ public class OrgDept extends BaseEntity {
         this.folderid = folderid == null ? null : folderid.trim();
     }
 
-    public String getParentfolderid() {
+    public Long getParentfolderid() {
         return parentfolderid;
     }
 
-    public void setParentfolderid(String parentfolderid) {
-        this.parentfolderid = parentfolderid == null ? null : parentfolderid.trim();
+    public void setParentfolderid(Long parentfolderid) {
+        this.parentfolderid = parentfolderid;
     }
 
     public Integer getSortNumber() {

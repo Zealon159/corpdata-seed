@@ -16,7 +16,7 @@ public interface OrgDeptService extends BaseService<OrgDept> {
 	 * @param parentFolderid
 	 * @return
 	 */
-	String calculateFolderid(String parentFolderid);
+	String calculateFolderid(Long parentFolderid);
 
-	Result update(OrgDept record, String oldParentFolderid);
+	Result update(OrgDept record, Long oldParentFolderid);
 }

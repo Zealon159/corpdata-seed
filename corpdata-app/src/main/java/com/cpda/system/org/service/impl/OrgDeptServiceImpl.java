@@ -22,17 +22,17 @@ public class OrgDeptServiceImpl extends AbstractBaseService<OrgDept> implements 
 	
 	@Override
 	public Result save(OrgDept record) {
-		String folderid = calculateFolderid(record.getParentfolderid());
-		record.setFolderid(folderid);
+		/*String folderid = calculateFolderid(record.getParentfolderid());
+		record.setFolderid(folderid);*/
 		return super.save(record);
 	}
 	
-	public Result update(OrgDept record,String oldParentFolderid) {
+	public Result update(OrgDept record,Long oldParentFolderid) {
 		//上级组织发生了变动，需要重新计算层级ID
-		if(!oldParentFolderid.equals(record.getParentfolderid())){
+		/*if(!oldParentFolderid.equals(record.getParentfolderid())){
 			String folderid = calculateFolderid(record.getParentfolderid());
 			record.setFolderid(folderid);
-		}
+		}*/
 		return super.update(record);
 	}
 	
@@ -41,7 +41,8 @@ public class OrgDeptServiceImpl extends AbstractBaseService<OrgDept> implements 
 	 * @return
 	 */
 	public String findByCombox(boolean hasRoot){
-		String json = CorpdataUtil.getOrgDeptComboxJson(orgDeptMapper.selectAllByCombox(),hasRoot);
+		//String json = CorpdataUtil.getOrgDeptComboxJson(orgDeptMapper.selectAllByCombox(),hasRoot);
+		String json = "";
 		return json;
 	}
 	
@@ -50,7 +51,7 @@ public class OrgDeptServiceImpl extends AbstractBaseService<OrgDept> implements 
 	 * @param parentFolderid
 	 * @return
 	 */
-	public String calculateFolderid(String parentFolderid){
+	public String calculateFolderid(Long parentFolderid){
 		String newFolderid = "001";
 		String folderid = orgDeptMapper.selectLastFolderidByParent(parentFolderid);
 		if(folderid!=null){
@@ -71,7 +72,7 @@ public class OrgDeptServiceImpl extends AbstractBaseService<OrgDept> implements 
 			}
 		}
 		//父级id不是根目录，需要加上父级组织的层级编号
-		if(!parentFolderid.equals("root")){
+		if(parentFolderid != -1){
 			OrgDept parentOrg = orgDeptMapper.selectById(parentFolderid);
 			newFolderid = parentOrg.getFolderid()+newFolderid;
 		}

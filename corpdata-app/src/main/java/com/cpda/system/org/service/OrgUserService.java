@@ -21,9 +21,9 @@ public interface OrgUserService extends BaseService<OrgUser> {
 	 */
 	OrgUser getUserInfoByUserid(String userId);
 
-	Result insert(OrgUser record, String orgDeptId, String deptids, String roleProject);
+	Result insert(OrgUser record, Long orgDeptId, String deptids, String roleProject);
 
-	Result update(OrgUser record, String orgDeptId, String deptids, String sysAttachmentPortraitId, String roleProject);
+	Result update(OrgUser record, Long orgDeptId, String deptids, String sysAttachmentPortraitId, String roleProject);
 	
 	/**
 	 * 修改用户密码
@@ -31,7 +31,9 @@ public interface OrgUserService extends BaseService<OrgUser> {
 	 * @param newPassword
 	 * @return
 	 */
-	Result modPassword(String id, String newPassword);
+	Result modPassword(Long id, String newPassword);
 
 	String findByCombox();
+
+	String findByPage(int page,int rows,Long deptId);
 }

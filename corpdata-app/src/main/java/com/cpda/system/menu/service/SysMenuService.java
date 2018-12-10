@@ -13,4 +13,15 @@ public interface SysMenuService extends BaseService<SysMenu> {
      * @return
      */
 	String getMenuJson(int mode);
+
+
+    /**
+     * 查询分页
+     * @param page
+     * @param rows
+     * @param returnMode 返回模式
+     * @return
+     */
+    String findByPage(int page, int rows,String returnMode);
+
 }

@@ -1,6 +1,9 @@
 package com.cpda.config;
 
-import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;1
+import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
+import com.cpda.system.security.shiro.RedisCacheManager;
+import com.cpda.system.security.shiro.RedisSessionDAO;
+import com.cpda.system.security.shiro.ShiroRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO;
@@ -13,8 +16,6 @@ import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreato
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.cache.RedisCacheManager;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -22,12 +23,12 @@ import java.util.Map;
 public class ShiroConfig {
 
 	@Autowired
-	private EnterpriseCacheSessionDAO sessionDAO;
+	private RedisSessionDAO sessionDAO;
 	
 	//安全管理器
     @Bean
-    public SecurityManager securityManager(){
-        DefaultWebSecurityManager securityManager =  new DefaultWebSecurityManager();
+    public DefaultWebSecurityManager securityManager(){
+		DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setRealm(shiroRealm());
         securityManager.setCacheManager(redisCacheManager());
         securityManager.setSessionManager(sessionManager());
@@ -40,7 +41,7 @@ public class ShiroConfig {
 	 * @return
 	 */
 	@Bean
-	public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
+	public ShiroFilterFactoryBean shiroFilter(DefaultWebSecurityManager securityManager) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
         //拦截器.
@@ -119,7 +120,7 @@ public class ShiroConfig {
 	 * @return
 	 */
 	@Bean
-	public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(SecurityManager securityManager){
+	public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(DefaultWebSecurityManager securityManager){
 		AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
 		authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
 		return authorizationAttributeSourceAdvisor;

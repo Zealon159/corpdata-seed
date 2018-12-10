@@ -1,19 +1,25 @@
 package com.cpda.system.org.service.impl;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.cpda.common.api.RedisService;
 import com.cpda.common.base.AbstractBaseService;
+import com.cpda.common.domain.DataGridRequestDTO;
+import com.cpda.common.result.Result;
+import com.cpda.common.result.util.ResultUtil;
+import com.cpda.common.utils.PageConvertUtil;
+import com.cpda.system.org.dao.OrgUserMapper;
+import com.cpda.system.org.entity.OrgDept;
 import com.cpda.system.org.entity.OrgUser;
 import com.cpda.system.org.service.OrgUserService;
+import com.cpda.system.security.shiro.util.ShiroUserPwdUtil;
+import com.cpda.system.security.shiro.util.UserUtil;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+
+import java.util.*;
 
 /**
  * 用户服务
@@ -28,29 +34,24 @@ public class OrgUserServiceImpl extends AbstractBaseService<OrgUser> implements 
 	@Autowired
 	private OrgUserMapper orgUserMapper;
 	
-	@Autowired
+	/*@Autowired
 	private OrgRoleMapper orgRoleMapper;
 
 	@Autowired
-	private OrgPermissionMapper orgPermissionMapper;
+	private OrgPermissionMapper orgPermissionMapper;*/
 	
 	@Autowired
 	RedisService redisService;
 	
-	@Autowired
-	private UserDeptService userDeptService;
-	
-	@Autowired
-	private ProjectTeamService projectTeamServ;
-	
-	@Autowired
-	private OrgUserRoleService orgUserRoleService;
+	/*@Autowired
+	private OrgUserRoleService orgUserRoleService;*/
 	
 	/**
 	 * 获取当前用户所有角色
 	 */
 	public Set<String> getRolesByUser(String userId) {
-		List<String> list =orgRoleMapper.getRolesByUser(userId);
+		//List<String> list =orgRoleMapper.getRolesByUser(userId);
+		List<String> list = new ArrayList<>();
 		Set<String> set = new HashSet<String>();
 		for(String str : list){
 			set.add(str);
@@ -62,7 +63,8 @@ public class OrgUserServiceImpl extends AbstractBaseService<OrgUser> implements 
 	 * 获取当前用户所有权限
 	 */
 	public Set<String> getPermissionsByUser(String userId) {
-		List<String> list =orgPermissionMapper.getPermissionsByUser(userId);
+		//List<String> list =orgPermissionMapper.getPermissionsByUser(userId);
+		List<String> list = new ArrayList<>();
 		Set<String> set = new HashSet<String>();
 		for(String str : list){
 			set.add(str);
@@ -72,20 +74,20 @@ public class OrgUserServiceImpl extends AbstractBaseService<OrgUser> implements 
 	}
 
 	@Override
-	public String findByPage(DataGridRequestDTO dgRequest) {
-		if(dgRequest.getParams()!=null && dgRequest.getParams().get("deptId")!=null){
-			if(dgRequest.getParams().get("deptId").equals("root")){
-				dgRequest.getParams().put("deptId", null);
-			}
+	public String findByPage(int page,int rows,Long deptId) {
+		if(deptId==-1){
+			deptId = null;
 		}
-		return super.findByPage(dgRequest);
+		PageHelper.startPage(page, rows);
+		Page<OrgUser> list = (Page<OrgUser>) orgUserMapper.selectAll(deptId);
+		return PageConvertUtil.getGridJson(list);
 	}
 	
 	/***
 	 * 根据用户id获取用户信息
 	 */
 	public OrgUser getUserInfoByUserid(String userId){
-		OrgUser user = orgUserMapper.getUserInfoByUserid(userId);
+		OrgUser user = orgUserMapper.selectByUserId(userId);
 		return user;
 	}
 	/**
@@ -96,10 +98,9 @@ public class OrgUserServiceImpl extends AbstractBaseService<OrgUser> implements 
 		return ouList;
 	}
 	
-	public Result insert(OrgUser record,String orgDeptId,String deptids,String roleProject) {
+	public Result insert(OrgUser record, Long orgDeptId, String deptids, String roleProject) {
 		
 		Date date = new Date();
-		record.setId(CorpdataUtil.getUUID());
 		record.setCreater(UserUtil.getCurrentUserid());
 		record.setCreated(date);
 		record.setModified(date);
@@ -107,11 +108,10 @@ public class OrgUserServiceImpl extends AbstractBaseService<OrgUser> implements 
 		record.setOrgDept(new OrgDept(orgDeptId));
 		String newPwd = ShiroUserPwdUtil.generateEncryptPwd(record.getUserid(), record.getUserPwd());
 		record.setUserPwd(newPwd);
-		record.setFkDoor("34");//所有门禁的权限id
-		if(deptids!=null){
+		/*if(deptids!=null){
 			userDeptService.insert(record.getUserid(), deptids);
-		}
-		//添加员工分店权限
+		}*/
+		/*//添加员工分店权限
 		JSONArray reList = JSONArray.parseArray(roleProject.replaceAll("&quot;", "\""));
 		for(int i = 0;i<reList.size();i++){
 			JSONObject re=reList.getJSONObject(i);
@@ -125,13 +125,13 @@ public class OrgUserServiceImpl extends AbstractBaseService<OrgUser> implements 
 		//对用户赋予角色
 		if(!(record.getRoleid()==null||record.getRoleid().equals(""))) {
 			orgUserRoleService.createUserRoles(record.getUserid(),"[\""+record.getRoleid()+"\"]");
-		}
+		}*/
 		
 		return super.save(record);
 	}
 
 	@Override
-	public Result deleteById(String id){
+	public Result deleteById(Long id){
 		Result r = ResultUtil.fail();
 		if(id.equals("304a3837c36911e7886e4ccc6a41b42a")){
 			r = ResultUtil.fail("不能删除系统管理员哦！");
@@ -149,34 +149,23 @@ public class OrgUserServiceImpl extends AbstractBaseService<OrgUser> implements 
 	 * @param newPassword
 	 * @return
 	 */
-	public Result modPassword(String id, String newPassword) {
+	public Result modPassword(Long id, String newPassword) {
 		OrgUser user = findById(id);
 		String password = ShiroUserPwdUtil.generateEncryptPwd(user.getUserid(), newPassword);//密码加密
 		user.setUserPwd(password);
 		return super.update(user);
 	}
 	
-	public Result update(OrgUser record,String orgDeptId,String deptids,String sysAttachmentPortraitId,String roleProject){
+	public Result update(OrgUser record,Long orgDeptId,String deptids,String sysAttachmentPortraitId,String roleProject){
 		record.setModified(new Date());
-		if(deptids!=null){
+		/*if(deptids!=null){
 			userDeptService.insert(record.getUserid(), deptids);
 		}
 		SysAttachment sa=new SysAttachment();
 		sa.setId(sysAttachmentPortraitId);
-		record.setSysAttachmentPortrait(sa);
-		//删除员工的所有分店权限
-		projectTeamServ.deleteByParams(null, record.getId());
-		//添加员工分店权限
-		JSONArray reList = JSONArray.parseArray(roleProject.replaceAll("&quot;", "\""));
-		for(int i = 0;i<reList.size();i++){
-			JSONObject re=reList.getJSONObject(i);
-			if(re.getInteger("teamRole") == 1){
-				projectTeamServ.insert(re.getString("projectid"),record.getId(), "1", 1);
-			}else{
-				projectTeamServ.insert(re.getString("projectid"),record.getId(), "2", 0);
-			}
-			
-		}
+		record.setSysAttachmentPortrait(sa);*/
+
+
 		return super.update(record);
 	}
 	/**
@@ -184,7 +173,8 @@ public class OrgUserServiceImpl extends AbstractBaseService<OrgUser> implements 
 	 * @return
 	 */
 	public String findByCombox(){
-		String json = CorpdataUtil.getComboxJson(orgUserMapper.selectAllByCombox());
+		//String json = CorpdataUtil.getComboxJson(orgUserMapper.selectAllByCombox());
+		String json = "";
 		return json;
 	}
 }

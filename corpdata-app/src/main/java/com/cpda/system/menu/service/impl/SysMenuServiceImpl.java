@@ -2,7 +2,6 @@ package com.cpda.system.menu.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.cpda.common.base.AbstractBaseService;
-import com.cpda.common.domain.DataGridRequestDTO;
 import com.cpda.system.menu.dao.SysMenuMapper;
 import com.cpda.system.menu.entity.SysMenu;
 import com.cpda.system.menu.service.SysMenuService;
@@ -29,19 +28,24 @@ public class SysMenuServiceImpl extends AbstractBaseService<SysMenu> implements 
     @Autowired
     private SysMenuMapper menuMapper;
 
+    /**
+     * 分页查询
+     * @param page
+     * @param rows
+     * @param returnMode
+     * @return
+     */
     @Override
     @Cacheable(value="menu")
-    public String findByPage(DataGridRequestDTO dgRequest) {
-        System.out.println("do service.");
-        Map<String,Object> params = dgRequest.getParams();
+    public String findByPage(int page,int rows,String returnMode) {
 
         //增加返回模式，如果是数组，则直接返回List的Json字符串数组
-        if(params!=null && params.get("returnMode")!=null && params.get("returnMode").equals("array")){
-            PageHelper.startPage(dgRequest.getPage(), dgRequest.getRows());
-            Page<SysMenu> list = (Page<SysMenu>) mapper.selectAll(dgRequest.getParams());
+        if(returnMode!=null && returnMode.equals("array")){
+            PageHelper.startPage(page, rows);
+            Page<SysMenu> list = (Page<SysMenu>) menuMapper.selectAll(null);
             return JSON.toJSONStringWithDateFormat(list,"yyyy-MM-dd");
         }else {
-            return super.findByPage(dgRequest);
+            return super.findByPage(page, rows);
         }
     }
 
@@ -60,9 +64,8 @@ public class SysMenuServiceImpl extends AbstractBaseService<SysMenu> implements 
         StringBuffer sb = new StringBuffer();
         sb.append("\"menus\":[");
 
-        Map<String, Object> params = new HashMap<>();
-        params.put("parentId",pid);
-        List<SysMenu> list = menuMapper.selectAll(params);
+
+        List<SysMenu> list = menuMapper.selectAll(pid);
         for(int i=0;i<list.size();i++){
             if(i>0){
                 sb.append(",");
@@ -83,5 +86,10 @@ public class SysMenuServiceImpl extends AbstractBaseService<SysMenu> implements 
 
         sb.append("]");
         return sb.toString();
+    }
+
+    @Override
+    public SysMenu findById(Long id) {
+        return super.findById(id);
     }
 }

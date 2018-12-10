@@ -11,11 +11,11 @@ import java.util.Map;
 
 public interface OrgUserMapper extends BaseMapper<OrgUser> {
 	
-    OrgUser getUserInfoByUserid(@Param("userId") String userId);
+    //OrgUser getUserInfoByUserid(@Param("userId") String userId);
 
-    Page<OrgUser> selectAll(Map<String, Object> params);
+    Page<OrgUser> selectAll(@Param("deptId") Long deptId);
 
-    OrgUser selectByUserId(String userId);
+    OrgUser selectByUserId(@Param("userId") String userId);
 
     List<Map<String,Object>> selectAllByCombox();
 

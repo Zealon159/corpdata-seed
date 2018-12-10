@@ -59,7 +59,7 @@ public class RedisConfig extends CachingConfigurerSupport {
 		//template.setValueSerializer(jackson2JsonRedisSerializer);
 		//value hashmap序列化
 		template.setHashValueSerializer(jackson2JsonRedisSerializer);
-		template.setDefaultSerializer(jackson2JsonRedisSerializer);
+		//template.setDefaultSerializer(jackson2JsonRedisSerializer);
 		return template;
 	}
 
@@ -89,7 +89,7 @@ public class RedisConfig extends CachingConfigurerSupport {
 
 				.entryTtl(Duration.ofMinutes(30))
 				.serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(redisSerializer))
-				.serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(jackson2JsonRedisSerializer))
+				//.serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(jackson2JsonRedisSerializer))
 				.disableCachingNullValues();
 
 		RedisCacheManager cacheManager = RedisCacheManager.builder(factory)

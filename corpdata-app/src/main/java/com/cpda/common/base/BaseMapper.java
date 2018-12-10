@@ -16,7 +16,7 @@ public interface BaseMapper<T>{
 	int deleteByIds(Long[] ids);						//按ids删除记录
 	T selectById(Long id);								//按id查询实体
 	List<T> selectByIds(Long ids);						//按id查询集合
-	int selectCount(Map<String, Object> params);		//按条件查询总数(params可空)
-	List<T> selectAll(Map<String, Object> params);		//按条件查询集合(params可空)
+	int selectCount();									//按条件查询总数
+	List<T> selectAll();								//按条件查询集合
 	boolean existsWithKeyName(Object key);				//按keyname判断记录是否已存在
 }

@@ -15,5 +15,5 @@ public interface OrgDeptMapper extends BaseMapper<OrgDept> {
      * @param parentFolderid
      * @return
      */
-    String selectLastFolderidByParent(@Param("parentFolderid") String parentFolderid);
+    String selectLastFolderidByParent(@Param("parentFolderid") Long parentFolderid);
 }

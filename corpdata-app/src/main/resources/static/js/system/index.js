@@ -89,7 +89,7 @@ $(function() {
     $("#logout").on('click', function() {
         $.messager.confirm('提示', '确定退出系统？', function(r) {
             if(r) {
-                console.log('确定退出')
+                location.href="/logout";
             }
         });
     });
