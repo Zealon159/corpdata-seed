@@ -7,13 +7,12 @@ import com.cpda.system.menu.entity.SysMenu;
 import com.cpda.system.menu.service.SysMenuService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 
@@ -24,6 +23,8 @@ import java.util.Map;
 @Service
 @Transactional
 public class SysMenuServiceImpl extends AbstractBaseService<SysMenu> implements SysMenuService {
+
+    private static final Logger logger = LoggerFactory.getLogger(SysMenuServiceImpl.class);
 
     @Autowired
     private SysMenuMapper menuMapper;
@@ -42,6 +43,7 @@ public class SysMenuServiceImpl extends AbstractBaseService<SysMenu> implements 
         //增加返回模式，如果是数组，则直接返回List的Json字符串数组
         PageHelper.startPage(page, rows);
         Page<SysMenu> list = (Page<SysMenu>) menuMapper.selectByParentId(parentId);
+        logger.info("");
         return JSON.toJSONStringWithDateFormat(list, "yyyy-MM-dd");
     }
 

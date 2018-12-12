@@ -3,7 +3,6 @@ package com.cpda.config;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.cache.CacheProperties;
 import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
@@ -19,10 +18,8 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.*;
-
 import java.lang.reflect.Method;
 import java.net.UnknownHostException;
-import java.time.Duration;
 
 /**
  * redis 配置
@@ -31,9 +28,6 @@ import java.time.Duration;
 @AutoConfigureAfter(RedisAutoConfiguration.class)
 @EnableConfigurationProperties(CacheProperties.class)
 public class RedisConfig extends CachingConfigurerSupport {
-
-	@Autowired
-	private CacheProperties cacheProperties;
 
 	@Bean
 	public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
@@ -48,18 +42,13 @@ public class RedisConfig extends CachingConfigurerSupport {
 
 		om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
 
-		GenericJackson2JsonRedisSerializer  jackson2JsonRedisSerializer = new GenericJackson2JsonRedisSerializer (om);
-
-		//jackson2JsonRedisSerializer.setObjectMapper(om);
+		GenericJackson2JsonRedisSerializer jackson2JsonRedisSerializer = new GenericJackson2JsonRedisSerializer (om);
 
 		template.setConnectionFactory(factory);
 		//key序列化方式
 		template.setKeySerializer(redisSerializer);
 		//value序列化
-		//template.setValueSerializer(jackson2JsonRedisSerializer);
-		//value hashmap序列化
 		template.setHashValueSerializer(jackson2JsonRedisSerializer);
-		//template.setDefaultSerializer(jackson2JsonRedisSerializer);
 		return template;
 	}
 
@@ -84,12 +73,10 @@ public class RedisConfig extends CachingConfigurerSupport {
 		om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
 		jackson2JsonRedisSerializer.setObjectMapper(om);
 
-		// 配置序列化（解决乱码的问题）,过期时间30秒
+		// 配置序列化
 		RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
-
-				.entryTtl(Duration.ofMinutes(30))
+				//.entryTtl(Duration.ofMinutes(30))
 				.serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(redisSerializer))
-				//.serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(jackson2JsonRedisSerializer))
 				.disableCachingNullValues();
 
 		RedisCacheManager cacheManager = RedisCacheManager.builder(factory)
