@@ -1,17 +1,13 @@
 package com.cpda.system.menu.controller;
 
 import com.cpda.common.base.BaseController;
-import com.cpda.common.domain.DataGridRequestDTO;
 import com.cpda.common.result.Result;
-import com.cpda.common.utils.CommonUtil;
 import com.cpda.system.menu.entity.SysMenu;
 import com.cpda.system.menu.service.SysMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @auther: Zealon
@@ -74,31 +70,24 @@ public class MenuController extends BaseController {
     //列表数据
     @ResponseBody
     @RequestMapping("/listdata")
-    public String findByPage(String id){
-        DataGridRequestDTO dgRequest = new DataGridRequestDTO();
-        Map<String,Object> params = new HashMap<String,Object>();
+    public String findByPage(Long id){
         String returnMode = "";
-        if(CommonUtil.isBlank(id)){
-            id = "root";
+        if(id==null){
+            id = 0L;
         }
-        if(!id.equals("root")){
+        if(id!=-1){
             returnMode = "array";
         }
-        params.put("parentId",id);
-        dgRequest.setParams(params);
-        return menuService.findByPage(dgRequest.getPage(),dgRequest.getRows(),returnMode);
+        return menuService.findByPage(1,1000,returnMode,id);
     }
 
     //下拉列表数据源
     @ResponseBody
     @RequestMapping("/comboxjson")
     public String getComboxJsondata(){
-        DataGridRequestDTO dgRequest = new DataGridRequestDTO();
-        Map<String,Object> params = new HashMap<String,Object>();
-        params.put("returnMode","array");
-        params.put("parentId","root");
-        dgRequest.setParams(params);
-        return menuService.findByPage(dgRequest.getPage(),dgRequest.getRows());
+        String returnMode = "array";
+        long parentId = 0;
+        return menuService.findByPage(1,1000,returnMode,parentId);
     }
 
     //菜单组件数据源

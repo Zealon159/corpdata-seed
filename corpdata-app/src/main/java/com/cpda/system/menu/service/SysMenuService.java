@@ -20,8 +20,9 @@ public interface SysMenuService extends BaseService<SysMenu> {
      * @param page
      * @param rows
      * @param returnMode 返回模式
+     * @param parentId 父id
      * @return
      */
-    String findByPage(int page, int rows,String returnMode);
+    String findByPage(int page, int rows,String returnMode,Long parentId);
 
 }

@@ -16,6 +16,10 @@ import java.util.List;
 @Mapper
 public interface SysMenuMapper extends BaseMapper<SysMenu> {
 
-    // 按返回类型查询
-    public List<SysMenu> selectAll(@Param("parentId") Long parentId);
+    /**
+     * 根据父id查询菜单列表
+     * @param parentId
+     * @return
+     */
+    public List<SysMenu> selectByParentId(@Param("parentId") Long parentId);
 }

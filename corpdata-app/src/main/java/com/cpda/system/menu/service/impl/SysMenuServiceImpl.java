@@ -36,17 +36,13 @@ public class SysMenuServiceImpl extends AbstractBaseService<SysMenu> implements 
      * @return
      */
     @Override
-    @Cacheable(value="menu")
-    public String findByPage(int page,int rows,String returnMode) {
+    //@Cacheable(value="menu")
+    public String findByPage(int page,int rows,String returnMode,Long parentId) {
 
         //增加返回模式，如果是数组，则直接返回List的Json字符串数组
-        if(returnMode!=null && returnMode.equals("array")){
-            PageHelper.startPage(page, rows);
-            Page<SysMenu> list = (Page<SysMenu>) menuMapper.selectAll(null);
-            return JSON.toJSONStringWithDateFormat(list,"yyyy-MM-dd");
-        }else {
-            return super.findByPage(page, rows);
-        }
+        PageHelper.startPage(page, rows);
+        Page<SysMenu> list = (Page<SysMenu>) menuMapper.selectByParentId(parentId);
+        return JSON.toJSONStringWithDateFormat(list, "yyyy-MM-dd");
     }
 
     @Override
@@ -65,7 +61,7 @@ public class SysMenuServiceImpl extends AbstractBaseService<SysMenu> implements 
         sb.append("\"menus\":[");
 
 
-        List<SysMenu> list = menuMapper.selectAll(pid);
+        List<SysMenu> list = menuMapper.selectByParentId(pid);
         for(int i=0;i<list.size();i++){
             if(i>0){
                 sb.append(",");
