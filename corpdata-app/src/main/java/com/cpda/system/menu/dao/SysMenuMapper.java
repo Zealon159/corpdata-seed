@@ -18,7 +18,7 @@ public interface SysMenuMapper extends BaseMapper<SysMenu> {
 
     /**
      * 根据父id查询菜单列表
-     * @param parentId
+     * @param parentId 父id
      * @return
      */
     public List<SysMenu> selectByParentId(@Param("parentId") Long parentId);

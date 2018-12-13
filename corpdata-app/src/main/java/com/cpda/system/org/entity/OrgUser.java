@@ -2,7 +2,9 @@ package com.cpda.system.org.entity;
 
 import com.cpda.common.base.BaseEntity;
 
-public class OrgUser extends BaseEntity {
+import java.io.Serializable;
+
+public class OrgUser extends BaseEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 

@@ -4,7 +4,7 @@
 	<resultMap id="BaseResultMap" type="${package}.entity.${className}">
 #foreach($column in $columns)
     #if($column.columnName == $pk.columnName )
-    <id column="id" jdbcType="CHAR" property="id" />
+    <id column="id" property="id" />
     #end
 #if($column.columnName != $pk.columnName )<result column="$column.columnName" property="$column.attrname" />
     #end
@@ -68,7 +68,7 @@
 		select count(*) from ${tableName} where 1=1
 	</select>
 
-	<select id="selectAll" parameterType="map" resultMap="BaseResultMap">
+	<select id="selectAll" resultMap="BaseResultMap">
 		select <include refid="Base_Column_List" />  from ${tableName}
         where 1=1 
 	</select>

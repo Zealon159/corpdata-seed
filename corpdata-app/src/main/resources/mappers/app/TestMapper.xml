@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cpda.app.test.dao.TestMapper">
+	<resultMap id="BaseResultMap" type="com.cpda.app.test.entity.Test">
+        <id column="id" property="id" />
+        <result column="title" property="title" />
+        <result column="created" property="created" />
+    </resultMap>
+
+  	<sql id="Base_Column_List" >
+    	id ,title ,created   	</sql>
+  	
+  	<insert id="insert" parameterType="com.cpda.app.test.entity.Test" useGeneratedKeys="true" keyProperty="id">
+		insert into test
+		(
+			title , 
+			created 
+		)
+		values
+		(
+			#{title}, 
+			#{created}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.cpda.app.test.entity.Test">
+		update test 
+		<set>
+			<if test="title != null">title= #{title}, </if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="deleteById" parameterType="java.lang.Long">
+		delete from test where id = #{id}
+	</delete>
+	
+	<delete id="deleteByIds">
+		delete from test where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+	
+	<select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" /> 
+		from test where id = #{id}
+	</select>
+	
+ 	<select id="selectCount" resultType="int">
+		select count(*) from test where 1=1
+	</select>
+
+	<select id="selectAll" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />  from test
+        where 1=1 
+	</select>
+	
+	<select id="existsWithKeyName" resultType="int" parameterType="String">
+		select 1 from test where 1=1 
+	</select>
+	
+</mapper>

@@ -42,13 +42,15 @@ public class RedisConfig extends CachingConfigurerSupport {
 
 		om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
 
-		GenericJackson2JsonRedisSerializer jackson2JsonRedisSerializer = new GenericJackson2JsonRedisSerializer (om);
+		JdkSerializationRedisSerializer jdkSerializationRedisSerializer = new JdkSerializationRedisSerializer();
 
 		template.setConnectionFactory(factory);
+
 		//key序列化方式
 		template.setKeySerializer(redisSerializer);
 		//value序列化
-		template.setHashValueSerializer(jackson2JsonRedisSerializer);
+		template.setDefaultSerializer(jdkSerializationRedisSerializer);
+
 		return template;
 	}
 

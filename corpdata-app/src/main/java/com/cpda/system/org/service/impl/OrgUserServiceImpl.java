@@ -1,8 +1,6 @@
 package com.cpda.system.org.service.impl;
 
-import com.cpda.common.api.RedisService;
 import com.cpda.common.base.AbstractBaseService;
-import com.cpda.common.domain.DataGridRequestDTO;
 import com.cpda.common.result.Result;
 import com.cpda.common.result.util.ResultUtil;
 import com.cpda.common.utils.PageConvertUtil;
@@ -18,7 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.*;
 
 /**
@@ -29,7 +26,7 @@ import java.util.*;
 @Service("userService")
 public class OrgUserServiceImpl extends AbstractBaseService<OrgUser> implements OrgUserService {
 
-	protected final Logger logger = LoggerFactory.getLogger(this.getClass());  
+	protected final Logger logger = LoggerFactory.getLogger(OrgUserServiceImpl.class);
 	
 	@Autowired
 	private OrgUserMapper orgUserMapper;
@@ -39,9 +36,6 @@ public class OrgUserServiceImpl extends AbstractBaseService<OrgUser> implements 
 
 	@Autowired
 	private OrgPermissionMapper orgPermissionMapper;*/
-	
-	@Autowired
-	RedisService redisService;
 	
 	/*@Autowired
 	private OrgUserRoleService orgUserRoleService;*/
@@ -155,8 +149,8 @@ public class OrgUserServiceImpl extends AbstractBaseService<OrgUser> implements 
 		user.setUserPwd(password);
 		return super.update(user);
 	}
-	
-	public Result update(OrgUser record,Long orgDeptId,String deptids,String sysAttachmentPortraitId,String roleProject){
+
+	public Result update(OrgUser record, Long orgDeptId, String deptids, String sysAttachmentPortraitId, String roleProject){
 		record.setModified(new Date());
 		/*if(deptids!=null){
 			userDeptService.insert(record.getUserid(), deptids);

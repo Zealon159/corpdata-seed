@@ -1,7 +1,6 @@
 package com.cpda.common.base;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * MyBatis Mapper基础接口，其他Mapper接口 请继承该接口
@@ -17,6 +16,6 @@ public interface BaseMapper<T>{
 	T selectById(Long id);								//按id查询实体
 	List<T> selectByIds(Long ids);						//按id查询集合
 	int selectCount();									//按条件查询总数
-	List<T> selectAll();								//按条件查询集合
+	List<T> selectAll();								//查询全部集合
 	boolean existsWithKeyName(Object key);				//按keyname判断记录是否已存在
 }

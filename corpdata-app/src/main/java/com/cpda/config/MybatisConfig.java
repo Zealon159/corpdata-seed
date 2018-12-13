@@ -14,6 +14,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import javax.sql.DataSource;
@@ -59,6 +60,12 @@ public class MybatisConfig {
 
         //添加XML目录
         ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+        Resource resource1 = resolver.getResource("classpath*:mappers/**/*.xml");
+        Resource resource2 = resolver.getResource("classpath*:com/corpdata/**/mapper/*.xml");
+        Resource[] resources = {
+                resource1,resource2
+        };
+        //resolver.getResources("classpath*:mappers/**/*.xml;classpath*:com/corpdata/**/mapper/*.xml")
         factory.setMapperLocations(resolver.getResources("classpath*:mappers/**/*.xml"));
 
         return factory.getObject();

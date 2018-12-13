@@ -1,6 +1,5 @@
 package com.cpda.common.base;
 
-import com.cpda.common.domain.DataGridRequestDTO;
 import com.cpda.common.result.Result;
 import java.util.List;
 

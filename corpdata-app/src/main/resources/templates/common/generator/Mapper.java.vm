@@ -1,6 +1,7 @@
 package ${package}.dao;
 
 import ${package}.entity.${className};
+import org.apache.ibatis.annotations.Mapper;
 import com.cpda.common.base.BaseMapper;
 
 /**
@@ -10,6 +11,7 @@ import com.cpda.common.base.BaseMapper;
  * @date ${datetime}
  * 
  */
+@Mapper
 public interface ${className}Mapper extends BaseMapper<${className}>{
 
 }

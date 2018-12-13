@@ -1,8 +1,11 @@
 package ${package}.service.impl;
 
+import com.cpda.common.result.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.cpda.common.base.AbstractBaseService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ${package}.dao.${className}Mapper;
 import ${package}.entity.${className};
 import ${package}.service.${className}Service;
@@ -16,5 +19,23 @@ import ${package}.service.${className}Service;
  */
 @Service
 public class ${className}ServiceImpl extends AbstractBaseService<${className}> implements ${className}Service {
-	
+
+    protected final Logger logger = LoggerFactory.getLogger(${className}ServiceImpl.class);
+
+    @Override
+    public Result update(${className} record) {
+        logger.info("update ${className}:{}",record.getId());
+        return super.update(record);
+    }
+
+    @Override
+    public Result save(${className} record) {
+        return super.save(record);
+    }
+
+    @Override
+    public Result deleteById(Long id) {
+        logger.info("delete ${className}:{}",id);
+        return super.deleteById(id);
+    }
 }

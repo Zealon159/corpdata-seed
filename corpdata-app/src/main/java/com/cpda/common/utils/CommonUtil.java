@@ -4,8 +4,12 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
+ * 常用函数工具类
+ *
  * @auther: Zealon
  * @Date: 2018-07-09 14:02
  */
@@ -175,11 +179,23 @@ public class CommonUtil {
         }
     }
 
+    /**
+     * 判断字符串是否为空
+     *
+     * @param   string       需要判断的字符串
+     * @return  {boolean} 空：true ； 非空 ：false
+     */
     private static boolean isEmpty(String string) {
         return (string == null) || (string.equals("null"))
                 || (string.length() == 0);
     }
 
+    /**
+     * 判断字符串是否不为空
+     *
+     * @param   string       需要判断的字符串
+     * @return  {boolean} 空：false ； 非空 ：true
+     */
     private static boolean isNotEmpty(String string) {
         return !isEmpty(string);
     }
@@ -190,5 +206,22 @@ public class CommonUtil {
 
     public static boolean isNotBlank(String string) {
         return !isBlank(string);
+    }
+
+    /**
+     * 验证是否为手机号
+     *
+     * @param   phone       手机号
+     * @return  {boolean}   是：true ； 否：false
+     */
+    public static boolean isPhone(String phone) {
+        String regex = "^((13[0-9])|(14[5,7,9])|(15([0-3]|[5-9]))|(17[0,1,3,5,6,7,8])|(18[0-9])|(19[8|9]))\\d{8}$";
+        if (phone.length() != 11) {
+            return false;
+        }
+
+        Pattern p = Pattern.compile(regex);
+        Matcher m = p.matcher(phone);
+        return m.matches();
     }
 }

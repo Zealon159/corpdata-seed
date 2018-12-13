@@ -1,4 +1,4 @@
-package ${package}.controller;
+package com.cpda.app.test.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,86 +9,87 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RequestParam;
-import ${package}.entity.${className};
-import ${package}.service.${className}Service;
+import com.cpda.app.test.entity.Test;
+import com.cpda.app.test.service.TestService;
 import com.cpda.common.domain.DataGridRequestDTO;
 import com.cpda.common.result.Result;
 import com.cpda.common.base.BaseController;
 
 /**
- * ${comments}
  * 
- * @author ${author}
- * @email ${email}
- * @date ${datetime}
+ * 
+ * @author zealon
+ * @email zealon@126.com
+ * @date 2018-12-13 15:39:31
  */
  
 @Controller
-@RequestMapping("${pathName}")
-public class ${className}Controller extends BaseController{
+@RequestMapping("app/test")
+public class TestController extends BaseController{
 
 	@Autowired
-	private ${className}Service ${classname}Service;
+	private TestService testService;
 	
 	//新增页面
 	@GetMapping("/add")
 	public String add(){
-		return "${pathName}/${classname}_add";
+		return "app/test/test_add";
 	}
 	
 	//保存数据
 	@ResponseBody
 	@RequestMapping("/save")
-	public Result save(${className} record){
-		return ${classname}Service.save(record);
+	public Result save(Test record){
+		return testService.save(record);
 	}
 	
 	//编辑页面
 	@RequestMapping("/edit/{id}")
-	public String edit(@PathVariable("${pk.attrname}") ${pk.attrType} ${pk.attrname},ModelMap map){
-		map.put("record", ${classname}Service.findById(${pk.attrname}));
-		return "${pathName}/${classname}_edit";
+	public String edit(@PathVariable("id") Long id,ModelMap map){
+		map.put("record", testService.findById(id));
+		return "app/test/test_edit";
 	}
 	
 	//更新数据
 	@ResponseBody
 	@RequestMapping("/update")
-	public Result update(${className} record){
-		return ${classname}Service.update(record);
+	public Result update(Test record){
+		return testService.update(record);
 	}
 	
 	//删除
 	@ResponseBody
 	@PostMapping("/delete")
-	public Result delete(${pk.attrType} ${pk.attrname}){
-		return ${classname}Service.deleteById(${pk.attrname});
+	public Result delete(Long id){
+		return testService.deleteById(id);
 	}
 	
 	//批量删除
 	@ResponseBody
 	@PostMapping("/deletes")
-	public Result deletes(@RequestParam("ids[]") ${pk.attrType}[] ${pk.attrname}s){
-		return ${classname}Service.deleteByIds(${pk.attrname}s);
+	public Result deletes(@RequestParam("ids[]") Long[] ids){
+		return testService.deleteByIds(ids);
 	}
 	
 	//详情页面
 	@GetMapping("/details/{id}")
 	public String details(ModelMap map,@PathVariable("id") Long id){
-		map.put("record", ${classname}Service.findById(id));
-	    return "${pathName}/${classname}_details";
+		map.put("record", testService.findById(id));
+	    return "app/test/test_details";
 	}
 	
 	//列表页面
 	@GetMapping("/list")
 	public String list(){
-	    return "${pathName}/${classname}_list";
+	    return "app/test/test_list";
 	}
 	
 	//列表数据
 	@ResponseBody
 	@RequestMapping("/listdata")
 	public String findByPage(DataGridRequestDTO dgRequest){
-		return ${classname}Service.findByPage(dgRequest.getPage(),dgRequest.getRows());
+		System.out.println(dgRequest.getRows());
+		return testService.findByPage(dgRequest.getPage(),dgRequest.getRows());
 	}
 	
 }
