@@ -49,7 +49,7 @@ public class RedisConfig extends CachingConfigurerSupport {
 		//key序列化方式
 		template.setKeySerializer(redisSerializer);
 		//value序列化
-		template.setDefaultSerializer(jdkSerializationRedisSerializer);
+		//template.setDefaultSerializer(jdkSerializationRedisSerializer);
 
 		return template;
 	}

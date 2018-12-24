@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -111,6 +113,15 @@ public class RedisUtil {
     }
 
     /**
+     * 获取 Hash 元素集合
+     * @param key
+     * @return
+     */
+    public Map getHashEntries(Object key){
+        return redisTemplate.opsForHash().entries(key);
+    }
+
+    /**
      * 添加hash键值
      *
      * @param hashKey
@@ -119,6 +130,19 @@ public class RedisUtil {
      */
     public void setHashValue(Object hashKey, Object key, Object value){
         redisTemplate.opsForHash().put(hashKey, key, value);
+    }
+
+    /**
+     * 删除 hash key
+     * @param hashKey
+     * @param keys
+     */
+    public Long deleteHashKeys(Object hashKey, Object... keys){
+        return redisTemplate.opsForHash().delete(hashKey,keys);
+    }
+
+    public void leftPush(Object key,Object value){
+        redisTemplate.opsForList().leftPush(key,value);
     }
 
     /**
@@ -140,6 +164,15 @@ public class RedisUtil {
      */
     public void addSetValue(Object setKey, Object itemValue){
         redisTemplate.opsForSet().add(setKey, itemValue);
+    }
+
+    /**
+     * 获取set中所有元素
+     * @param setKey
+     * @return
+     */
+    public Set getSetValues(Object setKey){
+        return redisTemplate.opsForSet().members(setKey);
     }
 
     /**
