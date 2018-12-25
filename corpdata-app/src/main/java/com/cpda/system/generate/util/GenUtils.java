@@ -13,6 +13,7 @@ import org.apache.commons.lang.WordUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
@@ -57,11 +58,11 @@ public class GenUtils {
         TableDO tableDO = new TableDO();
         tableDO.setTableName(table.get("tableName").toString());
         if(table.get("tableComment")!=null){
-        	tableDO.setComments(table.get("tableComment").toString());
+            tableDO.setComments(table.get("tableComment").toString());
         }else{
-        	tableDO.setComments(subject);
+            tableDO.setComments(subject);
         }
-        
+
         //表名转换成Java类名
         String className = tableToJava(tableDO.getTableName(), config.getString("tablePrefix"), config.getString("autoRemovePre"));
         tableDO.setClassName(className);
@@ -74,7 +75,7 @@ public class GenUtils {
             columnDO.setColumnName(column.get("columnName").toString());
             columnDO.setDataType(column.get("dataType").toString());
             if(column.get("extra")!=null){
-            	columnDO.setExtra(column.get("extra").toString());
+                columnDO.setExtra(column.get("extra").toString());
             }
             //列名转换成Java属性名
             String attrName = columnToJava(columnDO.getColumnName());
@@ -120,7 +121,7 @@ public class GenUtils {
         map.put("author", config.getString("author"));
         map.put("email", config.getString("email"));
         map.put("datetime", DateUtils.format(new Date(), DateUtils.DATE_TIME_PATTERN));
-        
+
         //判断是否包含需引用的数据类型
         boolean hasDecimal = hasType(tableDO.getColumns(),"decimal");
         map.put("hasBigDecimal", hasDecimal);
@@ -206,9 +207,9 @@ public class GenUtils {
             return packagePath + "dao" + File.separator + className + "Dao.java";
         }
 
-		if(template.contains("Mapper.java.vm")){
-			return packagePath + "dao" + File.separator + className + "Mapper.java";
-		}
+        if(template.contains("Mapper.java.vm")){
+            return packagePath + "dao" + File.separator + className + "Mapper.java";
+        }
 
         if (template.contains("Service.java.vm")) {
             return packagePath + "service" + File.separator + className + "Service.java";
@@ -223,9 +224,9 @@ public class GenUtils {
         }
 
         if (template.contains("Mapper.xml.vm")) {
-        	String path = packagePath + "dao\\mapper" + File.separator + className + "Mapper.xml";
-        	return path;
-            //return "main" + File.separator + "resources" + File.separator + "mapper" + File.separator + packageName + File.separator + className + "Mapper.xml";
+            //String path = packagePath + "dao\\mapper" + File.separator + className + "Mapper.xml";
+            //return path;
+            return "main" + File.separator + "resources" + File.separator + "mappers" + File.separator + packageName + File.separator + className + "Mapper.xml";
         }
 
         if (template.contains("list.html.vm")) {
@@ -262,23 +263,23 @@ public class GenUtils {
 
         return null;
     }
-    
+
     /**
      * 判断是否包含有匹配的数据类型
      * @param list
      * @param dataType
      * @return
      */
-    public static boolean hasType(List<ColumnDO> list,String dataType){
-    	boolean has = false;
-    	for(ColumnDO column : list){
-    		if(dataType.equals(column.getDataType())){
-    			if(!column.getColumnName().equals("created") && !column.getColumnName().equals("modified")){
-    				has = true;
-    				break;
-    			}
-    		}
-    	}
-    	return has;	
+    public static boolean hasType(List<ColumnDO> list, String dataType){
+        boolean has = false;
+        for(ColumnDO column : list){
+            if(dataType.equals(column.getDataType())){
+                if(!column.getColumnName().equals("created") && !column.getColumnName().equals("modified")){
+                    has = true;
+                    break;
+                }
+            }
+        }
+        return has;
     }
 }

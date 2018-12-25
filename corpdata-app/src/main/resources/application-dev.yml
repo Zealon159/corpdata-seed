@@ -1,0 +1,16 @@
+server:
+  port: 8081
+
+  # 热部署
+  devtools:
+    restart:
+      enabled: true
+      #添加那个目录的文件需要restart
+      additional-paths: src/main/resources/templates
+      #排除那个目录的文件不需要restart
+      exclude: src/main/resources/static
+
+# MyBatis 日志
+logging:
+  level:
+    com.cpda: DEBUG

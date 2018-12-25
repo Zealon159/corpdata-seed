@@ -50,22 +50,22 @@ public class OrgUserController extends BaseController {
 	
 	@ResponseBody
 	@RequestMapping("/save")
-	public Result save(OrgUser record, Long orgDept, String deptids, String roleProject){
-		return userService.insert(record,orgDept,deptids,roleProject);	
+	public Result save(OrgUser record){
+		return userService.insert(record);	
 	}
 	
 	@RequestMapping("/edit/{id}")
 	public String edit(@PathVariable Long id,ModelMap m){
 		OrgUser model = userService.findById(id);
-		m.addAttribute("model", model);
+		m.addAttribute("record", model);
 		//m.addAttribute("userRole",orgUserRoleService.findByUserId(model.getUserid()));
 		return "system/org/user/user_edit";
 	}
 	
 	@ResponseBody
 	@RequestMapping("/update")
-	public Result update(OrgUser record,Long orgDept,String deptids,String sysAttachmentPortraitId,String roleProject){
-		return userService.update(record,orgDept,deptids,sysAttachmentPortraitId,roleProject);
+	public Result update(OrgUser record){
+		return userService.update(record);
 	}
 	
 	@ResponseBody
@@ -97,10 +97,16 @@ public class OrgUserController extends BaseController {
 	@RequestMapping("/listdata")
 	public String findByPage(DataGridRequestDTO dgRequest){
 		Long deptId = null;
-		if (dgRequest.getParams()!=null && dgRequest.getParams().get("deptId")!=null){
-			deptId = Long.parseLong(dgRequest.getParams().get("deptId").toString());
+		String keyword=null;
+		if (dgRequest.getParams()!=null && (dgRequest.getParams().get("deptId")!=null || dgRequest.getParams().get("keyword")!=null)){
+			if(dgRequest.getParams().get("deptId")!=null){
+				deptId = Long.parseLong(dgRequest.getParams().get("deptId").toString());				
+			}
+			if(dgRequest.getParams().get("keyword")!=null){
+				keyword=(String) dgRequest.getParams().get("keyword");
+			}
 		}
-		return userService.findByPage(dgRequest.getPage(),dgRequest.getRows(),deptId);
+		return userService.findByPage(dgRequest.getPage(),dgRequest.getRows(),deptId,keyword);
 	}
 	
 	@RequestMapping("/tosel/{fdName}/{type}")
@@ -173,7 +179,7 @@ public class OrgUserController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping("/updatePassword")
-	public Result updatePassword(Long id ,String newPassword){
+	public Result updatePassword(Long id , String newPassword){
 		return userService.modPassword(id,newPassword);
 	}
 	/**

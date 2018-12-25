@@ -1,5 +1,6 @@
 package com.cpda.config;
 
+import com.cpda.common.utils.ProtostuffSerializer;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -42,14 +43,12 @@ public class RedisConfig extends CachingConfigurerSupport {
 
 		om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
 
-		JdkSerializationRedisSerializer jdkSerializationRedisSerializer = new JdkSerializationRedisSerializer();
-
 		template.setConnectionFactory(factory);
 
 		//key序列化方式
 		template.setKeySerializer(redisSerializer);
 		//value序列化
-		//template.setDefaultSerializer(jdkSerializationRedisSerializer);
+		//template.setDefaultSerializer(new ProtostuffSerializer());
 
 		return template;
 	}

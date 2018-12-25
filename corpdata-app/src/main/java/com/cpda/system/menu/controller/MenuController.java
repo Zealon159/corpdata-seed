@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 /**
  * @auther: Zealon
  * @Date: 2018-08-20 13:59
@@ -29,7 +31,7 @@ public class MenuController extends BaseController {
     //保存数据
     @ResponseBody
     @RequestMapping("/save")
-    public Result save(SysMenu record){
+    public Result save(@Valid SysMenu record){
         return menuService.save(record);
     }
 
@@ -43,15 +45,15 @@ public class MenuController extends BaseController {
     //更新数据
     @ResponseBody
     @RequestMapping("/update")
-    public Result update(SysMenu record){
-        return menuService.update(record);
+    public Result update(@Valid SysMenu record, long oldParentId){
+        return menuService.update(record,oldParentId);
     }
 
     //删除
     @ResponseBody
     @PostMapping("/delete")
-    public Result delete(Long id){
-        return menuService.deleteById(id);
+    public Result delete(Long id, Long parentId){
+        return menuService.deleteById(id,parentId);
     }
 
     //批量删除
@@ -96,4 +98,12 @@ public class MenuController extends BaseController {
     public String getJsonData(){
         return menuService.getMenuJson(0);
     }
+
+    //下拉树数据源
+    @ResponseBody
+    @RequestMapping("/comtree-json/{roleId}")
+    public String getTreeJson(@PathVariable("roleId") long roleId){
+        return menuService.getTreeJson(0,roleId);
+    }
+
 }

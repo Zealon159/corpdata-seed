@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cpda.system.org.dao.OrgRoleMapper">
+  <resultMap id="BaseResultMap" type="com.cpda.system.org.entity.OrgRole">
+    <id column="id" property="id" />
+    <result column="Role_Name" property="roleName" />
+    <result column="Role_Desc"  property="roleDesc" />
+    <result column="Sort_number"  property="sortNumber" />
+    <result column="creater" property="creater" />
+    <result column="created" property="created" />
+    <result column="modified"  property="modified" />
+  </resultMap>
+
+  <insert id="insert" parameterType="com.cpda.system.org.entity.OrgRole">
+    insert into org_role (Role_Name, Role_Desc,
+      Sort_number, creater, created, 
+      modified)
+    values (#{roleName,jdbcType=VARCHAR}, #{roleDesc,jdbcType=VARCHAR},
+      #{sortNumber,jdbcType=INTEGER}, #{creater,jdbcType=VARCHAR}, #{created,jdbcType=TIMESTAMP}, 
+      #{modified,jdbcType=TIMESTAMP})
+  </insert>
+
+  <update id="update" parameterType="com.cpda.system.org.entity.OrgRole">
+      update org_role
+      <set>
+          <if test="roleName != null">Role_Name = #{roleName,jdbcType=VARCHAR},</if>
+          <if test="roleDesc != null">Role_Desc = #{roleDesc,jdbcType=VARCHAR},</if>
+          <if test="sortNumber != null">Sort_number = #{sortNumber,jdbcType=INTEGER},</if>
+          <if test="modified != null">modified = #{modified,jdbcType=TIMESTAMP}</if>
+      </set>
+      where id = #{id}
+  </update>
+
+  <delete id="deleteById" parameterType="java.lang.Long">
+    delete from org_role
+    where id = #{id,jdbcType=CHAR}
+  </delete>
+
+  <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select id, Role_Name, Role_Desc, Sort_number, creater, created, modified
+    from org_role
+    where id = #{id}
+  </select>
+  
+  <select id="selectAll" resultMap="BaseResultMap" parameterType="map">
+    select id, Role_Name, Role_Desc, Sort_number, creater, created, modified
+    from org_role 
+    where 1 = 1
+    <if test="searchStr != null">
+		and ( Role_Name like '%${searchStr}%' or Role_Desc like '%${searchStr}%' )
+	</if>
+    order by Sort_number
+  </select>
+  
+  <select id="selectByKeyword" parameterType="String" resultMap="BaseResultMap">
+	select id, Role_Name, Role_Desc, Sort_number, creater, created, modified
+    from org_role
+    where 1 = 1
+      <if test="keyword != null">
+        and ( Role_Name like concat(#{keyword},'%') or Role_Desc like concat(#{keyword},'%') )
+      </if>
+    order by Sort_number
+  </select>
+	
+  <select id="getRolesByUser" resultType="String" parameterType="java.lang.String">
+  	select fk_role from org_user_role where userid=#{userId}
+  </select>
+
+</mapper>

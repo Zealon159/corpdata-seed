@@ -4,8 +4,8 @@ import com.cpda.common.base.AbstractBaseService;
 import com.cpda.common.result.Result;
 import com.cpda.common.result.util.ResultUtil;
 import com.cpda.common.utils.PageConvertUtil;
+import com.cpda.system.org.dao.OrgDeptMapper;
 import com.cpda.system.org.dao.OrgUserMapper;
-import com.cpda.system.org.entity.OrgDept;
 import com.cpda.system.org.entity.OrgUser;
 import com.cpda.system.org.service.OrgUserService;
 import com.cpda.system.security.shiro.util.ShiroUserPwdUtil;
@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.*;
 
 /**
@@ -30,6 +31,9 @@ public class OrgUserServiceImpl extends AbstractBaseService<OrgUser> implements 
 	
 	@Autowired
 	private OrgUserMapper orgUserMapper;
+	
+	@Autowired
+	private OrgDeptMapper orgDeptMapper;
 	
 	/*@Autowired
 	private OrgRoleMapper orgRoleMapper;
@@ -68,12 +72,15 @@ public class OrgUserServiceImpl extends AbstractBaseService<OrgUser> implements 
 	}
 
 	@Override
-	public String findByPage(int page,int rows,Long deptId) {
-		if(deptId==-1){
+	public String findByPage(int page,int rows,Long deptId,String keyWord) {
+		if(deptId!=null && deptId==0){
 			deptId = null;
 		}
 		PageHelper.startPage(page, rows);
-		Page<OrgUser> list = (Page<OrgUser>) orgUserMapper.selectAll(deptId);
+		HashMap<String,Object> map=new HashMap<String,Object>();
+		map.put("deptId", deptId);
+		map.put("keyword", keyWord);
+		Page<OrgUser> list = (Page<OrgUser>) orgUserMapper.selectAll(map);
 		return PageConvertUtil.getGridJson(list);
 	}
 	
@@ -92,16 +99,24 @@ public class OrgUserServiceImpl extends AbstractBaseService<OrgUser> implements 
 		return ouList;
 	}
 	
-	public Result insert(OrgUser record, Long orgDeptId, String deptids, String roleProject) {
-		
+	public Result insert(OrgUser record) {
+		//查询id是否重复
+		OrgUser user=orgUserMapper.selectByUserId(record.getUserid());
+		if(user!=null){
+			Result result=new Result();
+			result.setCode(400);
+			result.setMsg("添加失败,用户id重复");
+			return result;
+		}
 		Date date = new Date();
 		record.setCreater(UserUtil.getCurrentUserid());
 		record.setCreated(date);
 		record.setModified(date);
 		record.setEnabledState(true);
-		record.setOrgDept(new OrgDept(orgDeptId));
 		String newPwd = ShiroUserPwdUtil.generateEncryptPwd(record.getUserid(), record.getUserPwd());
 		record.setUserPwd(newPwd);
+		record.setPhoneNumber("");
+		record.setFkDoor(0l);
 		/*if(deptids!=null){
 			userDeptService.insert(record.getUserid(), deptids);
 		}*/
@@ -150,16 +165,14 @@ public class OrgUserServiceImpl extends AbstractBaseService<OrgUser> implements 
 		return super.update(user);
 	}
 
-	public Result update(OrgUser record, Long orgDeptId, String deptids, String sysAttachmentPortraitId, String roleProject){
+	public Result update(OrgUser record){
 		record.setModified(new Date());
-		/*if(deptids!=null){
-			userDeptService.insert(record.getUserid(), deptids);
+		if(record.getUserPwd()!=null && record.getUserPwd().equals("****")){
+			record.setUserPwd(null);
+		}else{
+			String pwd=record.getUserPwd();
+			record.setUserPwd(ShiroUserPwdUtil.generateEncryptPwd(record.getUserid(), pwd));
 		}
-		SysAttachment sa=new SysAttachment();
-		sa.setId(sysAttachmentPortraitId);
-		record.setSysAttachmentPortrait(sa);*/
-
-
 		return super.update(record);
 	}
 	/**

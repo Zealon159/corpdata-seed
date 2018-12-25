@@ -8,18 +8,18 @@
             $(function () {
                 var parentId = $("#oldParentId").val();
                 var showState = $("#oldShowState").val();
-                $("#parentId").combobox({
-                    url:"/system/menu/comboxjson",
-                    valueField:"id",
-                    textField:"menuName",
+                var menuType = $("#oldMenuType").val();
+                $("#parentId").combotree({
+                    url:"/system/menu/comtree-json/0",
                     required:true,
                     missingMessage:"请选择!",
                     onLoadSuccess:function(data){
-                        $(this).combobox("setValue", parentId);
+                        $("#parentId").combotree("setValue",parentId);
                     }
                 })
 
                 $("#showState").val(showState);
+                $("#menuType").val(menuType);
             });
         </script>
     </head>
@@ -29,7 +29,7 @@
                 <tr>
                     <td>所属父级</td>
                     <td>
-                        <input name="parentId" id="parentId" class="easyui-combotree" />
+                        <input name="parentId" id="parentId" class="easyui-combotree" th:size="45"/>
                     </td>
                 </tr>
                 <tr>
@@ -38,8 +38,20 @@
                         <input name="menuName" id="menuName" th:value="${record.menuName}" data-options="required:true,missingMessage:'请填写名称！'" class="easyui-validatebox textbox w-middle-more"/></td>
                 </tr>
                 <tr>
+                    <td>菜单类型</td>
+                    <td>
+                        <input type="radio" name="menuType" value="D" checked class="easyui-radiobutton" >目录
+                        <input type="radio" name="menuType" value="M" class="easyui-radiobutton">菜单
+                        <input type="radio" name="menuType" value="B" class="easyui-radiobutton">按钮
+                    </td>
+                </tr>
+                <tr>
                     <td>访问地址</td>
-                    <td><input name="menuUrl" id="menuUrl" th:value="${record.menuUrl}" data-options="required:true,missingMessage:'请填写地址！'" class="easyui-validatebox textbox w-middle-more"/></td>
+                    <td><input name="menuUrl" id="menuUrl" th:value="${record.menuUrl}" data-options="missingMessage:'请填写地址！'" class="easyui-validatebox textbox w-middle-more"/></td>
+                </tr>
+                <tr>
+                    <td>权限</td>
+                    <td><input name="permission" id="permission" th:value="${record.permission}" class="easyui-validatebox textbox w-middle-more"/></td>
                 </tr>
                 <tr>
                     <td>icon</td>
@@ -58,6 +70,7 @@
                 </tr>
             </table>
             <div class="form-table-button">
+                <input id="oldParentId" name="oldParentId" type="hidden" th:value="${record.parentId}"/>
                 <input id="id" name="id" th:value="${record.id}" type="hidden"/>
                 <button onclick="submitForm()" class="easyui-linkbutton l-btn l-btn-small primary" type="button"> 保存 </button>
                 <button onclick="closeWindow()" class="easyui-linkbutton l-btn l-btn-small default" type="button"> 关闭 </button>
@@ -81,7 +94,7 @@
         </script>
         <div>
             <input id="oldShowState" name="oldShowState" type="hidden" th:value="${record.showState}"/>
-            <input id="oldParentId" name="oldParentId" type="hidden" th:value="${record.parentId}"/>
+            <input id="oldMenuType" name="oldMenuType" type="hidden" th:value="${record.menuType}"/>
         </div>
     </body>
 </html>

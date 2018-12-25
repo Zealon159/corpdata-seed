@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>菜单管理</title>
+        <div th:replace="/common/system_form_header" ></div>
+        <script type="text/javascript">
+        $(function () {
+        	$('#fkDept').combotree({
+                url: '/system/org/dept/selectjson/1',
+                required: true
+            });         	
+        });
+        </script>
+    </head>
+    <body style="padding: 10px">
+        <form id="ff" class="easyui-form" method="post" data-options="novalidate:true">
+            <table class="form-table">
+                <tr>
+                    <td>所属部门</td>
+                    <td>
+                        <input id="fkDept" name="fkDept" class="easyui-combotree" style="width:250px;"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="90">用户id</td>
+                    <td>
+                        <input name="userid" id="userid" data-options="required:true,missingMessage:'请填写用户id！'" class="easyui-validatebox textbox w-middle-more"/></td>
+                </tr>
+                <tr>
+                    <td>密码</td>
+                    <td><input name="userPwd" id="userPwd" data-options="required:true,missingMessage:'请填写密码！'" type="password" class="easyui-validatebox textbox w-middle-more"/></td>
+                </tr>
+                <tr>
+                    <td>用户名称</td>
+                    <td><input name="userName" id="userName" data-options="required:true,missingMessage:'请填写用户名称！'" class="easyui-validatebox textbox w-middle-more"/></td>
+                </tr>
+                <tr>
+                    <td>坐席号</td>
+                    <td><input name="landLine" id="landLine" data-options="required:true,missingMessage:'请填写坐席号！'" class="easyui-validatebox textbox w-middle-more"/></td>
+                </tr>
+                <tr>
+                    <td>入职时间</td>
+                    <td><input name="entryTime" id="entryTime" class="easyui-datebox"/></td>
+                </tr>
+                <tr>
+                    <td>是否在职</td>
+                    <td>
+                        <input type="radio" name="enabledState" value="1" checked class="easyui-radiobutton" >是
+                        <input type="radio" name="enabledState" value="0" class="easyui-radiobutton">否
+                    </td>
+                </tr>
+                <tr>
+                    <td>同级排序</td>
+                    <td>
+                        <input name="sortNumber" id="sortNumber" data-options="required:true,missingMessage:'请填写同级排序！'" class="easyui-validatebox textbox w-middle-more"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>职务</td>
+                    <td>
+                        <input name="post" id="post" data-options="required:true,missingMessage:'请填写职务！'" class="easyui-validatebox textbox w-middle-more"/>
+                    </td>
+                </tr>
+            </table>
+            <div class="form-table-button">
+	            <button onclick="submitForm()" id="addButton" class="easyui-linkbutton l-btn l-btn-small primary" type="button"> 保存 </button>
+	            <button onclick="closeWindow()" id="closeButton" class="easyui-linkbutton l-btn l-btn-small default" type="button"> 关闭 </button>
+            </div>
+        </form>
+        <script>
+            function submitForm(){
+                $('#ff').form('submit',{
+                    url:"/system/org/user/save",
+                    onSubmit:function(){
+                        return $(this).form('enableValidation').form('validate');
+                    },
+                    success:function(data){
+                        var data = eval('(' + data + ')');
+                        showMessage(window.parent,data.msg);
+                        if(data.code=="200"){
+                        	window.parent.$('#win').window('close');
+                            window.parent.$('#searchTable').datagrid('reload');                        	
+                        }
+                    }
+                });
+            }
+        </script>
+    </body>
+</html>

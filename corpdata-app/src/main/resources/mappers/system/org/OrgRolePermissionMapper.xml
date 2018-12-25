@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cpda.system.org.dao.OrgRolePermissionMapper">
+
+  <resultMap id="BaseResultMap" type="com.cpda.system.org.entity.OrgRolePermission">
+      <association property="role" javaType="com.cpda.system.org.entity.OrgRole">
+          <id column="roleId" property="id"/>
+      </association>
+      <association property="permission" javaType="com.cpda.system.menu.entity.SysMenu">
+          <id column="id" property="id"/>
+      </association>
+  </resultMap>
+
+  <delete id="deleteByRoleId" parameterType="java.lang.Long">
+      delete from org_role_permission where roleId = #{roleId}
+  </delete>
+
+  <insert id="insert" parameterType="com.cpda.system.org.entity.OrgRolePermission">
+    insert into org_role_permission (roleId, permissionId)
+    values (#{role.id}, #{permission.id})
+  </insert>
+
+  <update id="update" parameterType="com.cpda.system.org.entity.OrgRolePermission">
+    update org_role_permission
+    set roleId = #{role.id},
+      permissionId = #{permission.id}
+    where id = #{id}
+  </update>
+
+  <select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select id, roleid, permissionId from org_role_permission  where id = #{id}
+  </select>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, roleid, permissionId from org_role_permission
+  </select>
+
+    <select id="getOrgRolePermissionSet" resultType="java.lang.Long" parameterType="java.lang.Long">
+		SELECT
+			permissionId
+		FROM
+			org_role_permission
+		where 1 = 1
+		<if test="roleId != null" >
+	        and roleid = #{roleId}
+	    </if>
+	</select>
+</mapper>

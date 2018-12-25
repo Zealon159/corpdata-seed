@@ -3,6 +3,7 @@ package com.cpda.system.org.service;
 import com.cpda.common.base.BaseService;
 import com.cpda.common.result.Result;
 import com.cpda.system.org.entity.OrgUser;
+
 import java.util.Set;
 
 public interface OrgUserService extends BaseService<OrgUser> {
@@ -21,9 +22,9 @@ public interface OrgUserService extends BaseService<OrgUser> {
 	 */
 	OrgUser getUserInfoByUserid(String userId);
 
-	Result insert(OrgUser record, Long orgDeptId, String deptids, String roleProject);
+	Result insert(OrgUser record);
 
-	Result update(OrgUser record, Long orgDeptId, String deptids, String sysAttachmentPortraitId, String roleProject);
+	Result update(OrgUser record);
 	
 	/**
 	 * 修改用户密码
@@ -35,5 +36,5 @@ public interface OrgUserService extends BaseService<OrgUser> {
 
 	String findByCombox();
 
-	String findByPage(int page,int rows,Long deptId);
+	String findByPage(int page, int rows, Long deptId, String keyWord);
 }

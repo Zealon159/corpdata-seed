@@ -6,6 +6,8 @@ import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Select;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,7 +15,7 @@ public interface OrgUserMapper extends BaseMapper<OrgUser> {
 	
     //OrgUser getUserInfoByUserid(@Param("userId") String userId);
 
-    Page<OrgUser> selectAll(@Param("deptId") Long deptId);
+    Page<OrgUser> selectAll(HashMap<String, Object> map);
 
     OrgUser selectByUserId(@Param("userId") String userId);
 

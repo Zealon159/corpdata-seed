@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>角色管理</title>
+        <div th:replace="/common/system_form_header" ></div>
+
+    </head>
+    <body style="padding: 10px">
+        <form id="ff" class="easyui-form" method="post" data-options="novalidate:true">
+            <table class="form-table">
+                <tr>
+                    <td width="90">角色名称</td>
+                    <td>
+                        <input name="roleName" id="roleName" data-options="required:true,missingMessage:'请填写名称！'" class="easyui-validatebox textbox w-middle-more"/></td>
+                </tr>
+                <tr>
+                    <td>角色说明</td>
+                    <td><input name="roleDesc" id="roleDesc" class="easyui-validatebox textbox w-middle-more"/></td>
+                </tr>
+                <tr>
+                    <td>排序</td>
+                    <td><input name="sortNumber" id="sortNumber" data-options="required:true,validType:'digits',missingMessage:'请填写排序(数字)！'" class="easyui-validatebox textbox w-middle-more"/></td>
+                </tr>
+            </table>
+            <div class="form-table-button">
+                <button onclick="submitForm()" class="easyui-linkbutton l-btn l-btn-small primary" type="button"> 保存 </button>
+                <button onclick="closeWindow()" class="easyui-linkbutton l-btn l-btn-small default" type="button"> 关闭 </button>
+            </div>
+        </form>
+        <script>
+            function submitForm(){
+                $('#ff').form('submit',{
+                    url:"/system/org/role/save",
+                    onSubmit:function(){
+                        return $(this).form('enableValidation').form('validate');
+                    },
+                    success:function(data){
+                    	//console.log(data);
+                        var data = eval('(' + data + ')');
+                        window.parent.$('#searchTable').datagrid('reload');
+                        window.parent.$('#win').window('close');
+                        showMessage(window.parent,data.msg);
+                    }
+                });
+            }
+        </script>
+    </body>
+</html>

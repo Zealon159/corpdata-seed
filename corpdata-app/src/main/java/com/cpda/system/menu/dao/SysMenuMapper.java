@@ -4,6 +4,7 @@ import com.cpda.common.base.BaseMapper;
 import com.cpda.system.menu.entity.SysMenu;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -22,4 +23,19 @@ public interface SysMenuMapper extends BaseMapper<SysMenu> {
      * @return
      */
     public List<SysMenu> selectByParentId(@Param("parentId") Long parentId);
+
+    /**
+     * 根据父id查询子菜单数量
+     * @param parentId
+     * @return
+     */
+    @Select("select count(*) from sys_menu where parent_id=#{parentId}")
+    public int getSubMenuCountByParentId(@Param("parentId") Long parentId);
+
+    /**
+     * 更新状态
+     * @param record
+     * @return
+     */
+    public int updateState(SysMenu record);
 }

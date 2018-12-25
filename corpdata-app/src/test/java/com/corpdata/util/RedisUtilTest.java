@@ -34,13 +34,15 @@ public class RedisUtilTest {
      */
     @Test()
     public void listTest(){
-        redisTemplate.opsForList().leftPush("queue","速度");
-        redisTemplate.opsForList().leftPush("queue","力量");
-        redisTemplate.opsForList().leftPush("queue","智慧");
-        Long size = redisTemplate.opsForList().size("queue");
+        redisTemplate.opsForList().leftPush("list:queue","速度");
+        redisTemplate.opsForList().leftPush("list:queue","力量");
+        redisTemplate.opsForList().leftPush("list:queue","智慧");
+        Long size = redisTemplate.opsForList().size("list:queue");
         for (int i = 0; i < size; i++) {
-            System.out.println(redisTemplate.opsForList().index("queue",i));
+            System.out.println(redisTemplate.opsForList().index("list:queue",i));
         }
+
+        redisTemplate.watch("");
     }
 
     /**

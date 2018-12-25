@@ -12,7 +12,7 @@ import javax.jms.TextMessage;
  * @Author: zealon
  * @Version: 1.0
  */
-@Component
+/*@Component
 public class CustomerMqListener {
 
     //定义消费者监听
@@ -33,4 +33,4 @@ public class CustomerMqListener {
             session.recover();
         }
     }
-}
+}*/

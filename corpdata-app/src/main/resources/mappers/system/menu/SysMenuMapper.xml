@@ -2,48 +2,53 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cpda.system.menu.dao.SysMenuMapper">
 	<resultMap id="BaseResultMap" type="com.cpda.system.menu.entity.SysMenu">
-        <id column="id" property="id" />
-        <result column="menu_name" property="menuName" />
-        <result column="icon" property="icon" />
-        <result column="menu_url" property="menuUrl" />
-        <result column="sort_number" property="sortNumber" />
-        <result column="parent_id" property="parentId" />
-        <result column="show_state" property="showState" />
-        <result column="created" property="created" />
+		<id column="id" property="id" />
+		<result column="menu_name" property="menuName" />
+		<result column="icon" property="icon" />
+		<result column="menu_url" property="menuUrl" />
+		<result column="sort_number" property="sortNumber" />
+		<result column="parent_id" property="parentId" />
+		<result column="show_state" property="showState" />
 		<result column="state" property="state" />
-    </resultMap>
+		<result column="created" property="created" />
+		<result column="menu_type" property="menuType" />
+	</resultMap>
 
-  	<sql id="Base_Column_List" >
-    	id,menu_name,icon,menu_url,sort_number,parent_id,show_state,created,state  	
+	<sql id="Base_Column_List" >
+    	id,menu_name,icon,menu_url,sort_number,parent_id,show_state,created,state,menu_type,permission
 	</sql>
-  	
-  	<insert id="insert" parameterType="com.cpda.system.menu.entity.SysMenu">
+
+	<insert id="insert" parameterType="com.cpda.system.menu.entity.SysMenu">
 		insert into sys_menu
 		(
-			menu_name, 
-			icon, 
-			menu_url, 
-			sort_number, 
-			parent_id, 
-			show_state, 
+			menu_name,
+			icon,
+			menu_url,
+			sort_number,
+			parent_id,
+			show_state,
 			created,
+			menu_type,
+			permission,
 			state
 		)
 		values
 		(
-			#{menuName}, 
-			#{icon}, 
-			#{menuUrl}, 
-			#{sortNumber}, 
-			#{parentId}, 
-			#{showState}, 
+			#{menuName},
+			#{icon},
+			#{menuUrl},
+			#{sortNumber},
+			#{parentId},
+			#{showState},
 			#{created},
+			#{menuType},
+			#{permission},
 			#{state}
 		)
 	</insert>
-	 
+
 	<update id="update" parameterType="com.cpda.system.menu.entity.SysMenu">
-		update sys_menu 
+		update sys_menu
 		<set>
 			<if test="menuName != null">menu_name = #{menuName}, </if>
 			<if test="icon != null">icon = #{icon}, </if>
@@ -51,28 +56,34 @@
 			<if test="sortNumber != null">sort_number = #{sortNumber}, </if>
 			<if test="parentId != null">parent_id = #{parentId}, </if>
 			<if test="showState != null">show_state = #{showState}, </if>
+			<if test="menuType != null">menu_type = #{menuType}, </if>
+			<if test="permission != null">permission = #{permission}, </if>
 			<if test="state != null">state = #{state}, </if>
 		</set>
 		where id = #{id}
 	</update>
-	
+
+	<update id="updateState" parameterType="com.cpda.system.menu.entity.SysMenu">
+		update sys_menu set state = #{state} where id = #{id}
+	</update>
+
 	<delete id="deleteById" parameterType="java.lang.Long">
 		delete from sys_menu where id = #{id}
 	</delete>
-	
+
 	<delete id="deleteByIds">
-		delete from sys_menu where id in 
+		delete from sys_menu where id in
 		<foreach item="id" collection="array" open="(" separator="," close=")">
 			#{id}
 		</foreach>
 	</delete>
-	
+
 	<select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
-		select <include refid="Base_Column_List" /> 
+		select <include refid="Base_Column_List" />
 		from sys_menu where id = #{id}
 	</select>
-	
- 	<select id="selectCount" resultType="int">
+
+	<select id="selectCount" resultType="int">
 		select count(*) from sys_menu where 1=1
 	</select>
 
@@ -85,15 +96,15 @@
 
 	<select id="selectByParentId" parameterType="Long" resultMap="BaseResultMap">
 		select <include refid="Base_Column_List" />  from sys_menu
-        where 1=1
+		where 1=1
 		<if test="parentId!=null">
-			and parent_Id=#{parentId}
+			and parent_id=#{parentId}
 		</if>
 		order by sort_number
 	</select>
-	
+
 	<select id="existsWithKeyName" resultType="int" parameterType="String">
 		select 1 from sys_menu where 1=1 limit 0,1
 	</select>
-	
+
 </mapper>

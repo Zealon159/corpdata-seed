@@ -3,39 +3,34 @@ package com.cpda.system.org.entity;
 import com.cpda.common.base.BaseEntity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class OrgUser extends BaseEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private OrgDept orgDept;
-	
 	private String userid;
 	
 	private String userPwd;
 	
-	private String userName;
+	private String landLine;
 	
-	private Integer userSex;
+	private String userName;
 	
 	private String phoneNumber;
 	
-	private String emailAddress;
-	
-	private String wechat;
+	private String post;
 	
 	private Boolean enabledState;
 	
 	private Integer sortNumber;
-
-	public OrgDept getOrgDept() {
-		return orgDept;
-	}
-
-	public void setOrgDept(OrgDept orgDept) {
-		this.orgDept = orgDept;
-	}
-
+	
+	private Date entryTime;
+	
+	private Long fkDept;
+	
+	private Long fkDoor;
+	
 	public String getUserid() {
 		return userid;
 	}
@@ -60,13 +55,6 @@ public class OrgUser extends BaseEntity implements Serializable {
 		this.userName = userName;
 	}
 
-	public Integer getUserSex() {
-		return userSex;
-	}
-
-	public void setUserSex(Integer userSex) {
-		this.userSex = userSex;
-	}
 
 	public String getPhoneNumber() {
 		return phoneNumber;
@@ -74,22 +62,6 @@ public class OrgUser extends BaseEntity implements Serializable {
 
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
-	}
-
-	public String getEmailAddress() {
-		return emailAddress;
-	}
-
-	public void setEmailAddress(String emailAddress) {
-		this.emailAddress = emailAddress;
-	}
-
-	public String getWechat() {
-		return wechat;
-	}
-
-	public void setWechat(String wechat) {
-		this.wechat = wechat;
 	}
 
 	public Boolean getEnabledState() {
@@ -108,7 +80,51 @@ public class OrgUser extends BaseEntity implements Serializable {
 		this.sortNumber = sortNumber;
 	}
 
+	public String getLandLine() {
+		return landLine;
+	}
 
-	
-    
+	public void setLandLine(String landLine) {
+		this.landLine = landLine;
+	}
+
+	public String getPost() {
+		return post;
+	}
+
+	public void setPost(String post) {
+		this.post = post;
+	}
+
+	public Long getFkDoor() {
+		return fkDoor;
+	}
+
+	public void setFkDoor(Long fkDoor) {
+		this.fkDoor = fkDoor;
+	}
+
+	public Long getFkDept() {
+		return fkDept;
+	}
+
+	public void setFkDept(Long fkDept) {
+		this.fkDept = fkDept;
+	}
+
+	@Override
+	public String toString() {
+		return "OrgUser [userid=" + userid + ", userPwd=" + userPwd + ", landLine=" + landLine + ", userName="
+				+ userName + ", phoneNumber=" + phoneNumber + ", post=" + post + ", enabledState=" + enabledState
+				+ ", sortNumber=" + sortNumber + ", fkDept=" + fkDept + ", fkDoor=" + fkDoor + "]";
+	}
+
+	public Date getEntryTime() {
+		return entryTime;
+	}
+
+	public void setEntryTime(Date entryTime) {
+		this.entryTime = entryTime;
+	}
+
 }

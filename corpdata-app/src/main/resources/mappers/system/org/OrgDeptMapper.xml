@@ -18,10 +18,10 @@
   
   <insert id="insert" parameterType="com.cpda.system.org.entity.OrgDept" >
     insert into org_dept (folderName, folderid,
-      ParentFolderid, Sort_number, creater, 
+      ParentFolderid, Sort_number, creater, modifier,
       created, modified)
     values (#{foldername,jdbcType=VARCHAR}, #{folderid,jdbcType=VARCHAR},
-      #{parentfolderid}, #{sortNumber,jdbcType=INTEGER}, #{creater,jdbcType=VARCHAR},
+      #{parentfolderid}, #{sortNumber,jdbcType=INTEGER}, #{creater,jdbcType=VARCHAR},#{modifier,jdbcType=VARCHAR},
       #{created,jdbcType=TIMESTAMP}, #{modified,jdbcType=TIMESTAMP})
   </insert>
   
@@ -57,12 +57,26 @@
     order by folderid
   </select>
   
+  <select id="selectByParentId" parameterType="String" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />  from org_dept
+		where 1=1
+		<if test="parentId!=null">
+			and parentfolderid=#{parentId}
+		</if>
+		order by sort_number
+	</select>
+	
+	<select id="selectByFolderId" parameterType="String" resultType="String">
+		select id from org_dept
+		where folderId=#{folderId}
+	</select>
+  
   <select id="selectAllByCombox" resultType="map">
     select id, folderName text, folderid from org_dept order by folderid
   </select>
   
   <!-- 按父分类查询最后一条子分类记录 编号（folderid） -->
-  <select id="selectLastFolderidByParent" resultType="String" parameterType="java.lang.Long" >
+  <select id="selectLastFolderidByParent" resultType="String" parameterType="String" >
     select folderid from org_dept  
     where parentFolderid = #{parentFolderid}
     order by folderid desc limit 0,1

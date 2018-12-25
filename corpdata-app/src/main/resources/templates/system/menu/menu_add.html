@@ -6,12 +6,13 @@
         <div th:replace="/common/system_form_header" ></div>
         <script type="text/javascript">
             $(function () {
-                $("#parentId").combobox({
-                    url:"/system/menu/comboxjson",
-                    valueField:"id",
-                    textField:"menuName",
+                $("#parentId").combotree({
+                    url:"/system/menu/comtree-json/0",
                     required:true,
-                    missingMessage:"请选择!"
+                    missingMessage:"请选择!",
+                    onLoadSuccess(data){
+                        $("#parentId").combotree("setValue",0);
+                    }
                 })
             });
         </script>
@@ -22,7 +23,7 @@
                 <tr>
                     <td>所属父级</td>
                     <td>
-                        <input name="parentId" id="parentId" class="easyui-combotree" />
+                        <input name="parentId" id="parentId" class="easyui-combotree" th:size="45"/>
                     </td>
                 </tr>
                 <tr>
@@ -31,8 +32,20 @@
                         <input name="menuName" id="menuName" data-options="required:true,missingMessage:'请填写名称！'" class="easyui-validatebox textbox w-middle-more"/></td>
                 </tr>
                 <tr>
+                    <td>菜单类型</td>
+                    <td>
+                        <input type="radio" name="menuType" value="D" checked class="easyui-radiobutton" >目录
+                        <input type="radio" name="menuType" value="M" class="easyui-radiobutton">菜单
+                        <input type="radio" name="menuType" value="B" class="easyui-radiobutton">按钮
+                    </td>
+                </tr>
+                <tr>
                     <td>访问地址</td>
-                    <td><input name="menuUrl" id="menuUrl" data-options="required:true,missingMessage:'请填写地址！'" class="easyui-validatebox textbox w-middle-more"/></td>
+                    <td><input name="menuUrl" id="menuUrl" data-options="missingMessage:'请填写地址！'" class="easyui-validatebox textbox w-middle-more"/></td>
+                </tr>
+                <tr>
+                    <td>权限</td>
+                    <td><input name="permission" id="permission" class="easyui-validatebox textbox w-middle-more"/></td>
                 </tr>
                 <tr>
                     <td>icon</td>
@@ -63,6 +76,7 @@
                         return $(this).form('enableValidation').form('validate');
                     },
                     success:function(data){
+                    	console.log(data);
                         var data = eval('(' + data + ')');
                         window.parent.$('#searchTable').treegrid('reload');
                         window.parent.$('#win').window('close');

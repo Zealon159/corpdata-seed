@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8" />
+		<title>分配角色权限</title>
+		<div th:replace="/common/system_form_header" ></div>
+		
+ 		<script type="text/javascript">
+            $(function () {
+				// 加载权限树
+                var roleId = $("#roleId").val();
+                $("#menus").tree({
+                    url:"/system/menu/comtree-json/"+roleId,
+                    required:true,
+                    animate:true,
+					checkbox:true
+                })
+            });
+
+ 		</script>
+	</head>
+	<body style="padding: 10px">
+
+		<div>
+			选择权限：
+			<ul id="menus" name="menus" class="easyui-tree" ></ul>
+		</div>
+
+		<div class="form-table-button">
+			<input th:type="hidden" th:value="${roleId}" th:id="roleId" th:name="roleId" />
+			<button onclick="submitForm()" class="easyui-linkbutton l-btn l-btn-small primary" type="button"> 保存 </button>
+			<button onclick="closeWindow()" class="easyui-linkbutton l-btn l-btn-small default" type="button"> 关闭 </button>
+		</div>
+
+	</body>
+	<script type="text/javascript">
+		// 提交
+		function submitForm(){
+            // 角色id
+            var roleId=$("#roleId").val();
+
+            // 获取选中的菜单ids
+            var nodes = $('#menus').tree('getChecked');
+            var ids = '';
+            for(var i=0; i<nodes.length; i++){
+                if (ids != '') ids += ',';
+                ids += nodes[i].id;
+            }
+
+            var url = "/system/org/role/save-role-permission";
+            $.post( url,{roleId:roleId,permissionIds:ids} ,function(data){
+                window.parent.$('#win').window('close');
+                showMessage(window.parent,data.msg);
+            },"json");
+
+		}
+	</script>
+</html>

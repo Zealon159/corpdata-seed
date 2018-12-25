@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>角色管理</title>
+    <div th:replace="/common/system_grid_header" ></div>
+
+</head>
+<body style="padding:10px">
+    <div style="padding-bottom: 10px">
+        <a href="#" onclick="openPage()" id="btnAdd" class="easyui-linkbutton l-btn primary" > 新增 </a>
+        <span style="float:right;padding-right:20px">搜索:
+        <input id="ss" class="easyui-searchbox" data-options="searcher:searchFor"style="width:300px;float:right;height: 25px;"></input>
+       	</span>
+    </div>
+    <table id="searchTable" style="width:100%;"></table>
+    <div id="win"></div>
+</body>
+    <script type="text/javascript" >
+        $(function () {
+            //初始化表头
+            $("#searchTable").datagrid({
+                method:'post',
+                url:"/system/org/role/listdata",
+                fitColumns:true,
+                striped:true,
+                pagination:true,
+                rownumbers:true,
+                singleSelect:true,
+                rownumbers:true,
+                pageNumber:1,
+                pageSize:20,
+                columns:[
+                  [
+                    {field:'roleName',title:'角色名称',width:100,align:'center',halign:'center'},
+                    {field:'roleDesc',title:'角色描述',width:100,align:'center',halign:'center'},
+                    {field:'sortNumber',title:'排序',width:60,align:'center',halign:'center'},
+                    {field:'created',title:'创建时间',width:80,align:'center',halign:'center'},
+                    {field:'formatOper',width:120,title:'操作',formatter:fmtOption,align:'center',halign:'center'},
+                    {field:'id',width:1,hidden:true}
+                  ]
+                ],
+                queryParams:{
+                	page:1,
+                	limit:20
+                }
+            });
+            
+            $("#btnAdd").bind("onClick",function () {
+                openPage();
+            })
+        })
+        
+        function searchFor(value){
+        	$('#searchTable').datagrid('load', {
+        		keyword: value
+        	}); 
+        }
+
+        function fmtOption(v,r) {
+            var btnSet = "<a href=\"#\" onclick=toSet(\""+r.id+"\",\""+r.roleName+"\") class=\"easyui-linkbutton l-btn success icon-add\" plain=\"true\">权限设置</a>";
+            var btnEdit = "<a href=\"#\" onclick=toEdit(\""+r.id+"\") class=\"easyui-linkbutton l-btn info icon-add\" plain=\"true\">编辑</a>";
+            var btnDel  = "<a href=\"#\" onclick=toDelete(\""+r.id+"\") class=\"easyui-linkbutton l-btn warning icon-add\" plain=\"true\">删除</a>";
+            return btnSet+"  "+btnEdit+"  "+btnDel;
+        }
+        
+        function fmtStatus(v,r){
+        	if(r.enabledState==true){
+        		return "是";
+        	}else{
+        		return "否";
+        	}
+        }
+
+        function toDelete(id) {
+            $.messager.confirm('提示','确定要删除吗？',function(r){
+                if (r){
+                    $.post('/system/org/role/delete',{id:id},function(res){
+                        $('#searchTable').datagrid('reload');
+                        showMessage(window.parent,res.msg);
+                    },"json");
+                }
+            });
+        }
+
+        function toEdit(id){
+            var url = "/system/org/role/edit/"+id;
+            openWindow("编辑角色",url,620,345);
+        }
+
+        function toSet(id,roleName) {
+            var url = "/system/org/role/permission-seting/"+id;
+            openWindow("["+roleName+"] 权限设置",url,620,450);
+        }
+
+        function openPage(){
+            var url = "/system/org/role/add";
+            openWindow("新增角色",url,620,345);
+        }
+    </script>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>菜单管理</title>
+        <div th:replace="/common/system_form_header" ></div>
+        <script type="text/javascript">
+            $(function () {
+            	$('#parentfolderid').combotree({
+                    url: '/system/org/dept/selectjson/1',    
+                    required: true,
+                    onLoadSuccess: function (node, data) {
+                    	$('#parentfolderid').combotree('setValue', '[[${parentId}]]');
+                    }
+                });         	
+            });
+        </script>
+    </head>
+    <body style="padding: 10px">
+        <form id="ff" class="easyui-form" method="post" th:object="${record}" data-options="novalidate:true" >
+            <table class="form-table">
+                <tr>
+                    <td>所属部门</td>
+                    <td>
+                        <input id="parentfolderid" name="parentfolderid" class="easyui-combotree" style="width:250px;"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="90">组织名称</td>
+                    <td>
+                        <input th:field="*{foldername}" data-options="required:true,missingMessage:'请填写组织名称！'" class="easyui-validatebox textbox w-middle-more"/></td>
+                </tr>
+                <tr>
+                    <td>排序</td>
+                    <td>
+                    <input th:field="*{sortNumber}" data-options="required:true,missingMessage:'请填写排序！'" class="easyui-validatebox textbox w-middle-more"/>
+                    </td>
+                </tr>
+            </table>
+            <div class="form-table-button">
+                <input th:field="*{id}" type="hidden"/>
+                <button onclick="submitForm()" id="addButton" class="easyui-linkbutton l-btn l-btn-small primary" type="button"> 保存 </button>
+            </div>
+            <div style="display:none">
+                <input type="text" id="oldParentFolderid" name="oldParentFolderid" th:value="${record.parentfolderid}" />
+                <input type="text" id="folderid" name="folderid" th:value="${record.folderid}" />
+                </div>
+        </form>
+        <script>
+            function submitForm(){
+                $('#ff').form('submit',{
+                    url:"/system/org/dept/update",
+                    onSubmit:function(){
+                    	console.log($(this).form('enableValidation').form('validate'));
+                        return $(this).form('enableValidation').form('validate');
+                    },
+                    success:function(data){
+                        var data = eval('(' + data + ')');
+                        window.parent.$('#win').window('close');
+                        window.parent.$('#searchTable').treegrid('reload');
+                        showMessage(window.parent,data.msg);
+                    }
+                });
+            }
+        </script>
+    </body>
+</html>

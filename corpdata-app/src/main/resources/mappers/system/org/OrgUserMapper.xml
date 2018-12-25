@@ -6,32 +6,26 @@
     <result column="Userid" property="userid" />
     <result column="User_Pwd" property="userPwd" />
     <result column="User_Name" property="userName" />
-    <result column="User_sex" property="userSex" />
-    <result column="Phone_number" property="phoneNumber" />
-    <result column="Email_address" property="emailAddress" />
-    <result column="wechat" property="wechat" />
+    <result column="land_line" property="landLine" />
     <result column="Enabled_state" property="enabledState" />
     <result column="Sort_number" property="sortNumber" />
     <result column="creater" property="creater" />
     <result column="created" property="created" />
     <result column="modified" property="modified" />
+    <result column="post" property="post" />
+    <result column="entry_Time" property="entryTime" />
     <result column="modifier" property="modifier" />
-    <association property="orgDept" javaType="com.cpda.system.org.entity.OrgDept">
-    	<id column="d_id" jdbcType="CHAR" property="id" />
-    	<result column="d_folderName" jdbcType="VARCHAR" property="foldername" />
-    </association>
-    
+    <result column="fk_Dept" property="fkDept" />
   </resultMap>
-  
+
   <insert id="insert" parameterType="com.cpda.system.org.entity.OrgUser">
-    insert into org_user (Userid, User_Pwd,
-      User_Name, User_sex, Phone_number, Email_address, wechat,
-      Enabled_state, Sort_number, creater,
-      created, modified,modifier)
+    insert into org_user (Userid, User_Pwd,User_Name,Enabled_state, Sort_number, creater,
+      created, modified,modifier,land_line,post,fk_door,fk_dept,entry_Time)
     values (#{userid,jdbcType=VARCHAR}, #{userPwd,jdbcType=VARCHAR},
-      #{userName,jdbcType=VARCHAR}, #{userSex,jdbcType=VARCHAR}, #{phoneNumber,jdbcType=VARCHAR}, #{emailAddress,jdbcType=VARCHAR}, #{wechat,jdbcType=VARCHAR}, 
+      #{userName,jdbcType=VARCHAR},
       #{enabledState,jdbcType=BIT}, #{sortNumber,jdbcType=INTEGER}, #{creater,jdbcType=VARCHAR},
-      #{created,jdbcType=TIMESTAMP}, #{modified,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR})
+      #{created,jdbcType=TIMESTAMP}, #{modified,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR},#{landLine,jdbcType=VARCHAR}
+      ,#{post,jdbcType=VARCHAR},#{fkDoor,jdbcType=VARCHAR},#{fkDept,jdbcType=BIGINT},#{entryTime,jdbcType=TIMESTAMP})
   </insert>
   
   <update id="update" parameterType="com.cpda.system.org.entity.OrgUser">
@@ -39,20 +33,23 @@
     <if test="userPwd!=null">
       User_Pwd = #{userPwd,jdbcType=VARCHAR},
     </if>
+    <if test="entryTime!=null">
+      entry_Time = #{entryTime,jdbcType=TIMESTAMP},
+    </if>
+    <if test="userid!=null">
+      userid = #{userid,jdbcType=VARCHAR},
+    </if>
+    <if test="fkDept!=null">
+      fk_dept = #{fkDept,jdbcType=VARCHAR},
+    </if>
+    <if test="post!=null">
+      post = #{post,jdbcType=VARCHAR},
+    </if>
+    <if test="landLine!=null">
+      land_Line = #{landLine,jdbcType=VARCHAR},
+    </if>
     <if test="userName!=null">
       User_Name = #{userName,jdbcType=VARCHAR},
-    </if>
-    <if test="userSex!=null">
-      User_sex = #{userSex},
-    </if>
-    <if test="wechat!=null">
-      wechat = #{wechat},
-    </if>
-    <if test="phoneNumber!=null">
-      Phone_number = #{phoneNumber,jdbcType=VARCHAR},
-    </if>
-    <if test="emailAddress!=null">
-      Email_address = #{emailAddress,jdbcType=VARCHAR},
     </if>
     <if test="enabledState!=null">
       Enabled_state = #{enabledState,jdbcType=BIT},
@@ -71,15 +68,15 @@
   </delete>
   
   <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select u.id, u.Userid, u.User_Pwd, u.User_Name, u.User_sex, u.wechat, u.Phone_number, u.Email_address, u.Enabled_state,
-    u.Sort_number, u.fk_door,u.creater, u.created, u.modified,u.modifier,d.id d_id,d.folderName d_folderName
+    select u.id, u.Userid, u.User_Pwd, u.User_Name, u.post, u.Enabled_state,u.land_Line,u.entry_Time,
+    u.Sort_number, u.fk_door,u.fk_dept,u.creater, u.created, u.modified,u.modifier,d.id d_id,d.folderName d_folderName
     from org_user u
     left join org_dept d on(u.fk_dept=d.id)
     where u.id = #{id}
   </select>
   
   <select id="selectByUserId" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select u.id, u.Userid, u.User_Pwd, u.User_Name, u.User_sex, u.wechat, u.Phone_number, u.Email_address, u.Enabled_state,
+    select u.id, u.Userid, u.User_Pwd, u.User_Name, u.post, u.Enabled_state,u.land_Line,u.entry_Time,
     u.Sort_number, u.fk_door,u.creater, u.created, u.modified,u.modifier,d.id d_id,d.folderName d_folderName
     from org_user u
     left join org_dept d on(u.fk_dept=d.id)
@@ -87,17 +84,19 @@
   </select>
   
   <select id="selectAll" parameterType="map" resultMap="BaseResultMap">
-    select u.id, u.Userid, u.User_Pwd, u.User_Name, u.User_sex, u.wechat, u.Phone_number, u.Email_address, u.Enabled_state,
-    u.Sort_number, u.creater, u.created, u.modified, u.modifier,d.id d_id,d.folderName d_folderName,
+    select u.id, u.Userid, u.User_Pwd, u.User_Name, u.post, u.Enabled_state,u.land_Line,u.entry_Time,
+    u.Sort_number, u.creater, u.created, u.modified, u.modifier,d.id d_id,d.folderName d_folderName
     from org_user u
     left join org_dept d on(u.fk_dept=d.id)
     where 1=1
     <if test="keyword!=null">
-    	and (u.userid like '%${keyword}%' or u.User_Name like '%${keyword}%')
+    	and (u.userid like '%${keyword}%' or u.User_Name like '%${keyword}%' or u.post = '${keyword}' or u.land_Line = '${keyword}')
     </if>
     <if test="deptId!=null and deptId != ''">
-    	and u.Userid in (select FK_user from org_user_dept where FK_dept = '${deptId}' )        
+    	<!-- and u.Userid in (select FK_user from org_dept where FK_dept = '${deptId}' ) -->
+    	and u.fk_dept='${deptId}'
     </if>
+    order by u.sort_Number
   </select>
   <select id="selectAllByCombox" resultType="map">
     select id, User_Name text from org_user order by Userid

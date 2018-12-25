@@ -39,13 +39,15 @@ public class OrgDeptController extends BaseController {
 	@RequestMapping("/edit/{id}")
 	public String edit(@PathVariable Long id,ModelMap m){
 		OrgDept model = orgDeptService.findById(id);
-		m.addAttribute("model", model);
+		String parentModelId=orgDeptService.findByFolderid(model.getParentfolderid());
+		m.addAttribute("record", model);
+		m.addAttribute("parentId", parentModelId);
 		return "system/org/dept/dept_edit";
 	}
 	
 	@ResponseBody
 	@RequestMapping("/update")
-	public Result update(OrgDept record,Long oldParentFolderid){
+	public Result update(OrgDept record, String oldParentFolderid){
 		return orgDeptService.update(record,oldParentFolderid);
 	}
 	
@@ -67,7 +69,7 @@ public class OrgDeptController extends BaseController {
 	}
 	
 	/**
-	 * 获取组织下来数据源
+	 * 获取组织下拉数据源
 	 * @param val 0:无根目录，1:有根目录
 	 * @return
 	 */
@@ -76,5 +78,18 @@ public class OrgDeptController extends BaseController {
 	public String getSelectJsonData(@PathVariable String val){
 		boolean hashRoot = val.equals("0") ? false : true;
 		return orgDeptService.findByCombox(hashRoot);
+	}
+	/**
+	 * 获取树数据表格
+	 * @param val
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/selectformjsontree")
+	public String getSelectFormTreeJsonData(String id){
+		if(id==null){
+			id="0";				
+		}
+		return orgDeptService.findByFromJsonTree(id);
 	}
 }

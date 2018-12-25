@@ -29,14 +29,18 @@
                 animate:true,
                 columns:[
                   [
-                    {field:'menuName',title:'菜单名称',width:100,halign:'center'},
-                    {field:'sortNumber',title:'同级排序',width:70,align:'center',halign:'center'},
-                    {field:'formatOper',width:100,title:'操作',formatter:fmtOption,align:'center',halign:'center'},
-                    {field:'id',width:1,hidden:true}
+                      {field:'menuName',title:'菜单名称',width:120,halign:'center'},
+                      {field:'menuType',title:'菜单类型',width:60,align:'center',halign:'center'},
+                      {field:'menuUrl',title:'URL',width:100,align:'left',halign:'center'},
+                      {field:'permission',title:'权限标识',width:100,align:'left',halign:'center'},
+                      {field:'sortNumber',title:'同级排序',width:60,align:'center',halign:'center'},
+                      {field:'formatOper',width:100,title:'操作',formatter:fmtOption,align:'center',halign:'center'},
+                      {field:'parentId',width:1,hidden:true},
+                      {field:'id',width:1,hidden:true}
                   ]
                 ],
                 queryParams:{
-                    parentId:0
+                    id:"root"
                 }
             });
 
@@ -47,14 +51,14 @@
 
         function fmtOption(v,r) {
             var btnEdit = "<a href=\"#\" onclick=toEdit(\""+r.id+"\") class=\"easyui-linkbutton l-btn info icon-add\" plain=\"true\">编辑</a>";
-            var btnDel  = "<a href=\"#\" onclick=toDelete(\""+r.id+"\") class=\"easyui-linkbutton l-btn warning icon-add\" plain=\"true\">删除</a>";
+            var btnDel  = "<a href=\"#\" onclick=toDelete(\""+r.id+"\",\""+r.parentId+"\") class=\"easyui-linkbutton l-btn warning icon-add\" plain=\"true\">删除</a>";
             return btnEdit+"  "+btnDel;
         }
 
-        function toDelete(id) {
+        function toDelete(id,parentId) {
             $.messager.confirm('提示','确定要删除吗？',function(r){
                 if (r){
-                    $.post('/system/menu/delete',{id:id},function(res){
+                    $.post('/system/menu/delete',{id:id,parentId:parentId},function(res){
                         $('#searchTable').treegrid('reload');
                         showMessage(window.parent,res.msg);
                     },"json");
@@ -63,13 +67,13 @@
         }
 
         function toEdit(id){
-            $('#win').window({ width:620,height:415,modal:true,title:'编辑菜单'});
-            $('#win').html("<iframe height='370px' width='100%' frameborder='0' src='/system/menu/edit/"+id+"'></iframe>");
+            $('#win').window({ width:620,height:490,modal:true,title:'编辑菜单'});
+            $('#win').html("<iframe height='455px' width='100%' frameborder='0' src='/system/menu/edit/"+id+"'></iframe>");
         }
 
         function openPage(){
-            $('#win').window({ width:620,height:415,modal:true,title:'新增菜单'});
-            $('#win').html("<iframe height='370px' width='100%' frameborder='0' src='/system/menu/add'></iframe>");
+            $('#win').window({ width:620,height:490,modal:true,title:'新增菜单'});
+            $('#win').html("<iframe height='455px' width='100%' frameborder='0' src='/system/menu/add'></iframe>");
         }
     </script>
 </html>

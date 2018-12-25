@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cpda.system.org.dao.OrgUserRoleMapper" >
+  <resultMap id="BaseResultMap" type="com.cpda.system.org.entity.OrgUserRole" >
+    <id column="id" property="id" />
+    <result column="userid" property="userid" jdbcType="VARCHAR" />
+    <association property="orgRole" javaType="com.cpda.system.org.entity.OrgRole">
+    	<id column="roleId" property="id"/>
+    </association>
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+      id, fk_role, userid
+  </sql>
+
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from org_user_role
+    where id = #{id}
+  </select>
+
+  <delete id="deleteById" parameterType="java.lang.Long" >
+    delete from org_user_role
+    where id = #{id}
+  </delete>
+
+  <delete id="deleteByUserid" parameterType="java.lang.String" >
+    delete from org_user_role
+    where userid = #{userid}
+  </delete>
+
+  <insert id="insert" parameterType="com.cpda.system.org.entity.OrgUserRole" >
+    insert into org_user_role ( roleId, userid)
+    values (#{orgRole.id}, #{userid,jdbcType=VARCHAR})
+  </insert>
+
+  <update id="update" parameterType="com.cpda.system.org.entity.OrgUserRole" >
+    update org_user_role set roleId='-1' where id = -1
+  </update>
+
+</mapper>

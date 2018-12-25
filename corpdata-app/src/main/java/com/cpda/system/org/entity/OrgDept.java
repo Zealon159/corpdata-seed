@@ -15,11 +15,12 @@ public class OrgDept extends BaseEntity {
 
     private String folderid;
 
-    private Long parentfolderid;
+    private String parentfolderid;
 
     private Integer sortNumber;
 
-
+    private String state;
+    
     public OrgDept(){}
     
     public OrgDept(Long id) {
@@ -43,14 +44,6 @@ public class OrgDept extends BaseEntity {
         this.folderid = folderid == null ? null : folderid.trim();
     }
 
-    public Long getParentfolderid() {
-        return parentfolderid;
-    }
-
-    public void setParentfolderid(Long parentfolderid) {
-        this.parentfolderid = parentfolderid;
-    }
-
     public Integer getSortNumber() {
         return sortNumber;
     }
@@ -58,5 +51,27 @@ public class OrgDept extends BaseEntity {
     public void setSortNumber(Integer sortNumber) {
         this.sortNumber = sortNumber;
     }
+
+	public String getParentfolderid() {
+		return parentfolderid;
+	}
+
+	public void setParentfolderid(String parentfolderid) {
+		this.parentfolderid = parentfolderid;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	@Override
+	public String toString() {
+		return "OrgDept [id="+id+",foldername=" + foldername + ", folderid=" + folderid + ", parentfolderid=" + parentfolderid
+				+ ", sortNumber=" + sortNumber + ", state=" + state + "]";
+	}
 
 }
