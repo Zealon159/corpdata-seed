@@ -1,6 +1,7 @@
 package com.corpdata;
 
 import com.corpdata.task.AddCustomerTask;
+import com.corpdata.task.AddCustomersTask;
 import com.corpdata.util.PhoneUtil;
 import com.cpda.Application;
 import com.cpda.common.utils.RedisUtil;
@@ -10,11 +11,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
 import java.util.Random;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -24,7 +22,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
-public class MockAddCustomerTest {
+public class MockAddCustomersTest {
 
     @Autowired
     private PhoneMapper mapper;
@@ -33,7 +31,7 @@ public class MockAddCustomerTest {
     private RedisUtil redisUtil;
 
     // 客户端并发量
-    private int clientCount = 100;
+    private int clientCount = 10;
     // 轮询次数
     private int polling = 200;
 
@@ -41,44 +39,24 @@ public class MockAddCustomerTest {
      * 模拟并发（数据库排重检查）
      */
     @Test()
-    public void addCustomerDBChecked() throws InterruptedException {
-        long startTime = System.currentTimeMillis();
-        AtomicInteger repeatCount = new AtomicInteger(); // 重复计数器
-        AtomicInteger failCount = new AtomicInteger();   // 失败计数器
-
-        CountDownLatch countDownLatch = new CountDownLatch(clientCount * polling); //线程计数器
-        ExecutorService executorService = Executors.newFixedThreadPool(15);
-
-        for (int j = 1; j <= polling; j++) {
-            // 模拟客户端并发保存数据
-            for (int i = 1; i <= clientCount; i++) {
-                String phone = PhoneUtil.getPhoneNumber();
-                int id = new Random().nextInt(9999999);
-                AddCustomerTask task = new AddCustomerTask(phone,id,false,countDownLatch,mapper,redisUtil,repeatCount,failCount);
-
-                // 执行任务
-                executorService.execute(task);
-            }
-        }
-
-        // 等待线程任务执行完成
-        countDownLatch.await();
-
-        // 计算耗时
-        long entTime = System.currentTimeMillis();
-        long runTime = entTime-startTime;//(int)(entTime-startTime)/1000;
-        System.out.println("执行完成. runTime:"+runTime+"ms. 重复数："+repeatCount.get()+". 失败数："+failCount);
+    public void addCustomerDBChecked() {
+        addCustomer(false);
     }
 
     /**
      * 模拟并发（Redis 排重检查）
      */
     @Test()
-    public void addCustomerRedisChecked() throws InterruptedException {
+    public void addCustomerRedisChecked() {
+        addCustomer(true);
+    }
+
+    public void addCustomer(boolean useRedis)  {
         long startTime = System.currentTimeMillis();
         AtomicInteger repeatCount = new AtomicInteger(); // 重复计数器
         AtomicInteger failCount = new AtomicInteger();   // 失败计数器
-        CountDownLatch countDownLatch = new CountDownLatch(clientCount*polling); //线程计数器
+        Semaphore semaphore = new Semaphore(clientCount);
+        CountDownLatch countDownLatch = new CountDownLatch(polling*clientCount); //线程计数器
         ExecutorService executorService = Executors.newFixedThreadPool(15);
 
         for (int j = 1; j <= polling; j++) {
@@ -86,7 +64,7 @@ public class MockAddCustomerTest {
             for (int i = 1; i <= clientCount; i++) {
                 String phone = PhoneUtil.getPhoneNumber();
                 int id = new Random().nextInt(9999999);
-                AddCustomerTask task = new AddCustomerTask(phone,id,true,countDownLatch,mapper,redisUtil,repeatCount,failCount);
+                AddCustomersTask task = new AddCustomersTask(phone,id,useRedis,semaphore,countDownLatch,mapper,redisUtil,repeatCount,failCount);
 
                 // 执行任务
                 executorService.execute(task);
@@ -94,12 +72,15 @@ public class MockAddCustomerTest {
         }
 
         // 等待线程任务执行完成
-        countDownLatch.await();
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         // 计算耗时
         long entTime = System.currentTimeMillis();
         long runTime = entTime-startTime;//(int)(entTime-startTime)/1000;
         System.out.println("执行完成. runTime:"+runTime+"ms. 重复数："+repeatCount.get()+". 失败数："+failCount);
     }
-
 }

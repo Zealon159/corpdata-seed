@@ -1,5 +1,6 @@
 package com.corpdata;
 
+import com.corpdata.util.PhoneUtil;
 import com.cpda.Application;
 import com.cpda.common.utils.RedisUtil;
 import com.cpda.system.org.dao.PhoneMapper;
@@ -33,7 +34,7 @@ public class MockPhoneTest {
         long startTime = System.currentTimeMillis();
 
         for (int i = 500001; i <= 600000; i++) {
-            String phone = getPhoneNumber();
+            String phone = PhoneUtil.getPhoneNumber();
             // 数据库排重
             if (mapper.checkRepeat(phone)==0){
                 mapper.addPhone(phone,i);
@@ -57,7 +58,7 @@ public class MockPhoneTest {
     public void initPhoneByRedis() {
         long startTime = System.currentTimeMillis();
         for (int i = 700001; i <= 1000000; i++) {
-            String phone = getPhoneNumber();
+            String phone = PhoneUtil.getPhoneNumber();
             // redis 排重
             boolean exist = redisUtil.existInSet("phones",phone);
             if (!exist){
@@ -104,26 +105,5 @@ public class MockPhoneTest {
             Object phone = iterator.next();
             System.out.println(phone);
         }*/
-    }
-
-    /**
-     * 获取手机号
-     * @return
-     */
-    private String getPhoneNumber(){
-        StringBuffer phone = new StringBuffer();
-
-        // 前3位
-        int[] twoArr = {3,5,7,8};
-        phone.append("1");
-        phone.append(twoArr[new Random().nextInt(4)]);
-        phone.append(new Random().nextInt(10));
-
-        // 后8位
-        for (int i = 0; i < 8; i++) {
-            phone.append(new Random().nextInt(10));
-        }
-
-        return phone.toString();
     }
 }
