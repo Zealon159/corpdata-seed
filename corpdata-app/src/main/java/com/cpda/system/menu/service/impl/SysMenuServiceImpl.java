@@ -187,10 +187,11 @@ public class SysMenuServiceImpl extends AbstractBaseService<SysMenu> implements 
      * @param roleId 角色id（非0，则根据角色追加选中属性）
      * @return
      */
-    @Cacheable(value="string:menu-tree")
+    @Cacheable(value="string:menu-tree-json",
+            key = "'['+T(String).valueOf(#mode).concat('-').concat(#roleId)+']'"
+    )
     @Override
     public String getTreeJson(int mode,long roleId) {
-        logger.info("db get");
         StringBuffer root = new StringBuffer();
         Set<Long> rolePermissions = null;
         if(roleId != 0){

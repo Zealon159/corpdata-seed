@@ -27,22 +27,22 @@ public class RedisUtilTest {
     private RedisUtil redisUtil;
 
     @Autowired
-    private RedisTemplate redisTemplate;
+    private RedisTemplate redisTemplateJackson;
 
     /**
      * 链表测试
      */
     @Test()
     public void listTest(){
-        redisTemplate.opsForList().leftPush("list:queue","速度");
-        redisTemplate.opsForList().leftPush("list:queue","力量");
-        redisTemplate.opsForList().leftPush("list:queue","智慧");
-        Long size = redisTemplate.opsForList().size("list:queue");
+        redisTemplateJackson.opsForList().leftPush("list:queue","速度");
+        redisTemplateJackson.opsForList().leftPush("list:queue","力量");
+        redisTemplateJackson.opsForList().leftPush("list:queue","智慧");
+        Long size = redisTemplateJackson.opsForList().size("list:queue");
         for (int i = 0; i < size; i++) {
-            System.out.println(redisTemplate.opsForList().index("list:queue",i));
+            System.out.println(redisTemplateJackson.opsForList().index("list:queue",i));
         }
 
-        redisTemplate.watch("");
+        redisTemplateJackson.watch("");
     }
 
     /**
