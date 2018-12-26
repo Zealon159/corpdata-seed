@@ -116,7 +116,6 @@ public class OrgUserServiceImpl extends AbstractBaseService<OrgUser> implements 
 		String newPwd = ShiroUserPwdUtil.generateEncryptPwd(record.getUserid(), record.getUserPwd());
 		record.setUserPwd(newPwd);
 		record.setPhoneNumber("");
-		record.setFkDoor(0l);
 		/*if(deptids!=null){
 			userDeptService.insert(record.getUserid(), deptids);
 		}*/

@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
-        <title>菜单管理</title>
+        <title>组织管理</title>
         <div th:replace="/common/system_form_header" ></div>
         <script type="text/javascript">
         $(function () {
@@ -48,10 +48,9 @@
                     },
                     success:function(data){
                         var data = eval('(' + data + ')');
-                        window.parent.$('#win').window('close');
-                        window.parent.$('#searchTable').datagrid('reload');
+                        window.parent.$('#searchTable').treegrid('reload');
                         showMessage(window.parent,data.msg);
-                        
+                        window.parent.$('#win').window('close');
                     }
                 });
             }

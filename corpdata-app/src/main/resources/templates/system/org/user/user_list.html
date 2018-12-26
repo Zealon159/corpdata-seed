@@ -14,7 +14,7 @@
 			<div style="padding-bottom: 10px">
 				<a href="#" onclick="openPage()" id="btnAdd" class="easyui-linkbutton l-btn primary" > 新增人员 </a>
 				<span style="float:right;padding-right:20px">搜索:
-				<input id="ss" class="easyui-searchbox" data-options="searcher:searchFor"style="width:300px;float:right;height: 25px;"></input>
+				<input id="ss" class="easyui-searchbox" data-options="searcher:searchFor"style="width:200px;float:right;height: 25px;"></input>
 				</span>
 			</div>
 			<table id="searchTable" style="width:100%;"></table>
@@ -22,7 +22,7 @@
 	<div id="win"></div>
 </body>
     <script type="text/javascript" >
-    var treeurl="/system/org/dept/selectjson/1";//树treeUrl
+    	var treeurl="/system/org/dept/selectjson/1";//树treeUrl
         $(function () {
             //初始化表头
             $("#searchTable").datagrid({
@@ -39,11 +39,9 @@
                 columns:[
                   [
                     {field:'userName',title:'用户名称',width:100,align:'center',halign:'center'},
-                    {field:'landLine',title:'坐席号',width:100,align:'center',halign:'center'},
-                    {field:'enabledState',title:'是否在职',width:100,align:'center',formatter:fmtStatus,halign:'center'},
-                    {field:'post',title:'职位',width:100,align:'center',halign:'center'},
+					{field:'userid',title:'userId',width:80,align:'center',halign:'center'},
+                    {field:'post',title:'职位',width:80,align:'center',halign:'center'},
                     {field:'sortNumber',title:'同级排序',width:70,align:'center',halign:'center'},
-                    {field:'modified',title:'修改时间',width:70,align:'center',halign:'center'},
                     {field:'formatOper',width:100,title:'操作',formatter:fmtOption,align:'center',halign:'center'},
                     {field:'id',width:1,hidden:true}
                   ]
@@ -70,16 +68,16 @@
         		params: {"deptId":deptId,keyword:value}
         	}); 
         }
-    
+
     	function exnode(node){
-    		
+
     	}
-        
+
         //搜索
         function GridDoSearch(){
         	alert(1);
         }
-        
+
         //分类查询
         function openurl(node){
         	var params =  new Array();
@@ -91,17 +89,10 @@
         }
 
         function fmtOption(v,r) {
+            var btnRole = "<a href=\"#\" onclick=toSetRole(\""+r.userid+"\",\""+r.userName+"\") class=\"easyui-linkbutton l-btn success icon-add\" plain=\"true\">角色</a>";
             var btnEdit = "<a href=\"#\" onclick=toEdit(\""+r.id+"\") class=\"easyui-linkbutton l-btn info icon-add\" plain=\"true\">编辑</a>";
             var btnDel  = "<a href=\"#\" onclick=toDelete(\""+r.id+"\") class=\"easyui-linkbutton l-btn warning icon-add\" plain=\"true\">删除</a>";
-            return btnEdit+"  "+btnDel;
-        }
-        
-        function fmtStatus(v,r){
-        	if(r.enabledState==true){
-        		return "是";
-        	}else{
-        		return "否";
-        	}
+            return btnRole+"  "+btnEdit+"  "+btnDel;
         }
 
         function toDelete(id) {
@@ -116,13 +107,18 @@
         }
 
         function toEdit(id){
-            $('#win').window({ width:620,height:517,modal:true,title:'编辑菜单'});
-            $('#win').html("<iframe height='470px' width='100%' frameborder='0' src='/system/org/user/edit/"+id+"'></iframe>");
+            var url = "/system/org/user/edit/"+id;
+            openWindow("编辑用户",url,620,517);
+        }
+        
+        function toSetRole(userid,userName) {
+            var url = "/system/org/user/role-seting/"+userid;
+            openWindow("["+userName+"] 角色设置",url,620,400);
         }
 
         function openPage(){
-            $('#win').window({ width:620,height:517,modal:true,title:'新增菜单'});
-            $('#win').html("<iframe height='470px' width='100%' frameborder='0' src='/system/org/user/add'></iframe>");
+            var url = "/system/org/user/add";
+            openWindow("新增用户",url,620,517);
         }
     </script>
 </html>

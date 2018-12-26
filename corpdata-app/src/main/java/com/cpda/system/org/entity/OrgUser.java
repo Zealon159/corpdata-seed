@@ -13,8 +13,6 @@ public class OrgUser extends BaseEntity implements Serializable {
 	
 	private String userPwd;
 	
-	private String landLine;
-	
 	private String userName;
 	
 	private String phoneNumber;
@@ -25,11 +23,7 @@ public class OrgUser extends BaseEntity implements Serializable {
 	
 	private Integer sortNumber;
 	
-	private Date entryTime;
-	
 	private Long fkDept;
-	
-	private Long fkDoor;
 	
 	public String getUserid() {
 		return userid;
@@ -55,7 +49,6 @@ public class OrgUser extends BaseEntity implements Serializable {
 		this.userName = userName;
 	}
 
-
 	public String getPhoneNumber() {
 		return phoneNumber;
 	}
@@ -80,28 +73,12 @@ public class OrgUser extends BaseEntity implements Serializable {
 		this.sortNumber = sortNumber;
 	}
 
-	public String getLandLine() {
-		return landLine;
-	}
-
-	public void setLandLine(String landLine) {
-		this.landLine = landLine;
-	}
-
 	public String getPost() {
 		return post;
 	}
 
 	public void setPost(String post) {
 		this.post = post;
-	}
-
-	public Long getFkDoor() {
-		return fkDoor;
-	}
-
-	public void setFkDoor(Long fkDoor) {
-		this.fkDoor = fkDoor;
 	}
 
 	public Long getFkDept() {
@@ -114,17 +91,9 @@ public class OrgUser extends BaseEntity implements Serializable {
 
 	@Override
 	public String toString() {
-		return "OrgUser [userid=" + userid + ", userPwd=" + userPwd + ", landLine=" + landLine + ", userName="
+		return "OrgUser [userid=" + userid + ", userPwd=" + userPwd + ", userName="
 				+ userName + ", phoneNumber=" + phoneNumber + ", post=" + post + ", enabledState=" + enabledState
-				+ ", sortNumber=" + sortNumber + ", fkDept=" + fkDept + ", fkDoor=" + fkDoor + "]";
-	}
-
-	public Date getEntryTime() {
-		return entryTime;
-	}
-
-	public void setEntryTime(Date entryTime) {
-		this.entryTime = entryTime;
+				+ ", sortNumber=" + sortNumber + ", fkDept=" + fkDept + "]";
 	}
 
 }
