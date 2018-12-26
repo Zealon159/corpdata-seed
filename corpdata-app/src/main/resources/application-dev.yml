@@ -13,4 +13,4 @@ server:
 # MyBatis 日志
 logging:
   level:
-    com.cpda: DEBUG
+    com.cpda: INFO

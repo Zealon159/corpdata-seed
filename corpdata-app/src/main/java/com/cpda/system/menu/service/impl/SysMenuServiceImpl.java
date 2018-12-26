@@ -15,6 +15,8 @@ import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,6 +47,7 @@ public class SysMenuServiceImpl extends AbstractBaseService<SysMenu> implements 
      * @return
      */
     @Override
+    @CacheEvict(value = "string:menu-tree",allEntries = true)
     public Result save(SysMenu record) {
         Result result = ResultUtil.success();
         try{
@@ -70,6 +73,7 @@ public class SysMenuServiceImpl extends AbstractBaseService<SysMenu> implements 
      * @return
      */
     @Override
+    @CacheEvict(value = "string:menu-tree",allEntries = true)
     public Result update(SysMenu record, Long oldParentId) {
         Result result = ResultUtil.success();
         try{
@@ -93,6 +97,7 @@ public class SysMenuServiceImpl extends AbstractBaseService<SysMenu> implements 
      * @return
      */
     @Override
+    @CacheEvict(value = "string:menu-tree",allEntries = true)
     public Result deleteById(Long id, Long parentId) {
         Result result = ResultUtil.success();
         int subMenuCount = menuMapper.getSubMenuCountByParentId(id);
@@ -123,7 +128,6 @@ public class SysMenuServiceImpl extends AbstractBaseService<SysMenu> implements 
      * @return
      */
     @Override
-    //@Cacheable(value="menu")
     public String findByPage(int page,int rows,String returnMode,Long parentId) {
 
         //增加返回模式，如果是数组，则直接返回List的Json字符串数组
@@ -183,8 +187,10 @@ public class SysMenuServiceImpl extends AbstractBaseService<SysMenu> implements 
      * @param roleId 角色id（非0，则根据角色追加选中属性）
      * @return
      */
+    @Cacheable(value="string:menu-tree")
     @Override
     public String getTreeJson(int mode,long roleId) {
+        logger.info("db get");
         StringBuffer root = new StringBuffer();
         Set<Long> rolePermissions = null;
         if(roleId != 0){
