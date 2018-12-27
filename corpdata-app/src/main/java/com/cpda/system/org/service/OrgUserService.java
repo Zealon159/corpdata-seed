@@ -37,4 +37,6 @@ public interface OrgUserService extends BaseService<OrgUser> {
 	String findByCombox();
 
 	String findByPage(int page, int rows, Long deptId, String keyWord);
+
+	Result deleteByUserid(String userId);
 }

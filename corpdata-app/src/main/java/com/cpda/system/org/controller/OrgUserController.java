@@ -70,9 +70,9 @@ public class OrgUserController extends BaseController {
 	
 	@ResponseBody
 	@RequestMapping("/delete")
-	public Result delete(Long id){
+	public Result delete(String userId){
 
-		return userService.deleteById(id);
+		return userService.deleteByUserid(userId);
 	}
 
 	@RequestMapping("/list")

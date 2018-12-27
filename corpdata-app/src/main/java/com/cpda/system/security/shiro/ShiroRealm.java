@@ -42,8 +42,6 @@ public class ShiroRealm extends AuthorizingRealm {
 		String encrityPwd = ShiroUserPwdUtil.generateEncryptPwd(userid, password);
 		Object credentials = encrityPwd;
 
-		logger.debug("读取数据库中的" + userid + "-" + "信息");
-
 		OrgUser user = userService.getUserInfoByUserid(userid);
 		if(user==null){
 			throw new UnknownAccountException("用户不存在！");

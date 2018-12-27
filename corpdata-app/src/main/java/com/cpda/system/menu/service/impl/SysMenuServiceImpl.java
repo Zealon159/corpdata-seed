@@ -148,9 +148,9 @@ public class SysMenuServiceImpl extends AbstractBaseService<SysMenu> implements 
      * @return
      */
     public String getMenusByParentId(long pid,int mode){
+
         StringBuffer sb = new StringBuffer();
         sb.append("\"menus\":[");
-
 
         List<SysMenu> list = menuMapper.selectByParentId(pid);
         for(int i=0;i<list.size();i++){
@@ -167,12 +167,14 @@ public class SysMenuServiceImpl extends AbstractBaseService<SysMenu> implements 
 
             //mode为0时代表同步获取全部数据，继续获取子分类
             if(mode==0) {
-                sb.append(",").append(getMenusByParentId(menu.getId(), mode));
+                if (menu.getState().equals("closed")) {
+                    sb.append(",").append(getMenusByParentId(menu.getId(), mode));
+                }
             }
             sb.append("}");
         }
-
         sb.append("]");
+
         return sb.toString();
     }
 

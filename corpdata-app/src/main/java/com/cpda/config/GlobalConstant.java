@@ -13,4 +13,6 @@ public class GlobalConstant {
     public final static String MENU_BUTTON = "B";
     // 菜单类型菜单
     public final static String MENU_MENU = "M";
+    // 权限缓存命名
+    public final static String AUTHORIZATION_CACHE_NAME = "authorizationCache";
 }

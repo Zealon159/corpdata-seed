@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
     <head>
         <meta charset="UTF-8">
         <title>系统管理</title>
@@ -153,6 +153,9 @@
                 <div title="首页" data-options="iconCls:'fa fa-home'">
                     <div style="padding: 20px;">
                         放点什么好呢......
+                        <shiro:hasRole name="1">
+                            显示权限啊啊.
+                        </shiro:hasRole>
                     </div>
                 </div>
             </div>

@@ -2,12 +2,17 @@ package com.cpda.system.org.controller;
 
 import com.cpda.common.base.BaseController;
 import com.cpda.common.result.Result;
+import com.cpda.system.org.dao.OrgRoleMapper;
 import com.cpda.system.org.entity.OrgUserRole;
+import com.cpda.system.org.service.OrgRoleService;
 import com.cpda.system.org.service.OrgUserRoleService;
+import com.cpda.system.org.service.OrgUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Set;
 
 /**
  * 用户角色关联控制器
@@ -20,7 +25,26 @@ public class OrgUserRoleController extends BaseController {
 
 	@Autowired
 	private OrgUserRoleService orgUserRoleService;
-	
+
+	@Autowired
+	private OrgRoleMapper roleMapper;
+
+	@Autowired
+	private OrgUserService userService;
+
+	@GetMapping("/seting/{userid}")
+	public String seting(@PathVariable("userid") String userid, ModelMap map){
+		map.put("userid",userid);
+		map.put("roleList",roleMapper.selectByKeyword(null));
+		return "/system/org/user/user_role_seting";
+	}
+
+	@PostMapping("/get-user-roles")
+	@ResponseBody
+	public Set<String> getUserRoles(String userid){
+		return userService.getRolesByUser(userid);
+	}
+
 	@ResponseBody
 	@RequestMapping("/add")
 	public Result add(OrgUserRole record){

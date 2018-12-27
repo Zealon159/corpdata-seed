@@ -63,7 +63,7 @@
   </select>
 	
   <select id="getRolesByUser" resultType="String" parameterType="java.lang.String">
-  	select fk_role from org_user_role where userid=#{userId}
+  	select roleId from org_user_role where userid=#{userId}
   </select>
 
 </mapper>

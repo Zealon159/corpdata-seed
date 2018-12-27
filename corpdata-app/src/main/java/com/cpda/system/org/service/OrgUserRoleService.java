@@ -19,5 +19,7 @@ public interface OrgUserRoleService extends BaseService<OrgUserRole> {
 
 	List<OrgUserRole> findByUserId(String userid);
 
+	String findRoleIdsByUserId(String userid);
+
 	void deleteByUserId(String userid);
 }

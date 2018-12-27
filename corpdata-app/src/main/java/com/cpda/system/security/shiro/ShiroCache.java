@@ -8,6 +8,7 @@ import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.stereotype.Component;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -24,13 +25,10 @@ import java.util.concurrent.TimeUnit;
 public class ShiroCache<K, V> implements Cache<K, V> {
 
     private Charset charset;
-    public static final String REDIS_SHIRO_CACHE = "";//biz-shiro-cache:
+    public static final String REDIS_SHIRO_CACHE = "";
     private String cacheKey;
     private RedisTemplate<K, V> redisTemplate;
     private long globExpire = 480; //分
-    
-    /*@Autowired
-    private RedisService redisService;*/
     
     @SuppressWarnings("rawtypes")
     public ShiroCache(String name, RedisTemplate client) {
@@ -47,9 +45,7 @@ public class ShiroCache<K, V> implements Cache<K, V> {
     @Override
     public V put(K key, V value) throws CacheException {
         V old = get(key);
-        //redisTemplate.boundValueOps(getCacheKey(key)).set(value);
-        //set(getCacheKey(key).toString(), value);
-        redisTemplate.opsForValue().set(getCacheKey(key), value);
+        redisTemplate.opsForValue().set(getCacheKey(key), value,globExpire, TimeUnit.MINUTES);
         return old;
     }
 
@@ -89,18 +85,4 @@ public class ShiroCache<K, V> implements Cache<K, V> {
     	
         return (K) (this.cacheKey + k);
     }
-    
-    /**
-	 * 存储key
-	 */
-	/*public boolean set(final String key, final Object value) {
-		boolean result = redisTemplate.execute(new RedisCallback<Boolean>() {
-            public Boolean doInRedis(RedisConnection connection) throws DataAccessException {
-            	RedisSerializer<String> serializer = redisTemplate.getStringSerializer();
-                connection.set(serializer.serialize(key), SerializeUtils.serialize(value));
-                return true;
-            }
-	    });
-		return result;
-	}*/
 }

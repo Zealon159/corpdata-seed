@@ -2,49 +2,47 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="${package}.dao.${className}Mapper">
     <resultMap id="BaseResultMap" type="${package}.entity.${className}">
-		#foreach($column in $columns)
-			#if($column.columnName == $pk.columnName )
-                <id column="id" property="id" />
-			#end
-			#if($column.columnName != $pk.columnName )<result column="$column.columnName" property="$column.attrname" />
-			#end
-		#end
+#foreach($column in $columns)
+    #if($column.columnName == $pk.columnName )
+    <id column="id" property="id" />#end
+
+    #if($column.columnName != $pk.columnName )
+    <result column="$column.columnName" property="$column.attrname" />#end#end
+
     </resultMap>
 
     <sql id="Base_Column_List" >
     	#foreach($column in $columns)$column.columnName #if($velocityCount != $columns.size()),#end#end
+
   	</sql>
 
     <insert id="insert" parameterType="${package}.entity.${className}"#if($pk.extra == 'auto_increment') useGeneratedKeys="true" keyProperty="$pk.attrname"#end>
         insert into ${tableName}
         <trim prefix="(" suffix=")" suffixOverrides="," >
-			#foreach($column in $columns)
-				#if($column.columnName != $pk.columnName || $pk.extra != 'auto_increment')
-                    <if test="$column.attrname != null" >
-						$column.columnName,
-                    </if>
-				#end
-			#end
-        </trim>
+#foreach($column in $columns)
+    #if($column.columnName != $pk.columnName || $pk.extra != 'auto_increment')
+    <if test="$column.attrname != null" >$column.columnName,</if>
+    #end
+#end
+    </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
-			#foreach($column in $columns)
-				#if($column.columnName != $pk.columnName || $pk.extra != 'auto_increment')
-                    <if test="$column.attrname != null" >
-                        #{$column.attrname},
-                    </if>
-				#end
-			#end
-        </trim>
+#foreach($column in $columns)
+    #if($column.columnName != $pk.columnName || $pk.extra != 'auto_increment')
+    <if test="$column.attrname != null" >#{$column.attrname},</if>
+    #end
+#end
+    </trim>
     </insert>
 
     <update id="update" parameterType="${package}.entity.${className}">
         update ${tableName}
         <set>
-			#foreach($column in $columns)
-				#if($column.columnName != $pk.columnName && $column.columnName!='creater' && $column.columnName!='created')
-                    <if test="$column.attrname != null">$column.columnName= #{$column.attrname}#if($velocityCount != $columns.size()), #end</if>
-				#end
-			#end
+#foreach($column in $columns)
+    #if($column.columnName != $pk.columnName && $column.columnName!='creater' && $column.columnName!='created')
+    <if test="$column.attrname != null">$column.columnName= #{$column.attrname}#if($velocityCount != $columns.size()), #end</if>
+    #end
+#end
+
         </set>
         where ${pk.columnName} = #{${pk.attrname}}
     </update>

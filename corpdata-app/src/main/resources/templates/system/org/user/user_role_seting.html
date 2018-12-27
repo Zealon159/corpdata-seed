@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8" />
+		<title>分配用户角色</title>
+		<div th:replace="/common/system_form_header" ></div>
+		
+ 		<script type="text/javascript">
+            $(function () {
+				// 加载角色
+				var url = "/system/org/user-role/get-user-roles";
+				var userid = $("#userid").val();
+                $.post( url,{userid:userid} ,function(data){
+                    // 将用户已有角色选中
+                    for (i=0;i<data.length;i++){
+                        var roleId = "role"+data[i];
+                        $("#"+roleId).attr("checked","checked");
+                    }
+                },"json");
+            });
+
+ 		</script>
+	</head>
+	<body style="padding: 10px">
+
+		<div>
+			请选择角色：
+		</div>
+		<div style=" border: #ace 1px dashed;padding: 10px; margin-top: 10px">
+			<span th:each="role:${roleList}" style="width: 33.33%">
+				<input type="checkbox" name="roles" th:value="${role.id}" th:id="${'role'+role.id}" />
+				<span th:text="${role.roleName}"></span>
+			</span>
+		</div>
+
+		<div class="form-table-button">
+			<input th:type="hidden" th:value="${userid}" id="userid"/>
+			<button onclick="submitForm()" class="easyui-linkbutton l-btn l-btn-small primary" type="button"> 保存 </button>
+			<button onclick="closeWindow()" class="easyui-linkbutton l-btn l-btn-small default" type="button"> 关闭 </button>
+		</div>
+
+	</body>
+	<script type="text/javascript">
+		// 提交
+		function submitForm(){
+            // 用户id
+            var userid=$("#userid").val();
+
+            // 获取选中的角色ids
+            var ids = '';
+            $("[name='roles']").each(function () {
+                if($(this).is(":checked")) {
+                    if (ids != '') ids += ',';
+                    ids += $(this).val();
+                }
+            })
+
+            var url = "/system/org/user-role/save-user-roles";
+            $.post( url,{userId:userid,roles:ids} ,function(data){
+                window.parent.$('#win').window('close');
+                showMessage(window.parent,data.msg);
+            },"json");
+
+		}
+	</script>
+</html>

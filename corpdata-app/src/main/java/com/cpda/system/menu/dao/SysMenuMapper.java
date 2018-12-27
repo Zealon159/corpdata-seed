@@ -38,4 +38,11 @@ public interface SysMenuMapper extends BaseMapper<SysMenu> {
      * @return
      */
     public int updateState(SysMenu record);
+
+    /**
+     * 根据用户获取相应权限集合
+     * @param userId
+     * @return
+     */
+    public List<String> getPermissionsByUser(String userId);
 }

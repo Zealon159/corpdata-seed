@@ -46,7 +46,7 @@ public class ShiroConfig {
         shiroFilterFactoryBean.setSecurityManager(securityManager);
         //拦截器.
         Map<String,String> filterChainDefinitionMap = new LinkedHashMap<String,String>();
-        //filterChainDefinitionMap.put("/**", "anon");
+
         // 配置不会被拦截的链接 顺序判断
         filterChainDefinitionMap.put("/js/**", "anon");
         filterChainDefinitionMap.put("/images/**", "anon");
@@ -54,7 +54,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/css/**", "anon");
         filterChainDefinitionMap.put("/font/**", "anon");
         filterChainDefinitionMap.put("/doLogin", "anon");
-        //filterChainDefinitionMap.put("/logout", "logout");
+        filterChainDefinitionMap.put("/logout", "logout");
         filterChainDefinitionMap.put("/weixin/**", "anon");
         filterChainDefinitionMap.put("/mp/**", "anon");
         filterChainDefinitionMap.put("/api/**", "anon");
@@ -85,8 +85,8 @@ public class ShiroConfig {
     public ShiroRealm shiroRealm(){
         ShiroRealm shiroRealm = new ShiroRealm();
         shiroRealm.setCredentialsMatcher(hashedCredentialsMatcher());
-        //shiroRealm.setAuthorizationCachingEnabled(true);
-        //shiroRealm.setAuthorizationCacheName("authorizationCache");
+        shiroRealm.setAuthorizationCachingEnabled(true);
+        shiroRealm.setAuthorizationCacheName(GlobalConstant.AUTHORIZATION_CACHE_NAME);
         return shiroRealm;
     }
 

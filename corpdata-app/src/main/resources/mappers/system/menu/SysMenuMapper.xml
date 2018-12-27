@@ -107,4 +107,15 @@
 		select 1 from sys_menu where 1=1 limit 0,1
 	</select>
 
+	<select id="getPermissionsByUser" resultType="String" parameterType="String">
+		select m.menu_name,m.permission  from sys_menu m
+		where EXISTS(
+			select rp.permissionId from org_role_permission rp where
+			m.id=rp.permissionId
+			and EXISTS (
+				select 1 from org_user_role r where r.roleId=rp.roleId  and userid=#{userId}
+			)
+		)
+	</select>
+
 </mapper>

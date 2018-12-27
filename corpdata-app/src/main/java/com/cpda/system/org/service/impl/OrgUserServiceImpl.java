@@ -4,8 +4,11 @@ import com.cpda.common.base.AbstractBaseService;
 import com.cpda.common.result.Result;
 import com.cpda.common.result.util.ResultUtil;
 import com.cpda.common.utils.PageConvertUtil;
+import com.cpda.system.menu.dao.SysMenuMapper;
 import com.cpda.system.org.dao.OrgDeptMapper;
+import com.cpda.system.org.dao.OrgRoleMapper;
 import com.cpda.system.org.dao.OrgUserMapper;
+import com.cpda.system.org.dao.OrgUserRoleMapper;
 import com.cpda.system.org.entity.OrgUser;
 import com.cpda.system.org.service.OrgUserService;
 import com.cpda.system.security.shiro.util.ShiroUserPwdUtil;
@@ -16,7 +19,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.*;
 
 /**
@@ -35,21 +37,20 @@ public class OrgUserServiceImpl extends AbstractBaseService<OrgUser> implements 
 	@Autowired
 	private OrgDeptMapper orgDeptMapper;
 	
-	/*@Autowired
+	@Autowired
 	private OrgRoleMapper orgRoleMapper;
 
 	@Autowired
-	private OrgPermissionMapper orgPermissionMapper;*/
-	
-	/*@Autowired
-	private OrgUserRoleService orgUserRoleService;*/
+	private OrgUserRoleMapper userRoleMapper;
+
+	@Autowired
+	private SysMenuMapper menuMapper;
 	
 	/**
 	 * 获取当前用户所有角色
 	 */
 	public Set<String> getRolesByUser(String userId) {
-		//List<String> list =orgRoleMapper.getRolesByUser(userId);
-		List<String> list = new ArrayList<>();
+		List<String> list =orgRoleMapper.getRolesByUser(userId);
 		Set<String> set = new HashSet<String>();
 		for(String str : list){
 			set.add(str);
@@ -59,15 +60,15 @@ public class OrgUserServiceImpl extends AbstractBaseService<OrgUser> implements 
 
 	/**
 	 * 获取当前用户所有权限
+	 * @param userId
+	 * @return
 	 */
 	public Set<String> getPermissionsByUser(String userId) {
-		//List<String> list =orgPermissionMapper.getPermissionsByUser(userId);
-		List<String> list = new ArrayList<>();
+		List<String> list =menuMapper.getPermissionsByUser(userId);
 		Set<String> set = new HashSet<String>();
 		for(String str : list){
 			set.add(str);
 		}
-		logger.debug("查询数据库:"+list.toString());
 		return set;
 	}
 
@@ -119,33 +120,25 @@ public class OrgUserServiceImpl extends AbstractBaseService<OrgUser> implements 
 		/*if(deptids!=null){
 			userDeptService.insert(record.getUserid(), deptids);
 		}*/
-		/*//添加员工分店权限
-		JSONArray reList = JSONArray.parseArray(roleProject.replaceAll("&quot;", "\""));
-		for(int i = 0;i<reList.size();i++){
-			JSONObject re=reList.getJSONObject(i);
-			if(re.getInteger("teamRole") == 1){
-				projectTeamServ.insert(re.getString("projectid"),record.getId(), "1", 1);
-			}else{
-				projectTeamServ.insert(re.getString("projectid"),record.getId(), "2", 0);
-			}
-			
-		}
-		//对用户赋予角色
-		if(!(record.getRoleid()==null||record.getRoleid().equals(""))) {
-			orgUserRoleService.createUserRoles(record.getUserid(),"[\""+record.getRoleid()+"\"]");
-		}*/
 		
 		return super.save(record);
 	}
 
 	@Override
-	public Result deleteById(Long id){
-		Result r = ResultUtil.fail();
-		if(id.equals("304a3837c36911e7886e4ccc6a41b42a")){
+	public Result deleteByUserid(String userId){
+		Result r = ResultUtil.success();
+		if(userId.equals("admin") || userId.equals("designer")){
 			r = ResultUtil.fail("不能删除系统管理员哦！");
 		}else{
-			if(orgUserMapper.deleteById(id)>0){
-				r = ResultUtil.success();
+			try{
+				// 删除用户角色
+				userRoleMapper.deleteByUserid(userId);
+
+				// 删除用户
+				orgUserMapper.deleteByUserid(userId);
+			}catch (Exception ex){
+				ex.printStackTrace();
+				r = ResultUtil.fail();
 			}
 		}
 		return r;

@@ -91,14 +91,14 @@
         function fmtOption(v,r) {
             var btnRole = "<a href=\"#\" onclick=toSetRole(\""+r.userid+"\",\""+r.userName+"\") class=\"easyui-linkbutton l-btn success icon-add\" plain=\"true\">角色</a>";
             var btnEdit = "<a href=\"#\" onclick=toEdit(\""+r.id+"\") class=\"easyui-linkbutton l-btn info icon-add\" plain=\"true\">编辑</a>";
-            var btnDel  = "<a href=\"#\" onclick=toDelete(\""+r.id+"\") class=\"easyui-linkbutton l-btn warning icon-add\" plain=\"true\">删除</a>";
+            var btnDel  = "<a href=\"#\" onclick=toDelete(\""+r.userid+"\") class=\"easyui-linkbutton l-btn warning icon-add\" plain=\"true\">删除</a>";
             return btnRole+"  "+btnEdit+"  "+btnDel;
         }
 
         function toDelete(id) {
             $.messager.confirm('提示','确定要删除吗？',function(r){
                 if (r){
-                    $.post('/system/org/user/delete',{id:id},function(res){
+                    $.post('/system/org/user/delete',{userId:id},function(res){
                         $('#searchTable').datagrid('reload');
                         showMessage(window.parent,res.msg);
                     },"json");
@@ -112,8 +112,8 @@
         }
         
         function toSetRole(userid,userName) {
-            var url = "/system/org/user/role-seting/"+userid;
-            openWindow("["+userName+"] 角色设置",url,620,400);
+            var url = "/system/org/user-role/seting/"+userid;
+            openWindow("["+userName+"] 角色设置",url,620,300);
         }
 
         function openPage(){
